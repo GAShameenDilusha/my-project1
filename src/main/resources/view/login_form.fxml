@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="root" prefHeight="536.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.fx.controller.LoginFormController">
+   <children>
+      <ImageView fitHeight="538.0" fitWidth="760.0" layoutX="-6.0">
+         <image>
+            <Image url="@../icon/login.jpg" />
+         </image>
+      </ImageView>
+      <TextField fx:id="txtPassword" layoutX="441.0" layoutY="236.0" prefHeight="24.0" prefWidth="275.0" promptText="   Password" style="-fx-background-radius: 15px;">
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+         <font>
+            <Font size="9.0" />
+         </font>
+      </TextField>
+      <TextField fx:id="txtUsername" layoutX="441.0" layoutY="163.0" prefHeight="24.0" prefWidth="275.0" promptText="   Enter user name" style="-fx-background-radius: 15px;">
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+         <font>
+            <Font size="9.0" />
+         </font>
+      </TextField>
+      <JFXButton layoutX="516.0" layoutY="318.0" onAction="#btnLoginOnAction" prefHeight="24.0" prefWidth="125.0" style="-fx-background-color: #1B1464;" text="Login" textFill="WHITE" />
+      <Label layoutX="494.0" layoutY="349.0" text="Already have an account ?">
+         <font>
+            <Font size="10.0" />
+         </font>
+      </Label>
+      <Hyperlink layoutX="628.0" layoutY="345.0" onAction="#btnSignUpOnAction" text="sign up">
+         <font>
+            <Font size="12.0" />
+         </font>
+      </Hyperlink>
+      <Hyperlink layoutX="538.0" layoutY="261.0" text="Forgot password">
+         <font>
+            <Font size="9.0" />
+         </font>
+      </Hyperlink>
+   </children>
+</AnchorPane>

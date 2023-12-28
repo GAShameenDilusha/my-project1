@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane fx:id="root" prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.fx.controller.PaymentTableController">
+   <children>
+      <TableView fx:id="tblPayment" layoutX="-1.0" layoutY="46.0" prefHeight="553.0" prefWidth="767.0">
+        <columns>
+          <TableColumn fx:id="colChurchNo" prefWidth="95.0" text="ChurchNo" />
+          <TableColumn fx:id="colFamilyNo" prefWidth="157.0" text="FamilyNo" />
+            <TableColumn fx:id="colDivisionNo" prefWidth="167.0" text="DivisionNo" />
+            <TableColumn fx:id="colFee" prefWidth="116.0" text="Fee" />
+            <TableColumn fx:id="colDate" prefWidth="129.0" text="Date" />
+            <TableColumn fx:id="colAction" prefWidth="101.0" text="Action" />
+        </columns>
+      </TableView>
+      <JFXButton layoutX="14.0" layoutY="14.0" onAction="#btnBackOnAction" prefHeight="24.0" prefWidth="74.0" style="-fx-background-color: #1B1464;  -fx-background-radius: 200;" text="Back" textFill="WHITE">
+         <graphic>
+            <ImageView fitHeight="15.0" fitWidth="18.0">
+               <image>
+                  <Image url="@../icon/back.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </JFXButton>
+   </children>
+</AnchorPane>

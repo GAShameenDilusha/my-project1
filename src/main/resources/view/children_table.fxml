@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane fx:id="root" prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.fx.controller.ChildrenTableController">
+   <children>
+      <TableView fx:id="tblChildren" layoutX="-1.0" layoutY="48.0" prefHeight="551.0" prefWidth="876.0">
+        <columns>
+          <TableColumn fx:id="colFamilyNo" prefWidth="95.0" text="FamilyNo" />
+          <TableColumn fx:id="colChildId" prefWidth="107.0" text="ChildId" />
+            <TableColumn fx:id="colChildName" prefWidth="151.0" text="ChildName" />
+            <TableColumn fx:id="colBirthday" prefWidth="137.0" text="Birthday" />
+            <TableColumn fx:id="colComplimentaryDate" prefWidth="174.0" text="ComplimentaryDate" />
+            <TableColumn fx:id="colDate" prefWidth="110.0" text="Date" />
+            <TableColumn fx:id="colAction" prefWidth="101.0" text="Action" />
+        </columns>
+      </TableView>
+      <JFXButton layoutX="6.0" layoutY="14.0" onAction="#btnBackOnAction" prefHeight="24.0" prefWidth="74.0" style="-fx-background-color: #1B1464; -fx-background-radius: 200;" text="Back" textFill="WHITE">
+         <graphic>
+            <ImageView fitHeight="15.0" fitWidth="18.0">
+               <image>
+                  <Image url="@../icon/back.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </JFXButton>
+   </children>
+</AnchorPane>

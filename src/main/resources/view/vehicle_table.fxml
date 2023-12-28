@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane fx:id="root" prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.fx.controller.VehicleTableController">
+   <children>
+      <TableView fx:id="tblVehicle" layoutX="-1.0" layoutY="50.0" prefHeight="549.0" prefWidth="753.0">
+        <columns>
+          <TableColumn fx:id="colChurchFatherId" prefWidth="126.0" text="ChurchFatherId" />
+          <TableColumn fx:id="colDate" prefWidth="226.0" text="Date" />
+            <TableColumn fx:id="colCategory" prefWidth="147.0" text="Category" />
+            <TableColumn fx:id="colDescription" prefWidth="135.0" text="Discription" />
+            <TableColumn fx:id="colAction" prefWidth="117.0" text="Action" />
+        </columns>
+      </TableView>
+      <JFXButton layoutX="14.0" layoutY="14.0" onAction="#btnBackOnAction" prefHeight="24.0" prefWidth="74.0" style="-fx-background-color: #1B1464;  -fx-background-radius: 200;" text="Back" textFill="WHITE">
+         <graphic>
+            <ImageView fitHeight="15.0" fitWidth="18.0">
+               <image>
+                  <Image url="@../icon/back.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </JFXButton>
+   </children>
+</AnchorPane>

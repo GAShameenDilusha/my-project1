@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="root" prefHeight="600.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.fx.controller.FatherFormController">
+   <children>
+      <ImageView fitHeight="607.0" fitWidth="334.0" layoutX="417.0" layoutY="-2.0">
+         <image>
+            <Image url="@../icon/father.jpg" />
+         </image>
+      </ImageView>
+      <Label layoutX="36.0" layoutY="47.0" text="Father registration">
+         <font>
+            <Font name="System Bold" size="31.0" />
+         </font>
+      </Label>
+      <JFXButton layoutX="214.0" layoutY="559.0" onAction="#btnSaveOnAction" prefHeight="23.0" prefWidth="56.0" style="-fx-background-color: #1B1464;" text="save" textFill="WHITE" />
+      <JFXButton layoutX="72.0" layoutY="559.0" onAction="#btnClearOnAction" prefHeight="24.0" prefWidth="64.0" style="-fx-background-color: #1B1464;" text="clear" textFill="WHITE" />
+      <TextField fx:id="txtLeaveDate" layoutX="63.0" layoutY="441.0" prefHeight="24.0" prefWidth="275.0" promptText="   YYYY-MM-DD" style="-fx-background-radius: 15px;">
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+         <font>
+            <Font size="9.0" />
+         </font>
+      </TextField>
+      <TextField fx:id="txtStartDate" layoutX="65.0" layoutY="375.0" prefHeight="24.0" prefWidth="275.0" promptText="   YYYY-MM-DD" style="-fx-background-radius: 15px;">
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+         <font>
+            <Font size="9.0" />
+         </font>
+      </TextField>
+      <TextField fx:id="txtName" layoutX="63.0" layoutY="303.0" prefHeight="24.0" prefWidth="275.0" promptText="   Name" style="-fx-background-radius: 15px;">
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+         <font>
+            <Font size="9.0" />
+         </font>
+      </TextField>
+      <TextField fx:id="txtChurchFatherId" layoutX="63.0" layoutY="235.0" prefHeight="24.0" prefWidth="275.0" promptText="    Church Father Id" style="-fx-background-radius: 15px;">
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+         <font>
+            <Font size="9.0" />
+         </font>
+      </TextField>
+      <TextField fx:id="txtChurchNo" layoutX="65.0" layoutY="162.0" prefHeight="24.0" prefWidth="275.0" promptText="   Church no" style="-fx-background-radius: 15px;">
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+         <font>
+            <Font size="9.0" />
+         </font>
+      </TextField>
+      <JFXButton layoutX="143.0" layoutY="559.0" onAction="#btnUpdateOnAction" prefHeight="24.0" prefWidth="64.0" style="-fx-background-color: #1B1464;" text="update" textFill="WHITE" />
+      <TextField fx:id="txtChurchFatherId1" layoutX="584.0" layoutY="14.0" onAction="#btnSearchOnAction" promptText="Search">
+         <font>
+            <Font size="11.0" />
+         </font>
+      </TextField>
+      <Label layoutX="75.0" layoutY="148.0" text="Church no">
+         <font>
+            <Font size="10.0" />
+         </font>
+      </Label>
+      <Label layoutX="73.0" layoutY="221.0" text="Church Father Id">
+         <font>
+            <Font size="10.0" />
+         </font>
+      </Label>
+      <Label layoutX="71.0" layoutY="289.0" text="Name">
+         <font>
+            <Font size="10.0" />
+         </font>
+      </Label>
+      <Label layoutX="71.0" layoutY="361.0" text="Start Date">
+         <font>
+            <Font size="10.0" />
+         </font>
+      </Label>
+      <Label layoutX="73.0" layoutY="427.0" text="Leave Date">
+         <font>
+            <Font size="10.0" />
+         </font>
+      </Label>
+      <JFXButton layoutX="12.0" layoutY="13.0" onAction="#btnBackOnAction" prefHeight="24.0" prefWidth="74.0" style="-fx-background-color: #1B1464; -fx-background-radius: 200;" text="Back" textFill="WHITE">
+         <graphic>
+            <ImageView fitHeight="15.0" fitWidth="18.0">
+               <image>
+                  <Image url="@../icon/back.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </JFXButton>
+      <JFXButton layoutX="277.0" layoutY="559.0" onAction="#btnNextOnAction" prefHeight="23.0" prefWidth="56.0" style="-fx-background-color: #1B1464;" text="next" textFill="WHITE" />
+   </children>
+</AnchorPane>

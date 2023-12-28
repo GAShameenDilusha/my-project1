@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="root" prefHeight="696.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.fx.controller.RegistrationFormController">
+   <children>
+      <Label layoutX="93.0" layoutY="14.0" text="Registration">
+         <font>
+            <Font name="System Bold" size="31.0" />
+         </font>
+      </Label>
+      <TextField fx:id="txtDate" layoutX="64.0" layoutY="613.0" prefHeight="24.0" prefWidth="275.0" promptText="   Date" style="-fx-background-radius: 15px;">
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+         <font>
+            <Font size="9.0" />
+         </font>
+      </TextField>
+      <JFXButton layoutX="191.0" layoutY="664.0" onAction="#btnSaveOnAction" prefHeight="23.0" prefWidth="56.0" style="-fx-background-color: #1B1464;" text="save" textFill="WHITE" />
+      <JFXButton layoutX="49.0" layoutY="664.0" onAction="#btnClearOnAction" prefHeight="24.0" prefWidth="64.0" style="-fx-background-color: #1B1464;" text="clear" textFill="WHITE" />
+      <TextField fx:id="txtTel" layoutX="64.0" layoutY="557.0" prefHeight="24.0" prefWidth="275.0" promptText="   tel" style="-fx-background-radius: 15px;">
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+         <font>
+            <Font size="9.0" />
+         </font>
+      </TextField>
+      <TextField fx:id="txtAddress" layoutX="64.0" layoutY="504.0" prefHeight="24.0" prefWidth="275.0" promptText="   address" style="-fx-background-radius: 15px;">
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+         <font>
+            <Font size="9.0" />
+         </font>
+      </TextField>
+      <TextField fx:id="txtMotherName" layoutX="64.0" layoutY="447.0" prefHeight="24.0" prefWidth="275.0" promptText="   Mother name" style="-fx-background-radius: 15px;">
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+         <font>
+            <Font size="9.0" />
+         </font>
+      </TextField>
+      <TextField fx:id="txtFatherName" layoutX="63.0" layoutY="395.0" prefHeight="24.0" prefWidth="275.0" promptText="   Father name" style="-fx-background-radius: 15px;">
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+         <font>
+            <Font size="9.0" />
+         </font>
+      </TextField>
+      <TextField fx:id="txtDivisionNo" layoutX="63.0" layoutY="173.0" prefHeight="24.0" prefWidth="275.0" promptText="   Division no" style="-fx-background-radius: 15px;">
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+         <font>
+            <Font size="9.0" />
+         </font>
+      </TextField>
+      <TextField fx:id="txtChurchNo" layoutX="63.0" layoutY="114.0" prefHeight="24.0" prefWidth="275.0" promptText="   Church no" style="-fx-background-radius: 15px;">
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+         <font>
+            <Font size="9.0" />
+         </font>
+      </TextField>
+      <ImageView fx:id="imgRegistration" fitHeight="690.0" fitWidth="353.0" layoutX="394.0" layoutY="3.0">
+         <image>
+            <Image url="@../icon/registration.png" />
+         </image>
+      </ImageView>
+      <JFXButton layoutX="120.0" layoutY="664.0" onAction="#btnUpdateOnAction" prefHeight="24.0" prefWidth="64.0" style="-fx-background-color: #1B1464;" text="update" textFill="WHITE" />
+      <TextField fx:id="txtFamilyNo1" layoutX="593.0" layoutY="14.0" onAction="#txtSearchOnAction" promptText="Search">
+         <font>
+            <Font size="11.0" />
+         </font>
+      </TextField>
+      <JFXButton layoutX="6.0" layoutY="2.0" onAction="#btnBackOnAction" prefHeight="24.0" prefWidth="74.0" style="-fx-background-color: #1B1464;  -fx-background-radius: 200;" text="Back" textFill="WHITE">
+         <graphic>
+            <ImageView fx:id="BackImg" fitHeight="15.0" fitWidth="18.0">
+               <image>
+                  <Image url="@../icon/back.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </JFXButton>
+      <JFXButton layoutX="254.0" layoutY="664.0" onAction="#btnAddChildOnAction" prefHeight="24.0" prefWidth="100.0" style="-fx-background-color: #1B1464;" text="+Add child" textFill="WHITE" />
+      <Label layoutX="75.0" layoutY="98.0" text="Church no">
+         <font>
+            <Font size="10.0" />
+         </font>
+      </Label>
+      <Label layoutX="73.0" layoutY="159.0" text="Division no">
+         <font>
+            <Font size="10.0" />
+         </font>
+      </Label>
+      <Label layoutX="77.0" layoutY="216.0" text="Family no">
+         <font>
+            <Font size="10.0" />
+         </font>
+      </Label>
+      <Label layoutX="79.0" layoutY="272.0" text="Father Id">
+         <font>
+            <Font size="10.0" />
+         </font>
+      </Label>
+      <Label layoutX="78.0" layoutY="326.0" text="Mother Id">
+         <font>
+            <Font size="10.0" />
+         </font>
+      </Label>
+      <Label layoutX="76.0" layoutY="381.0" text="Father name">
+         <font>
+            <Font size="10.0" />
+         </font>
+      </Label>
+      <Label layoutX="75.0" layoutY="433.0" text="Mother name">
+         <font>
+            <Font size="10.0" />
+         </font>
+      </Label>
+      <Label layoutX="75.0" layoutY="490.0" text="Address">
+         <font>
+            <Font size="10.0" />
+         </font>
+      </Label>
+      <Label layoutX="76.0" layoutY="543.0" text="Tel">
+         <font>
+            <Font size="10.0" />
+         </font>
+      </Label>
+      <Label layoutX="76.0" layoutY="599.0" text="Date">
+         <font>
+            <Font size="10.0" />
+         </font>
+      </Label>
+      <Label fx:id="lblFamilyNo" layoutX="95.0" layoutY="230.0" prefHeight="24.0" prefWidth="243.0" textFill="#0eb216">
+         <font>
+            <Font name="System Bold" size="9.0" />
+         </font>
+      </Label>
+      <Label fx:id="lblFatherId" layoutX="87.0" layoutY="286.0" prefHeight="24.0" prefWidth="257.0" textFill="#0eb216">
+         <font>
+            <Font name="System Bold" size="9.0" />
+         </font>
+      </Label>
+      <Label fx:id="lblMotherId" layoutX="87.0" layoutY="340.0" prefHeight="24.0" prefWidth="257.0" textFill="#0eb216">
+         <font>
+            <Font name="System Bold" size="9.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>

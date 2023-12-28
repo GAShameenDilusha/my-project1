@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="root" prefHeight="573.0" prefWidth="753.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.fx.controller.DashboardFormController">
+   <children>
+      <ImageView fitHeight="573.0" fitWidth="756.0" layoutX="-3.0">
+         <image>
+            <Image url="@../icon/dashboard.jpg" />
+         </image>
+      </ImageView>
+      <Label layoutX="282.0" layoutY="28.0" text="Dash Board">
+         <font>
+            <Font name="System Bold" size="31.0" />
+         </font>
+      </Label>
+      <JFXButton layoutX="289.0" layoutY="170.0" onAction="#btnFamiliesRegistrationOnAction" prefHeight="24.0" prefWidth="442.0" style="-fx-background-color: #1B1464; -fx-background-radius: 100;" text="Families Registration" textFill="WHITE" />
+      <JFXButton layoutX="289.0" layoutY="215.0" onAction="#btnChurchFatherAndVehicleRegistrationOnAction" prefHeight="24.0" prefWidth="442.0" style="-fx-background-color: #1B1464; -fx-background-radius: 100;" text="Church's fathers &amp; vehicles registration" textFill="WHITE" />
+      <JFXButton layoutX="289.0" layoutY="261.0" onAction="#btnPaymentOnAction" prefHeight="24.0" prefWidth="442.0" style="-fx-background-color: #1B1464; -fx-background-radius: 100;" text="Payments" textFill="WHITE" />
+      <JFXButton layoutX="289.0" layoutY="304.0" onAction="#btnEventOnAction" prefHeight="24.0" prefWidth="442.0" style="-fx-background-color: #1B1464; -fx-background-radius: 100;" text="Events" textFill="WHITE" />
+      <JFXButton layoutX="289.0" layoutY="346.0" onAction="#btnAttendenceOnAction" prefHeight="24.0" prefWidth="442.0" style="-fx-background-color: #1B1464; -fx-background-radius: 100;" text="Attendence" textFill="WHITE" />
+      <JFXButton layoutX="289.0" layoutY="395.0" onAction="#btnVisitOnAction" prefHeight="24.0" prefWidth="442.0" style="-fx-background-color: #1B1464; -fx-background-radius: 100;" text="Visit" textFill="WHITE" />
+   </children>
+</AnchorPane>

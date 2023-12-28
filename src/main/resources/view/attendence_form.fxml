@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="root" prefHeight="600.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.fx.controller.AttendenceFormController">
+   <children>
+      <ImageView fitHeight="617.0" fitWidth="347.0" layoutX="405.0" layoutY="-9.0">
+         <image>
+            <Image url="@../icon/attendence.jpg" />
+         </image>
+      </ImageView>
+      <Label layoutX="102.0" layoutY="48.0" text="Attendence">
+         <font>
+            <Font name="System Bold" size="31.0" />
+         </font>
+      </Label>
+      <JFXButton layoutX="241.0" layoutY="562.0" onAction="#btnSaveOnAction" prefHeight="23.0" prefWidth="56.0" style="-fx-background-color: #1B1464;" text="save" textFill="WHITE" />
+      <JFXButton layoutX="99.0" layoutY="562.0" onAction="#btnClearOnAction" prefHeight="24.0" prefWidth="64.0" style="-fx-background-color: #1B1464;" text="clear" textFill="WHITE" />
+      <TextField fx:id="txtDate" layoutX="63.0" layoutY="441.0" prefHeight="24.0" prefWidth="275.0" promptText="   Date" style="-fx-background-radius: 15px;">
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+         <font>
+            <Font size="9.0" />
+         </font>
+      </TextField>
+      <TextField fx:id="txtLeaveTime" layoutX="65.0" layoutY="375.0" prefHeight="24.0" prefWidth="275.0" promptText="   Leave time" style="-fx-background-radius: 15px;">
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+         <font>
+            <Font size="9.0" />
+         </font>
+      </TextField>
+      <TextField fx:id="txtArrangedTime" layoutX="63.0" layoutY="303.0" prefHeight="24.0" prefWidth="275.0" promptText="   Arranged time" style="-fx-background-radius: 15px;">
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+         <font>
+            <Font size="9.0" />
+         </font>
+      </TextField>
+      <TextField fx:id="txtPurpose" layoutX="63.0" layoutY="235.0" prefHeight="24.0" prefWidth="275.0" promptText="   Purpose" style="-fx-background-radius: 15px;">
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+         <font>
+            <Font size="9.0" />
+         </font>
+      </TextField>
+      <TextField fx:id="txtFamilyNo" layoutX="65.0" layoutY="162.0" prefHeight="24.0" prefWidth="275.0" promptText="   Family no" style="-fx-background-radius: 15px;">
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+         <font>
+            <Font size="9.0" />
+         </font>
+      </TextField>
+      <JFXButton layoutX="170.0" layoutY="562.0" onAction="#btnUpdateOnAction" prefHeight="24.0" prefWidth="64.0" style="-fx-background-color: #1B1464;" text="update" textFill="WHITE" />
+      <TextField fx:id="txtFamilyNo1" layoutX="593.0" layoutY="14.0" onAction="#txtSearchOnAction" promptText="Search">
+         <font>
+            <Font size="11.0" />
+         </font>
+      </TextField>
+      <Label layoutX="75.0" layoutY="148.0" text="Family no">
+         <font>
+            <Font size="10.0" />
+         </font>
+      </Label>
+      <Label layoutX="73.0" layoutY="221.0" text="Purpose">
+         <font>
+            <Font size="10.0" />
+         </font>
+      </Label>
+      <Label layoutX="71.0" layoutY="289.0" text="Arranged time">
+         <font>
+            <Font size="10.0" />
+         </font>
+      </Label>
+      <Label layoutX="71.0" layoutY="361.0" text="Leave time">
+         <font>
+            <Font size="10.0" />
+         </font>
+      </Label>
+      <Label layoutX="73.0" layoutY="427.0" text="Date">
+         <font>
+            <Font size="10.0" />
+         </font>
+      </Label>
+      <JFXButton fx:id="btnBack" layoutX="14.0" layoutY="13.0" onAction="#btnBackOnAction" prefHeight="24.0" prefWidth="74.0" style="-fx-background-color: #1B1464;  -fx-background-radius: 200;" text="Back" textFill="WHITE">
+         <graphic>
+            <ImageView fx:id="imgBack" fitHeight="15.0" fitWidth="18.0">
+               <image>
+                  <Image url="@../icon/back.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </JFXButton>
+   </children>
+</AnchorPane>
