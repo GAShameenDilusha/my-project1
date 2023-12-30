@@ -10,12 +10,13 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import lk.ijse.fx.dao.impl.ChildrenDAOImpl;
 import lk.ijse.fx.dto.ChildrenDto;
 import lk.ijse.fx.dto.tm.ChildrenTm;
-import lk.ijse.fx.model.ChildrenModel;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -47,7 +48,6 @@ public class ChildrenTableController {
 
     @FXML
     private TableView<ChildrenTm> tblChildren;
-    private ChildrenModel childModel = new ChildrenModel();
 
     public void initialize() {
         setCellValueFactory();
@@ -68,28 +68,32 @@ public class ChildrenTableController {
     private void loadAllChildren() {
         ObservableList<ChildrenTm> obList = FXCollections.observableArrayList();
         try {
-            List<ChildrenDto> dtoList = childModel.loadAllChildren();
+            ChildrenDAOImpl childrenDAO = new ChildrenDAOImpl();
+            List<ChildrenDto> allChildren = childrenDAO.loadAllChildren();
 
-            for (ChildrenDto dto : dtoList) {
+            for (ChildrenDto c : allChildren) {
                 Button deleteButton = new Button("Delete");
                 deleteButton.setOnAction(event -> {
                     try {
-                        removeChildren(dto.getChildId());
+                        removeChildren(c.getChildId());
                     } catch (SQLException e) {
                         throw new RuntimeException(e);
                     }
                 });
+
                 obList.add(new ChildrenTm(
-                        dto.getFamilyNo(),
-                        dto.getChildId(),
-                        dto.getChildName(),
-                        dto.getBirthday(),
-                        dto.getComplimentaryDate(),
-                        dto.getDate(),
+                        c.getFamilyNo(),
+                        c.getChildId(),
+                        c.getChildName(),
+                        c.getBirthday(),
+                        c.getComplimentaryDate(),
+                        c.getDate(),
                         deleteButton
                 ));
             }
+
             tblChildren.setItems(obList);
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -112,17 +116,15 @@ public class ChildrenTableController {
         confirmationAlert.setContentText("Are you sure you want to delete this Child?");
         Optional<ButtonType> result = confirmationAlert.showAndWait();
 
-
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            boolean isDeleted = childModel.deleteChildren(childId);
-
+            ChildrenDAOImpl childrenDAO = new ChildrenDAOImpl();
+            boolean isDeleted = childrenDAO.deleteChildren(childId);
 
             if (isDeleted) {
                 Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
                 successAlert.setHeaderText(null);
                 successAlert.setContentText("Child deleted successfully!");
                 successAlert.showAndWait();
-
 
                 loadAllChildren(); // Refresh the table after deletion
             } else {
@@ -132,6 +134,6 @@ public class ChildrenTableController {
                 errorAlert.showAndWait();
             }
         }
-
     }
+
 }

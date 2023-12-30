@@ -11,12 +11,13 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import lk.ijse.fx.dao.impl.RegistrationDAOImpl;
 import lk.ijse.fx.dto.RegistrationDto;
 import lk.ijse.fx.dto.tm.RegistrationTm;
-import lk.ijse.fx.model.RegistrationModel;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -59,7 +60,6 @@ public class RegistrationTableController {
 
     @FXML
     private TableView<RegistrationTm> tblRegistration;
-    private RegistrationModel regisModel = new RegistrationModel();
 
 
     public void initialize() {
@@ -84,9 +84,10 @@ public class RegistrationTableController {
     private void loadAllRegistration() {
         ObservableList<RegistrationTm> obList = FXCollections.observableArrayList();
         try {
-            List<RegistrationDto> dtoList = regisModel.loadAllRegistration();
+            RegistrationDAOImpl registrationDAO = new RegistrationDAOImpl();
+            List<RegistrationDto> allRegistration = registrationDAO.loadAllRegistration();
 
-            for (RegistrationDto dto : dtoList) {
+            for (RegistrationDto dto : allRegistration) {
                 JFXButton deleteButton = new JFXButton("Delete");
                 deleteButton.setCursor(javafx.scene.Cursor.HAND);
                 deleteButton.setStyle("-fx-background-color: #ff0000; -fx-text-fill: #ffffff");
@@ -114,12 +115,14 @@ public class RegistrationTableController {
                         deleteButton
                 ));
             }
+
             tblRegistration.setItems(obList);
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
+
 
 
     public void btnBackOnAction(ActionEvent actionEvent) throws IOException {
@@ -137,17 +140,15 @@ public class RegistrationTableController {
         confirmationAlert.setContentText("Are you sure you want to delete this registration?");
         Optional<ButtonType> result = confirmationAlert.showAndWait();
 
-
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            boolean isDeleted = regisModel.deleteRegistration(familyNo);
-
+            RegistrationDAOImpl registrationDAO = new RegistrationDAOImpl();
+            boolean isDeleted = registrationDAO.deleteRegistration(familyNo);
 
             if (isDeleted) {
                 Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
                 successAlert.setHeaderText(null);
                 successAlert.setContentText("Registration deleted successfully!");
                 successAlert.showAndWait();
-
 
                 loadAllRegistration(); // Refresh the table after deletion
             } else {
@@ -157,9 +158,8 @@ public class RegistrationTableController {
                 errorAlert.showAndWait();
             }
         }
-
-
     }
+
 }
 
 

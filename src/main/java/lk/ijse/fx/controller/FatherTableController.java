@@ -11,12 +11,13 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import lk.ijse.fx.dao.impl.FatherDAOImpl;
 import lk.ijse.fx.dto.FatherDto;
 import lk.ijse.fx.dto.tm.FatherTm;
-import lk.ijse.fx.model.FatherModel;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,16 +39,8 @@ public class FatherTableController {
     @FXML
     private AnchorPane root;
 
-    private FatherModel farModel = new FatherModel();
 
-    public void btnBackOnAction(ActionEvent actionEvent) throws IOException {
-        AnchorPane anchorPane = FXMLLoader.load(getClass().getResource("/view/father_form.fxml"));
-        Stage stage = (Stage) root.getScene().getWindow();
 
-        stage.setScene(new Scene(anchorPane));
-        stage.setTitle("Father Form");
-        stage.centerOnScreen();
-    }
 
     public void initialize() {
         setCellValueFactory();
@@ -66,9 +59,10 @@ public class FatherTableController {
     private void loadAllFather() {
         ObservableList<FatherTm> obList = FXCollections.observableArrayList();
         try {
-            List<FatherDto> dtoList = farModel.loadAllFather();
+            FatherDAOImpl fatherDAO = new FatherDAOImpl();
+            List<FatherDto> allFather = fatherDAO.loadAllFather();
 
-            for (FatherDto dto : dtoList) {
+            for (FatherDto dto : allFather) {
                 JFXButton deleteButton = new JFXButton("Delete");
                 deleteButton.setCursor(javafx.scene.Cursor.HAND);
                 deleteButton.setStyle("-fx-background-color: #ff0000; -fx-text-fill: #ffffff");
@@ -91,11 +85,27 @@ public class FatherTableController {
                         deleteButton
                 ));
             }
+
             tblFather.setItems(obList);
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
+
+
+
+
+    public void btnBackOnAction(ActionEvent actionEvent) throws IOException {
+        AnchorPane anchorPane = FXMLLoader.load(getClass().getResource("/view/father_form.fxml"));
+        Stage stage = (Stage) root.getScene().getWindow();
+
+        stage.setScene(new Scene(anchorPane));
+        stage.setTitle("Father Form");
+        stage.centerOnScreen();
+    }
+
+
 
     private void removeFather(String churchFatherId) throws SQLException {
         Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -103,17 +113,15 @@ public class FatherTableController {
         confirmationAlert.setContentText("Are you sure you want to delete this father?");
         Optional<ButtonType> result = confirmationAlert.showAndWait();
 
-
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            boolean isDeleted = farModel.deleteFather(churchFatherId);
-
+            FatherDAOImpl fatherDAO = new FatherDAOImpl();
+            boolean isDeleted = fatherDAO.deleteFather(churchFatherId);
 
             if (isDeleted) {
                 Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
                 successAlert.setHeaderText(null);
                 successAlert.setContentText("Father deleted successfully!");
                 successAlert.showAndWait();
-
 
                 loadAllFather(); // Refresh the table after deletion
             } else {
@@ -123,6 +131,6 @@ public class FatherTableController {
                 errorAlert.showAndWait();
             }
         }
-
     }
+
 }

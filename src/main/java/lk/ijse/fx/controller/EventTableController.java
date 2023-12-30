@@ -8,17 +8,16 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.Button;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import lk.ijse.fx.dao.impl.EventDAOImpl;
 import lk.ijse.fx.dto.EventDto;
 import lk.ijse.fx.dto.tm.EventTm;
-import lk.ijse.fx.model.EventModel;
 
-import java.awt.*;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,8 +36,6 @@ public class EventTableController {
 
     @FXML
     private AnchorPane root;
-    private EventModel eveModel = new EventModel();
-
 
     public void initialize() {
         setCellValueFactory();
@@ -61,10 +58,10 @@ public class EventTableController {
     private void loadAllEvent() {
         ObservableList<EventTm> obList = FXCollections.observableArrayList();
         try {
-            List<EventDto> dtoList = eveModel.loadAllEvent();
+            EventDAOImpl eventDAO = new EventDAOImpl();
+            List<EventDto> allEvent = eventDAO.loadAllEvent();
 
-
-            for (EventDto dto : dtoList) {
+            for (EventDto dto : allEvent) {
                 JFXButton deleteButton = new JFXButton("Delete");
                 deleteButton.setCursor(javafx.scene.Cursor.HAND);
                 deleteButton.setStyle("-fx-background-color: #ff0000; -fx-text-fill: #ffffff");
@@ -78,7 +75,6 @@ public class EventTableController {
                     }
                 });
 
-
                 obList.add(new EventTm(
                         dto.getFamilyNo(),
                         dto.getEventName(),
@@ -88,14 +84,16 @@ public class EventTableController {
                         dto.getEstimatedBudget(),
                         dto.getCost(),
                         deleteButton
-
                 ));
             }
+
             tblEvent.setItems(obList);
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
+
 
 
     public void btnBackOnAction(ActionEvent actionEvent) throws IOException {
@@ -113,17 +111,15 @@ public class EventTableController {
         confirmationAlert.setContentText("Are you sure you want to delete this event?");
         Optional<ButtonType> result = confirmationAlert.showAndWait();
 
-
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            boolean isDeleted = eveModel.deleteEvent(familyNo);
-
+            EventDAOImpl eventDAO = new EventDAOImpl();
+            boolean isDeleted = eventDAO.deleteEvent(familyNo);
 
             if (isDeleted) {
                 Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
                 successAlert.setHeaderText(null);
                 successAlert.setContentText("Event deleted successfully!");
                 successAlert.showAndWait();
-
 
                 loadAllEvent(); // Refresh the table after deletion
             } else {
@@ -133,7 +129,6 @@ public class EventTableController {
                 errorAlert.showAndWait();
             }
         }
-
-
     }
+
 }

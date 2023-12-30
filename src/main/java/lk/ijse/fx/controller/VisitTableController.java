@@ -11,12 +11,13 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import lk.ijse.fx.dao.impl.VisitDAOImpl;
 import lk.ijse.fx.dto.VisitDto;
 import lk.ijse.fx.dto.tm.VisitTm;
-import lk.ijse.fx.model.VisitModel;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,15 +39,8 @@ public class VisitTableController {
     @FXML
     private AnchorPane root;
 
-    private VisitModel visitModel = new VisitModel();
 
-    public void btnBackOnAction(ActionEvent actionEvent) throws IOException {
-        AnchorPane anchorPane = FXMLLoader.load(getClass().getResource("/view/visit_form.fxml"));
-        Stage stage = (Stage) root.getScene().getWindow();
-        stage.setScene(new Scene(anchorPane));
-        stage.setTitle("Visit Form");
-        stage.centerOnScreen();
-    }
+
 
     public void initialize() {
         setCellValueFactory();
@@ -65,8 +59,10 @@ public class VisitTableController {
     private void loadAllVisit() {
         ObservableList<VisitTm> obList = FXCollections.observableArrayList();
         try {
-            List<VisitDto> dtoList = visitModel.loadAllVisit();
-            for (VisitDto dto : dtoList) {
+            VisitDAOImpl visitDAO = new VisitDAOImpl();
+            List<VisitDto> allVisit = visitDAO.loadAllVisit();
+
+            for (VisitDto dto : allVisit) {
                 JFXButton deleteButton = new JFXButton("Delete");
                 deleteButton.setCursor(javafx.scene.Cursor.HAND);
                 deleteButton.setStyle("-fx-background-color: #ff0000; -fx-text-fill: #ffffff");
@@ -89,11 +85,25 @@ public class VisitTableController {
                         deleteButton
                 ));
             }
+
             tblVisit.setItems(obList);
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
+
+
+
+
+    public void btnBackOnAction(ActionEvent actionEvent) throws IOException {
+        AnchorPane anchorPane = FXMLLoader.load(getClass().getResource("/view/visit_form.fxml"));
+        Stage stage = (Stage) root.getScene().getWindow();
+        stage.setScene(new Scene(anchorPane));
+        stage.setTitle("Visit Form");
+        stage.centerOnScreen();
+    }
+
 
     private void removeVisit(String familyNo) throws SQLException {
         Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -102,7 +112,8 @@ public class VisitTableController {
         Optional<ButtonType> result = confirmationAlert.showAndWait();
 
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            boolean isDeleted = visitModel.deleteVisit(familyNo);
+            VisitDAOImpl visitDAO = new VisitDAOImpl();
+            boolean isDeleted = visitDAO.deleteVisit(familyNo);
 
             if (isDeleted) {
                 Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
@@ -119,4 +130,5 @@ public class VisitTableController {
             }
         }
     }
+
 }

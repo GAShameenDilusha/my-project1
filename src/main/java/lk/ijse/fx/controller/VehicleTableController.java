@@ -11,12 +11,13 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import lk.ijse.fx.dao.impl.VehicleDAOImpl;
 import lk.ijse.fx.dto.VehicleDto;
 import lk.ijse.fx.dto.tm.VehicleTm;
-import lk.ijse.fx.model.VehicleModel;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,7 +32,6 @@ public class VehicleTableController {
     @FXML
     private AnchorPane root;
 
-    private VehicleModel vehiModel = new VehicleModel();
 
     public void initialize() {
         setCellValueFactory();
@@ -51,10 +51,10 @@ public class VehicleTableController {
     private void loadAllVehicle() {
         ObservableList<VehicleTm> obList = FXCollections.observableArrayList();
         try {
-            List<VehicleDto> dtoList = vehiModel.loadAllVehicle();
+            VehicleDAOImpl vehicleDAO = new VehicleDAOImpl();
+            List<VehicleDto> allVehicle = vehicleDAO.loadAllVehicle();
 
-
-            for (VehicleDto dto : dtoList) {
+            for (VehicleDto dto : allVehicle) {
                 JFXButton deleteButton = new JFXButton("Delete");
                 deleteButton.setCursor(javafx.scene.Cursor.HAND);
                 deleteButton.setStyle("-fx-background-color: #ff0000; -fx-text-fill: #ffffff");
@@ -76,7 +76,9 @@ public class VehicleTableController {
                         deleteButton
                 ));
             }
+
             tblVehicle.setItems(obList);
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -99,17 +101,15 @@ public class VehicleTableController {
         confirmationAlert.setContentText("Are you sure you want to delete this vehicle?");
         Optional<ButtonType> result = confirmationAlert.showAndWait();
 
-
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            boolean isDeleted = vehiModel.deleteVehicle(churchFatherId);
-
+            VehicleDAOImpl vehicleDAO = new VehicleDAOImpl();
+            boolean isDeleted = vehicleDAO.deleteVehicle(churchFatherId);
 
             if (isDeleted) {
                 Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
                 successAlert.setHeaderText(null);
                 successAlert.setContentText("Vehicle deleted successfully!");
                 successAlert.showAndWait();
-
 
                 loadAllVehicle(); // Refresh the table after deletion
             } else {
@@ -119,6 +119,6 @@ public class VehicleTableController {
                 errorAlert.showAndWait();
             }
         }
-
     }
+
 }
