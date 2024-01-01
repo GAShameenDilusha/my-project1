@@ -14,7 +14,7 @@ public class ChildrenTm {
 
 
 
-    public ChildrenTm(){
+    public ChildrenTm(String family_no, String child_id, String child_name, String birthday, String complimentary_date, String date){
     }
 
     public ChildrenTm(String familyNo, String childId, String childName, String birthday, String complimentaryDate, String date, Button btn) {

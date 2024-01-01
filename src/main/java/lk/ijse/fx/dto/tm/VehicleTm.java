@@ -1,7 +1,6 @@
 package lk.ijse.fx.dto.tm;
 
 import com.jfoenix.controls.JFXButton;
-import javafx.scene.control.Button;
 
 public class VehicleTm {
     private String ChurchFatherId;
@@ -21,7 +20,7 @@ public class VehicleTm {
     }
 
 
-    public VehicleTm(){
+    public VehicleTm(String churchFatherId, String date, String category, String discription){
     }
 
 

@@ -1,7 +1,6 @@
 package lk.ijse.fx.dto.tm;
 
 import com.jfoenix.controls.JFXButton;
-import javafx.scene.control.Button;
 
 public class AttendenceTm {
     private String FamilyNo;
@@ -22,7 +21,7 @@ public class AttendenceTm {
     }
 
 
-    public AttendenceTm(){
+    public AttendenceTm(String familyNo, String purpose, String arrangedTime, String leaveTime, String date){
     }
 
     public AttendenceTm(String familyNo, String purpose, String arrangedTime, String leaveTime, String date, JFXButton btn) {

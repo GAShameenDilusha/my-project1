@@ -1,7 +1,6 @@
 package lk.ijse.fx.dto.tm;
 
 import com.jfoenix.controls.JFXButton;
-import javafx.scene.control.Button;
 
 public class VisitTm {
     private String familyNo;
@@ -21,7 +20,7 @@ public class VisitTm {
         btnDelete.setPrefHeight(30);
     }
 
-    public VisitTm() {
+    public VisitTm(String familyNo, String churchFatherId, String date, String time, String discription) {
     }
 
     public VisitTm(String familyNo, String churchFatherId, String date, String time, String description, JFXButton btn) {

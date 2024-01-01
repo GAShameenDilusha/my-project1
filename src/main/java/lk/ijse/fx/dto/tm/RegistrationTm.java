@@ -1,7 +1,6 @@
 package lk.ijse.fx.dto.tm;
 
 import com.jfoenix.controls.JFXButton;
-import javafx.scene.control.Button;
 
 public class RegistrationTm {
     private String ChurchNo;
@@ -29,7 +28,7 @@ public class RegistrationTm {
 
 
 
-    public RegistrationTm(){
+    public RegistrationTm(String churchNo, String divisionNo, String familyNo, String fatherId, String motherId, String fatherName, String motherName, String address, String tel, String date){
     }
 
     public RegistrationTm(String churchNo, String divisionNo, String familyNo, String fatherId, String motherId, String fatherName, String motherName, String address, String tel, String date, JFXButton btn) {

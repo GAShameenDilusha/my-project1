@@ -1,7 +1,7 @@
 package lk.ijse.fx.dto.tm;
 
 import com.jfoenix.controls.JFXButton;
-import javafx.scene.control.Button;
+
 public class FatherTm {
     private String ChurchNo;
     private String ChurchFatherId;
@@ -21,7 +21,7 @@ public class FatherTm {
    }
 
 
-   public FatherTm(){}
+   public FatherTm(String churchNo, String churchFatherId, String name, String startDate, String leaveDate){}
 
    public FatherTm(String churchNo, String churchFatherId, String name, String startDate, String leaveDate, JFXButton btn) {
       this.ChurchNo = churchNo;

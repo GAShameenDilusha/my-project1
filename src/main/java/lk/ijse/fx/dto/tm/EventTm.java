@@ -1,7 +1,6 @@
 package lk.ijse.fx.dto.tm;
 
 import com.jfoenix.controls.JFXButton;
-import javafx.scene.control.Button;
 
 public class EventTm {
     private String FamilyNo;
@@ -24,7 +23,7 @@ public class EventTm {
     }
 
 
-    public EventTm(){
+    public EventTm(String family_no, String event_name, String date, String time, String discription, String estimated_budget, String cost){
     }
 
     public EventTm(String familyNo, String eventName, String date, String time, String discription, String estimatedBudget, String cost, JFXButton btn) {
