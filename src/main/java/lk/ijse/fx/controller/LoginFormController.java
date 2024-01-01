@@ -8,9 +8,9 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import lk.ijse.fx.dao.impl.LoginDAOImpl;
 import lk.ijse.fx.dto.LoginDto;
 import lk.ijse.fx.dto.SignupDto;
-import lk.ijse.fx.model.LoginModel;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -30,8 +30,7 @@ public class LoginFormController {
         LoginDto loginDto = new LoginDto(u_name, pass);
 
         try {
-            Optional<SignupDto> optionalUser = LoginModel.searchUser(loginDto);
-
+            Optional<SignupDto> optionalUser = LoginDAOImpl.searchUser(loginDto);
             if (optionalUser.isPresent()) {
                 // User found, proceed to the next window (dashboard or login form)
                 AnchorPane anchorPane = FXMLLoader.load(getClass().getResource("/view/dashboard.fxml"));

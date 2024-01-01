@@ -1,7 +1,6 @@
 package lk.ijse.fx.controller;
 
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -11,16 +10,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import lk.ijse.fx.db.DbConnection;
-import lk.ijse.fx.dto.FatherDto;
-import lk.ijse.fx.model.ChurchModel;
+import lk.ijse.fx.dao.impl.ChurchDAOImpl;
 import lk.ijse.fx.dto.ChurchDto;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
 
 public class ChurchFormController {
@@ -46,16 +39,16 @@ public class ChurchFormController {
     @FXML
     private TextField txtD;
 
-    private ChurchModel churchModel;
+
+    private final ChurchDAOImpl churchDAO = new ChurchDAOImpl();
 
     public void initialize() {
-        churchModel = new ChurchModel();
         loadChurches();
     }
 
     private void loadChurches() {
         try {
-            List<ChurchDto> churches = churchModel.getAllChurches();
+            List<ChurchDto> churches = churchDAO.getAllChurches();
             cmbChurch.setItems(FXCollections.observableArrayList(churches));
         } catch (Exception e) {
             e.printStackTrace();

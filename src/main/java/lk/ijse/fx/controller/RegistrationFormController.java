@@ -12,16 +12,19 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import lk.ijse.fx.dao.custom.AttendenceDAO;
+import lk.ijse.fx.dao.custom.RegistrationDAO;
+import lk.ijse.fx.dao.impl.AttendenceDAOImpl;
+import lk.ijse.fx.dao.impl.RegistrationDAOImpl;
+import lk.ijse.fx.dto.AttendenceDto;
 import lk.ijse.fx.dto.RegistrationDto;
+import lk.ijse.fx.dto.tm.AttendenceTm;
 import lk.ijse.fx.dto.tm.RegistrationTm;
-import lk.ijse.fx.model.RegistrationModel;
 
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class RegistrationFormController implements Initializable {
 
@@ -58,14 +61,13 @@ public class RegistrationFormController implements Initializable {
     private TextField txtSearch;
     @FXML
     private TableView<RegistrationTm> tblRegistration;
-
-    private RegistrationModel regisModel = new RegistrationModel();
     private RegistrationDto dto = new RegistrationDto();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         try {
-            int nextFamilyNo = regisModel.getNextFamilyNo();
+            RegistrationDAOImpl registrationDAO = new RegistrationDAOImpl();
+            int nextFamilyNo = registrationDAO.getNextFamilyNo();
             lblFamilyNo.setText(String.valueOf(nextFamilyNo));
             dto.setFamilyNo(String.valueOf(nextFamilyNo));
 
@@ -110,10 +112,11 @@ public class RegistrationFormController implements Initializable {
 
         dto = new RegistrationDto(church_no, division_no, family_no, father_id, mother_id, father_name, mother_name, address, tel, date);
 
+        RegistrationDAOImpl registrationDAO=new RegistrationDAOImpl();
         try {
-            boolean isSaved = regisModel.saveRegistration(dto);
-            if (isSaved) {
-                new Alert(Alert.AlertType.CONFIRMATION, "Registration saved!").show();
+            boolean isSaved =registrationDAO.saveRegistration(dto);
+            if (isSaved){
+                tblRegistration.getItems().add(new RegistrationTm(dto.getChurchNo(), dto.getDivisionNo(), dto.getFamilyNo(), dto.getFatherId(), dto.getMotherId(), dto.getFatherName(), dto.getMotherName(), dto.getAddress(), dto.getTel(), dto.getDate()));
             }
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
@@ -142,19 +145,20 @@ public class RegistrationFormController implements Initializable {
     void txtSearchOnAction(ActionEvent event) {
         String familyNo = txtFamilyNo1.getText();
 
+        RegistrationDAOImpl registrationDAO = new RegistrationDAOImpl();
         try {
-            RegistrationDto customerDto = regisModel.searchCustomer(familyNo);
-            if (customerDto != null) {
-                lblFamilyNo.setText(customerDto.getFamilyNo());
-                txtChurchNo.setText(customerDto.getChurchNo());
-                txtDivisionNo.setText(customerDto.getDivisionNo());
-                lblFatherId.setText(customerDto.getFatherId());
-                lblMotherId.setText(customerDto.getMotherId());
-                txtFatherName.setText(customerDto.getFatherName());
-                txtMotherName.setText(customerDto.getMotherName());
-                txtAddress.setText(customerDto.getAddress());
-                txtTel.setText(customerDto.getTel());
-                txtDate.setText(customerDto.getDate());
+            RegistrationDto registrationDto = registrationDAO.searchCustomer(familyNo);
+            if (registrationDto != null) {
+                lblFamilyNo.setText(registrationDto.getFamilyNo());
+                txtChurchNo.setText(registrationDto.getChurchNo());
+                txtDivisionNo.setText(registrationDto.getDivisionNo());
+                lblFatherId.setText(registrationDto.getFatherId());
+                lblMotherId.setText(registrationDto.getMotherId());
+                txtFatherName.setText(registrationDto.getFatherName());
+                txtMotherName.setText(registrationDto.getMotherName());
+                txtAddress.setText(registrationDto.getAddress());
+                txtTel.setText(registrationDto.getTel());
+                txtDate.setText(registrationDto.getDate());
             } else {
                 new Alert(Alert.AlertType.INFORMATION, "Registration not found").show();
             }
@@ -162,6 +166,7 @@ public class RegistrationFormController implements Initializable {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
     }
+
 
     @FXML
     void btnUpdateOnAction(ActionEvent event) {
@@ -178,8 +183,9 @@ public class RegistrationFormController implements Initializable {
 
         var dto = new RegistrationDto(newChurchNo, newDivisionNo, familyNo, newFatherId, newMotherId, newFatherName, newMotherName, newAddress, newTel, newDate);
 
+        RegistrationDAOImpl dao = new RegistrationDAOImpl();
         try {
-            boolean isUpdated = regisModel.updateRegistration(dto);
+            boolean isUpdated = dao.updateRegistration(dto);
             if (isUpdated) {
                 new Alert(Alert.AlertType.CONFIRMATION, "Registration updated!").show();
                 clearFields();

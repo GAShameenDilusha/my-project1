@@ -5,12 +5,18 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import lk.ijse.fx.dao.custom.AttendenceDAO;
+import lk.ijse.fx.dao.custom.VehicleDAO;
+import lk.ijse.fx.dao.impl.AttendenceDAOImpl;
+import lk.ijse.fx.dao.impl.VehicleDAOImpl;
+import lk.ijse.fx.dto.AttendenceDto;
 import lk.ijse.fx.dto.VehicleDto;
-import lk.ijse.fx.model.RegistrationModel;
-import lk.ijse.fx.model.VehicleModel;
+import lk.ijse.fx.dto.tm.AttendenceTm;
+import lk.ijse.fx.dto.tm.VehicleTm;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -24,10 +30,11 @@ public class VehicleFormController {
     public TextField txtDescription;
     public TextField txtChurchFatherId1;
 
+    public TableView tblVehicle;
+
     @FXML
     private AnchorPane root;
 
-    private VehicleModel vehiModel = new VehicleModel();
 
 
     public void btnBackOnAction(ActionEvent actionEvent) throws IOException {
@@ -53,10 +60,11 @@ public class VehicleFormController {
 
         var dto = new VehicleDto(church_father_id, date, category, discription);
 
+        VehicleDAOImpl vehicleDAO=new VehicleDAOImpl();
         try {
-            boolean isSaved = vehiModel.saveVehicle(dto);
-            if (isSaved) {
-                new Alert(Alert.AlertType.CONFIRMATION, "registration saved!").show();
+            boolean isSaved =vehicleDAO.saveVehicle(dto);
+            if (isSaved){
+                tblVehicle.getItems().add(new VehicleTm(dto.getChurchFatherId(), dto.getDate(), dto.getCategory(), dto.getDiscription()));
             }
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
@@ -128,11 +136,9 @@ public class VehicleFormController {
         String newCategory = txtCategory.getText();
         String newDiscription = txtDescription.getText();
 
-        var dto = new VehicleDto(churchFatherId, newDate, newCategory, newDiscription);
-
-
+        VehicleDAO dao = new VehicleDAOImpl();
         try {
-            boolean isUpdated = vehiModel.updateVehicle(dto);
+            boolean isUpdated = dao.updateVehicle(new VehicleDto(churchFatherId, newDate, newCategory, newDiscription));
             if (isUpdated) {
                 new Alert(Alert.AlertType.CONFIRMATION, "Registration updated!").show();
                 clearFields();
@@ -142,32 +148,33 @@ public class VehicleFormController {
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
-
     }
 
 
 
 
-        @FXML
-        void txtSearchOnAction(ActionEvent event) {
-            String familyNo = txtChurchFatherId1.getText();
 
+    @FXML
+    void txtSearchOnAction(ActionEvent event) {
+        String churchFatherId = txtChurchFatherId1.getText();
 
-            try {
-                VehicleDto customerDto = vehiModel.searchCustomer(familyNo);
-                if (customerDto != null) {
-                    txtChurchFatherId.setText(customerDto.getChurchFatherId());
-                    txtDate.setText(customerDto.getDate());
-                    txtCategory.setText(customerDto.getCategory());
-                    txtDescription.setText(customerDto.getDiscription());
+        VehicleDAO dao = new VehicleDAOImpl();
+        try {
+            VehicleDto vehicleDto = dao.searchCustomer(churchFatherId);
 
-                } else {
-                    new Alert(Alert.AlertType.INFORMATION, "vehicle not found").show();
-                }
-            } catch (SQLException e) {
-                new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+            if (vehicleDto != null) {
+                txtChurchFatherId.setText(vehicleDto.getChurchFatherId());
+                txtDate.setText(vehicleDto.getDate());
+                txtCategory.setText(vehicleDto.getCategory());
+                txtDescription.setText(vehicleDto.getDiscription());
+            } else {
+                new Alert(Alert.AlertType.INFORMATION, "Vehicle not found").show();
             }
+        } catch (SQLException e) {
+            new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
+    }
+
 
 
     @FXML

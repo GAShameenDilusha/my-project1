@@ -5,13 +5,19 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.DatePicker;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import lk.ijse.fx.dao.custom.AttendenceDAO;
+import lk.ijse.fx.dao.custom.PaymentDAO;
+import lk.ijse.fx.dao.impl.AttendenceDAOImpl;
+import lk.ijse.fx.dao.impl.PaymentDAOImpl;
 import lk.ijse.fx.db.DbConnection;
+import lk.ijse.fx.dto.AttendenceDto;
 import lk.ijse.fx.dto.PaymentDto;
-import lk.ijse.fx.model.PaymentModel;
+import lk.ijse.fx.dto.tm.AttendenceTm;
+import lk.ijse.fx.dto.tm.PaymentTm;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
@@ -31,13 +37,12 @@ public class PaymentFormController {
     public TextField txtFee;
 
     public TextField txtFamilyNo1;
+
     public TextField txtDate;
 
-
+    public TableView tblPayment;
     @FXML
     private AnchorPane root;
-
-    private PaymentModel paymentModel = new PaymentModel();
 
     public void btnBackOnAction(ActionEvent actionEvent) throws IOException {
         AnchorPane anchorPane = FXMLLoader.load(getClass().getResource("/view/dashboard.fxml"));
@@ -59,10 +64,11 @@ public class PaymentFormController {
 
         var dto = new PaymentDto(church_no, family_no, division_no, fee, date);
 
+        PaymentDAOImpl paymentDAO=new PaymentDAOImpl();
         try {
-            boolean isSaved = paymentModel.savePayment(dto);
-            if (isSaved) {
-                new Alert(Alert.AlertType.CONFIRMATION, "Payment saved!").show();
+            boolean isSaved =paymentDAO.savePayment(dto);
+            if (isSaved){
+                tblPayment.getItems().add(new PaymentTm(dto.getChurchNo(), dto.getFamilyNo(), dto.getDivisionNo(), dto.getFee(), dto.getDate()));
             }
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
@@ -167,10 +173,9 @@ public class PaymentFormController {
         String newFee = txtFee.getText();
         String newDate = txtDate.getText();
 
-        var dto = new PaymentDto(newChurchNo, familyNo, newDivisionNo, newFee, newDate);
-
+        PaymentDAO dao = new PaymentDAOImpl();
         try {
-            boolean isUpdated = paymentModel.updatePayment(dto);
+            boolean isUpdated = dao.updatePayment(new PaymentDto(newChurchNo, familyNo, newDivisionNo, newFee, newDate));
             if (isUpdated) {
                 new Alert(Alert.AlertType.CONFIRMATION, "Payment updated!").show();
                 clearFields();
@@ -182,18 +187,21 @@ public class PaymentFormController {
         }
     }
 
+
     @FXML
     void txtSearchOnAction(ActionEvent event) {
         String familyNo = txtFamilyNo1.getText();
 
+        PaymentDAO dao = new PaymentDAOImpl();  // Create an instance of the DAO
         try {
-            PaymentDto customerDto = paymentModel.searchCustomer(familyNo);
-            if (customerDto != null) {
-                txtChurchNo.setText(customerDto.getChurchNo());
-                txtFamilyNo.setText(customerDto.getFamilyNo());
-                txtDivisionNo.setText(customerDto.getDivisionNo());
-                txtFee.setText(customerDto.getFee());
-                txtDate.setText(customerDto.getDate());
+            PaymentDto paymentDto = dao.searchCustomer(familyNo);  // Use the instance to call the method
+
+            if (paymentDto != null) {
+                txtChurchNo.setText(paymentDto.getChurchNo());
+                txtFamilyNo.setText(paymentDto.getFamilyNo());
+                txtDivisionNo.setText(paymentDto.getDivisionNo());
+                txtFee.setText(paymentDto.getFee());
+                txtDate.setText(paymentDto.getDate());
             } else {
                 new Alert(Alert.AlertType.INFORMATION, "Payment not found").show();
             }
@@ -201,6 +209,7 @@ public class PaymentFormController {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
     }
+
 
     @FXML
     void btnClearOnAction(ActionEvent event) {

@@ -11,14 +11,13 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import lk.ijse.fx.dao.custom.AttendenceDAO;
+import lk.ijse.fx.dao.custom.ChildrenDAO;
+import lk.ijse.fx.dao.impl.ChildrenDAOImpl;
+import lk.ijse.fx.dto.AttendenceDto;
 import lk.ijse.fx.dto.ChildrenDto;
-import lk.ijse.fx.dto.RegistrationDto;
 import lk.ijse.fx.dto.tm.ChildrenTm;
-import lk.ijse.fx.dto.tm.RegistrationTm;
-import lk.ijse.fx.model.ChildrenModel;
-import lk.ijse.fx.model.RegistrationModel;
 
-import java.awt.*;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.regex.Matcher;
@@ -47,7 +46,6 @@ public class ChildrenFormController {
     @FXML
     private TableView<ChildrenTm> tblChildren;
 
-    private ChildrenModel childModel = new ChildrenModel();
 
 
 
@@ -74,10 +72,14 @@ public class ChildrenFormController {
 
         var dto = new ChildrenDto(family_no, child_id, child_name, birthday, complimentary_date, date);
 
+
+
+        ChildrenDAOImpl childrenDAO=new ChildrenDAOImpl();
+        ChildrenDto childrenDto=new ChildrenDto(family_no,child_id,child_name, birthday, complimentary_date, date);
         try {
-            boolean isSaved = childModel.saveChildren(dto);
-            if (isSaved) {
-                new Alert(Alert.AlertType.CONFIRMATION, "Children saved!").show();
+            boolean isSaved =childrenDAO.saveChildren(childrenDto);
+            if (isSaved){
+                tblChildren.getItems().add(new ChildrenTm(family_no, child_id, child_name, birthday, complimentary_date, date));
             }
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
@@ -144,21 +146,25 @@ public class ChildrenFormController {
         String childId = txtChildId1.getText();
 
         try {
-            ChildrenDto customerDto = childModel.searchCustomer(childId);
-            if (customerDto != null) {
-                txtChildId.setText(customerDto.getChildId());
-                txtFamilyNo.setText(customerDto.getFamilyNo());
-                txtChildName.setText(customerDto.getChildName());
-                txtBirthday.setText(customerDto.getBirthday());
-                txtComplimentaryDate.setText(customerDto.getComplimentaryDate());
-                txtDate.setText(customerDto.getDate());
+            ChildrenDAO childrenDAO = new ChildrenDAOImpl();  // Create an instance of the DAO
+            ChildrenDto childrenDto = childrenDAO.searchCustomer(childId);  // Use the instance to call the method
+
+            if (childrenDto != null) {
+                txtChildId.setText(childrenDto.getChildId());
+                txtFamilyNo.setText(childrenDto.getFamilyNo());
+                txtChildName.setText(childrenDto.getChildName());
+                txtBirthday.setText(childrenDto.getBirthday());
+                txtComplimentaryDate.setText(childrenDto.getComplimentaryDate());
+                txtDate.setText(childrenDto.getDate());
             } else {
-                new Alert(Alert.AlertType.INFORMATION, "children not found").show();
+                new Alert(Alert.AlertType.INFORMATION, "Children not found").show();
             }
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
     }
+
+
 
 
 
@@ -180,14 +186,10 @@ public class ChildrenFormController {
 
         var dto = new ChildrenDto(newFamilyNo, childId, newChildName, newBirthday, newComplimentaryDate, newDate);
 
+        ChildrenDAOImpl childrenDAO =new ChildrenDAOImpl();
         try {
-            boolean isUpdated = childModel.updateChildren(dto);
-            if (isUpdated) {
-                new Alert(Alert.AlertType.CONFIRMATION, "Children updated!").show();
-                clearFields();
-            } else {
-                new Alert(Alert.AlertType.ERROR, "Failed to update children").show();
-            }
+            childrenDAO.updateChildren(new ChildrenDto(newFamilyNo, childId, newChildName, newBirthday, newComplimentaryDate,newDate));
+
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }

@@ -5,12 +5,18 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import lk.ijse.fx.dao.custom.AttendenceDAO;
+import lk.ijse.fx.dao.custom.EventDAO;
+import lk.ijse.fx.dao.impl.AttendenceDAOImpl;
+import lk.ijse.fx.dao.impl.EventDAOImpl;
 import lk.ijse.fx.db.DbConnection;
+import lk.ijse.fx.dto.AttendenceDto;
 import lk.ijse.fx.dto.EventDto;
-import lk.ijse.fx.model.EventModel;
+import lk.ijse.fx.dto.tm.EventTm;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
@@ -32,12 +38,12 @@ public class EventFormController {
     public TextField txtEstimatedBudget;
     public TextField txtCost;
     public TextField txtEventName;
-    public TextField txtFamilyNo1;
 
+    public TextField txtFamilyNo1;
+    public TableView tblEvent;
     @FXML
     private AnchorPane root;
 
-    private EventModel eveModel = new EventModel();
 
 
     public void btnBackOnAction(ActionEvent actionEvent) throws IOException {
@@ -52,7 +58,7 @@ public class EventFormController {
 
 
     @FXML
-    void btnSaveOnAction(ActionEvent event) throws IOException {
+    void btnSaveOnAction(ActionEvent event) {
         String family_no = txtFamilyNo.getText();
         String event_name = txtEventName.getText();
         String date = txtDate.getText();
@@ -61,33 +67,36 @@ public class EventFormController {
         String estimated_budget = txtEstimatedBudget.getText();
         String cost = txtCost.getText();
 
-
-
-        var dto = new EventDto(family_no, event_name, date,time, discription, estimated_budget, cost);
-
+        EventDto eventDto = new EventDto(family_no, event_name, date, time, discription, estimated_budget, cost);
 
         try {
-            boolean isSaved = eveModel.saveEvent(dto);
+            EventDAO eventDAO = new EventDAOImpl();
+            boolean isSaved = eventDAO.saveEvent(eventDto);
+
             if (isSaved) {
-                new Alert(Alert.AlertType.CONFIRMATION, "event saved!").show();
+                tblEvent.getItems().add(new EventTm(family_no, event_name, date, time, discription, estimated_budget, cost));
             }
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
 
-        AnchorPane anchorPane = FXMLLoader.load(getClass().getResource("/view/event_table.fxml"));   //me kotasa (mekath ekka line 6)mn damme next window ekata yamataya
-        Scene scene = new Scene(anchorPane);
-        Stage stage = (Stage) root.getScene().getWindow();
-        stage.setScene(scene);
-        stage.setTitle("Event Table");
-        stage.centerOnScreen();
-
+        try {
+            AnchorPane anchorPane = FXMLLoader.load(getClass().getResource("/view/event_table.fxml"));
+            Scene scene = new Scene(anchorPane);
+            Stage stage = (Stage) root.getScene().getWindow();
+            stage.setScene(scene);
+            stage.setTitle("Event Table");
+            stage.centerOnScreen();
+        } catch (IOException e) {
+            new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+        }
 
         boolean isEventValid = validateEvent();
-        if(isEventValid){
-            //perform save action
+        if (isEventValid) {
+            // perform save action
         }
     }
+
 
     private boolean validateEvent() {
         //Validate family_no
@@ -187,14 +196,9 @@ public class EventFormController {
         var dto = new EventDto(familyNo, newEventName, newDate, newTime, newDisciption, newEstimatedBugdet, newCost);
 
 
+        EventDAOImpl dao =new EventDAOImpl();
         try {
-            boolean isUpdated = eveModel.updateEvent(dto);
-            if (isUpdated) {
-                new Alert(Alert.AlertType.CONFIRMATION, "Event updated!").show();
-                clearFields();
-            } else {
-                new Alert(Alert.AlertType.ERROR, "Failed to update event").show();
-            }
+            dao.updateEvent(new EventDto(familyNo, newEventName, newDate, newTime, newDisciption, newEstimatedBugdet, newCost));
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
@@ -208,24 +212,26 @@ public class EventFormController {
     void txtSearchOnAction(ActionEvent event) {
         String familyNo = txtFamilyNo1.getText();
 
-
         try {
-            EventDto customerDto = eveModel.searchCustomer(familyNo);
-            if (customerDto != null) {
-                txtFamilyNo.setText(customerDto.getFamilyNo());
-                txtEventName.setText(customerDto.getEventName());
-                txtDate.setText(customerDto.getDate());
-                txtTime.setText(customerDto.getTime());
-                txtDiscription.setText(customerDto.getDiscription());
-                txtEstimatedBudget.setText(customerDto.getEstimatedBudget());
-                txtCost.setText(customerDto.getCost());
+            EventDAO eventDAO = new EventDAOImpl();  // Create an instance of the DAO
+            EventDto eventDto = eventDAO.searchCustomer(familyNo);  // Use the instance to call the method
+
+            if (eventDto != null) {
+                txtFamilyNo.setText(eventDto.getFamilyNo());
+                txtEventName.setText(eventDto.getEventName());
+                txtDate.setText(eventDto.getDate());
+                txtTime.setText(eventDto.getTime());
+                txtDiscription.setText(eventDto.getDiscription());
+                txtEstimatedBudget.setText(eventDto.getEstimatedBudget());
+                txtCost.setText(eventDto.getCost());
             } else {
-                new Alert(Alert.AlertType.INFORMATION, "event not found").show();
+                new Alert(Alert.AlertType.INFORMATION, "Event not found").show();
             }
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
     }
+
 
 
     @FXML

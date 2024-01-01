@@ -5,12 +5,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import lk.ijse.fx.dao.impl.SignupDAOImpl;
 import lk.ijse.fx.dto.SignupDto;
-import lk.ijse.fx.model.SignupModel;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -34,7 +33,7 @@ public class SignUpFormController {
         SignupDto signupDto = new SignupDto(username, password);
 
         try {
-            if (SignupModel.registerUser(signupDto)) {
+            if (SignupDAOImpl.registerUser(signupDto)){
                 AnchorPane anchorPane = FXMLLoader.load(getClass().getResource("/view/dashboard.fxml"));
                 Stage stage = (Stage) root.getScene().getWindow();
                 stage.setScene(new Scene(anchorPane));

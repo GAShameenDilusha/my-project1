@@ -9,11 +9,15 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import lk.ijse.fx.dao.custom.AttendenceDAO;
+import lk.ijse.fx.dao.custom.FatherDAO;
+import lk.ijse.fx.dao.impl.AttendenceDAOImpl;
+import lk.ijse.fx.dao.impl.FatherDAOImpl;
+import lk.ijse.fx.dto.AttendenceDto;
 import lk.ijse.fx.dto.FatherDto;
+import lk.ijse.fx.dto.tm.AttendenceTm;
 import lk.ijse.fx.dto.tm.FatherTm;
-import lk.ijse.fx.model.FatherModel;
 
-import java.awt.*;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.regex.Matcher;
@@ -31,10 +35,9 @@ public class FatherFormController {
     @FXML
     private AnchorPane root;
 
+
     @FXML
     private TableView<FatherTm> tblFather;
-
-    private FatherModel farModel = new FatherModel();
 
 
 
@@ -59,10 +62,11 @@ public class FatherFormController {
         var dto = new FatherDto(church_no, church_father_id, name, start_date, leave_date);
 
 
+        FatherDAOImpl fatherDAO=new FatherDAOImpl();
         try {
-            boolean isSaved = farModel.saveFather(dto);
-            if (isSaved) {
-                new Alert(Alert.AlertType.CONFIRMATION, "Father saved!").show();
+            boolean isSaved =fatherDAO.saveFather(dto);
+            if (isSaved){
+                tblFather.getItems().add(new FatherTm(dto.getChurchNo(), dto.getChurchFatherId(), dto.getName(), dto.getStartDate(), dto.getLeaveDate()));
             }
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
@@ -123,27 +127,26 @@ public class FatherFormController {
 
 
     @FXML
-        void btnUpdateOnAction(ActionEvent event) {
-            String newChurchNo = txtChurchNo.getText();
-            String churchFatherId = txtChurchFatherId.getText();
-            String newName = txtName.getText();
-            String newStartDate = txtStartDate.getText();
-            String newLeaveDate = txtLeaveDate.getText();
+    void btnUpdateOnAction(ActionEvent event) {
+        String newChurchNo = txtChurchNo.getText();
+        String churchFatherId = txtChurchFatherId.getText();
+        String newName = txtName.getText();
+        String newStartDate = txtStartDate.getText();
+        String newLeaveDate = txtLeaveDate.getText();
 
-            var dto = new FatherDto(newChurchNo, churchFatherId, newName, newStartDate, newLeaveDate);
-
-            try {
-                boolean isUpdated = farModel.updateFather(dto);
-                if (isUpdated) {
-                    new Alert(Alert.AlertType.CONFIRMATION, "Father updated!").show();
-                    clearFields();
-                } else {
-                    new Alert(Alert.AlertType.ERROR, "Failed to update father").show();
-                }
-            } catch (SQLException e) {
-                new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+        FatherDAOImpl dao = new FatherDAOImpl();
+        try {
+            boolean isUpdated = dao.updateFather(new FatherDto(newChurchNo, churchFatherId, newName, newStartDate, newLeaveDate));
+            if (isUpdated) {
+                new Alert(Alert.AlertType.CONFIRMATION, "Father updated!").show();
+                clearFields();
+            } else {
+                new Alert(Alert.AlertType.ERROR, "Failed to update father").show();
             }
+        } catch (SQLException e) {
+            new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
+    }
 
 
 
@@ -152,26 +155,30 @@ public class FatherFormController {
 
 
 
-@FXML
-void btnSearchOnAction(ActionEvent event) {
-   String churchFatherId = txtChurchFatherId1.getText();
+
+    @FXML
+    void btnSearchOnAction(ActionEvent event) {
+        String churchFatherId = txtChurchFatherId1.getText();
+
+        FatherDAO dao = new FatherDAOImpl();  // Create an instance of the DAO
+        try {
+            FatherDto fatherDto = dao.searchCustomer(churchFatherId);  // Use the instance to call the method
+
+            if (fatherDto != null) {
+                txtChurchNo.setText(fatherDto.getChurchNo());
+                txtChurchFatherId.setText(fatherDto.getChurchFatherId());
+                txtName.setText(fatherDto.getName());
+                txtStartDate.setText(fatherDto.getStartDate());
+                txtLeaveDate.setText(fatherDto.getLeaveDate());
+            } else {
+                new Alert(Alert.AlertType.INFORMATION, "Father not found").show();
+            }
+        } catch (SQLException e) {
+            new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+        }
+    }
 
 
-   try {
-       FatherDto customerDto = farModel.searchCustomer(churchFatherId);
-       if (customerDto != null) {
-           txtChurchNo.setText(customerDto.getChurchNo());
-           txtChurchFatherId.setText(customerDto.getChurchFatherId());
-           txtName.setText(customerDto.getName());
-           txtStartDate.setText(customerDto.getStartDate());
-           txtLeaveDate.setText(customerDto.getLeaveDate());
-       } else {
-           new Alert(Alert.AlertType.INFORMATION, "father not found").show();
-       }
-   } catch (SQLException e) {
-       new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
-   }
-}
 
 
 

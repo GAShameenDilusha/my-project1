@@ -5,11 +5,14 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import lk.ijse.fx.dao.custom.AttendenceDAO;
+import lk.ijse.fx.dao.impl.AttendenceDAOImpl;
 import lk.ijse.fx.dto.AttendenceDto;
-import lk.ijse.fx.model.AttendenceModel;
+import lk.ijse.fx.dto.tm.AttendenceTm;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -23,12 +26,14 @@ public class AttendenceFormController {
     public TextField txtLeaveTime;
 
     public TextField txtDate;
+
     public TextField txtFamilyNo1;
+
+    public TableView tblAttendance;
 
     @FXML
     private AnchorPane root;
 
-    private AttendenceModel attenModel = new AttendenceModel();
 
 
     public void btnBackOnAction(ActionEvent actionEvent) throws IOException {
@@ -53,10 +58,12 @@ public class AttendenceFormController {
         var dto = new AttendenceDto(family_no, purpose, arranged_time, leave_time, date);
 
 
+
+        AttendenceDAOImpl attendenceDAO=new AttendenceDAOImpl();
         try {
-            boolean isSaved = attenModel.saveAttendence(dto);
-            if (isSaved) {
-                new Alert(Alert.AlertType.CONFIRMATION, "attendence saved!").show();
+            boolean isSaved =attendenceDAO.saveAttendence(dto);
+            if (isSaved){
+                tblAttendance.getItems().add(new AttendenceTm(dto.getFamilyNo(), dto.getPurpose(), dto.getArrangedTime(), dto.getLeaveTime(), dto.getDate()));
             }
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
@@ -143,15 +150,9 @@ public class AttendenceFormController {
 
         var dto = new AttendenceDto(familyNo, newPurpose, newArrangedTime, newLeaveTime, newDate);
 
-
+        AttendenceDAOImpl dao =new AttendenceDAOImpl();
         try {
-            boolean isUpdated = attenModel.updateAttendence(dto);
-            if (isUpdated) {
-                new Alert(Alert.AlertType.CONFIRMATION, "Attendence updated!").show();
-                clearFields();
-            } else {
-                new Alert(Alert.AlertType.ERROR, "Failed to update attendence").show();
-            }
+            dao.updateAttendence(new AttendenceDto(familyNo, newPurpose, newArrangedTime, newLeaveTime, newDate));
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
@@ -162,23 +163,24 @@ public class AttendenceFormController {
     void txtSearchOnAction(ActionEvent event) {
         String familyNo = txtFamilyNo1.getText();
 
-
         try {
-            AttendenceDto customerDto = attenModel.searchCustomer(familyNo);
-            if (customerDto != null) {
-                txtFamilyNo.setText(customerDto.getFamilyNo());
-                txtPurpose.setText(customerDto.getPurpose());
-                txtArrangedTime.setText(customerDto.getArrangedTime());
-                txtLeaveTime.setText(customerDto.getLeaveTime());
-                txtDate.setText(customerDto.getDate());
+            AttendenceDAO attendenceDAO = new AttendenceDAOImpl();  // Create an instance of the DAO
+            AttendenceDto attendenceDto = attendenceDAO.searchCustomer(familyNo);  // Use the instance to call the method
 
+            if (attendenceDto != null) {
+                txtFamilyNo.setText(attendenceDto.getFamilyNo());
+                txtPurpose.setText(attendenceDto.getPurpose());
+                txtArrangedTime.setText(attendenceDto.getArrangedTime());
+                txtLeaveTime.setText(attendenceDto.getLeaveTime());
+                txtDate.setText(attendenceDto.getDate());
             } else {
-                new Alert(Alert.AlertType.INFORMATION, "attendence not found").show();
+                new Alert(Alert.AlertType.INFORMATION, "Attendance not found").show();
             }
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
     }
+
 
 
 
