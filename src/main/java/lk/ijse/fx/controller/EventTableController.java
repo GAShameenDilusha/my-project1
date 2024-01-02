@@ -11,6 +11,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import lk.ijse.fx.dao.custom.EventDAO;
 import lk.ijse.fx.dao.impl.EventDAOImpl;
 import lk.ijse.fx.dto.EventDto;
 import lk.ijse.fx.dto.tm.EventTm;
@@ -112,7 +113,7 @@ public class EventTableController {
         Optional<ButtonType> result = confirmationAlert.showAndWait();
 
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            EventDAOImpl eventDAO = new EventDAOImpl();
+            EventDAO eventDAO = new EventDAOImpl();
             boolean isDeleted = eventDAO.deleteEvent(familyNo);
 
             if (isDeleted) {

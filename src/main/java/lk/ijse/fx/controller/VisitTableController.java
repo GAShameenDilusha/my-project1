@@ -11,6 +11,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import lk.ijse.fx.dao.custom.VisitDAO;
 import lk.ijse.fx.dao.impl.VisitDAOImpl;
 import lk.ijse.fx.dto.VisitDto;
 import lk.ijse.fx.dto.tm.VisitTm;
@@ -59,7 +60,7 @@ public class VisitTableController {
     private void loadAllVisit() {
         ObservableList<VisitTm> obList = FXCollections.observableArrayList();
         try {
-            VisitDAOImpl visitDAO = new VisitDAOImpl();
+            VisitDAO visitDAO = new VisitDAOImpl();
             List<VisitDto> allVisit = visitDAO.loadAllVisit();
 
             for (VisitDto dto : allVisit) {
@@ -112,7 +113,7 @@ public class VisitTableController {
         Optional<ButtonType> result = confirmationAlert.showAndWait();
 
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            VisitDAOImpl visitDAO = new VisitDAOImpl();
+            VisitDAO visitDAO = new VisitDAOImpl();
             boolean isDeleted = visitDAO.deleteVisit(familyNo);
 
             if (isDeleted) {

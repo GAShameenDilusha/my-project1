@@ -11,6 +11,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import lk.ijse.fx.dao.custom.FatherDAO;
 import lk.ijse.fx.dao.impl.FatherDAOImpl;
 import lk.ijse.fx.dto.FatherDto;
 import lk.ijse.fx.dto.tm.FatherTm;
@@ -114,7 +115,7 @@ public class FatherTableController {
         Optional<ButtonType> result = confirmationAlert.showAndWait();
 
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            FatherDAOImpl fatherDAO = new FatherDAOImpl();
+            FatherDAO fatherDAO = new FatherDAOImpl();
             boolean isDeleted = fatherDAO.deleteFather(churchFatherId);
 
             if (isDeleted) {

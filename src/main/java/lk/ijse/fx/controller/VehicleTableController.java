@@ -11,6 +11,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import lk.ijse.fx.dao.custom.VehicleDAO;
 import lk.ijse.fx.dao.impl.VehicleDAOImpl;
 import lk.ijse.fx.dto.VehicleDto;
 import lk.ijse.fx.dto.tm.VehicleTm;
@@ -51,7 +52,7 @@ public class VehicleTableController {
     private void loadAllVehicle() {
         ObservableList<VehicleTm> obList = FXCollections.observableArrayList();
         try {
-            VehicleDAOImpl vehicleDAO = new VehicleDAOImpl();
+            VehicleDAO vehicleDAO = new VehicleDAOImpl();
             List<VehicleDto> allVehicle = vehicleDAO.loadAllVehicle();
 
             for (VehicleDto dto : allVehicle) {
@@ -102,7 +103,7 @@ public class VehicleTableController {
         Optional<ButtonType> result = confirmationAlert.showAndWait();
 
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            VehicleDAOImpl vehicleDAO = new VehicleDAOImpl();
+            VehicleDAO vehicleDAO = new VehicleDAOImpl();
             boolean isDeleted = vehicleDAO.deleteVehicle(churchFatherId);
 
             if (isDeleted) {

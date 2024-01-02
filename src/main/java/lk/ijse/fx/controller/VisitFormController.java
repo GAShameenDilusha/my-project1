@@ -61,7 +61,7 @@ public class VisitFormController {
         var dto = new VisitDto(family_no, church_father_id, date, time, discription);
 
 
-        VisitDAOImpl visitDAO = new VisitDAOImpl();
+        VisitDAO visitDAO = new VisitDAOImpl();
         try {
             boolean isSaved = visitDAO.saveVisit(dto);
             if (isSaved) {
@@ -147,9 +147,9 @@ public class VisitFormController {
         String newTime = txtTime.getText();
         String newDescription = txtDescription.getText();
 
-        VisitDAO dao = new VisitDAOImpl();
+        VisitDAO visitDAO = new VisitDAOImpl();
         try {
-            boolean isUpdated = dao.updateVisit(new VisitDto(familyNo, newChurchFatherId, newDate, newTime, newDescription));
+            boolean isUpdated = visitDAO.updateVisit(new VisitDto(familyNo, newChurchFatherId, newDate, newTime, newDescription));
             if (isUpdated) {
                 new Alert(Alert.AlertType.CONFIRMATION, "Visit updated!").show();
                 clearFields();
@@ -167,9 +167,9 @@ public class VisitFormController {
     void txtSearchOnAction(ActionEvent event) {
         String familyNo = txtFamilyNo1.getText();
 
-        VisitDAO dao = new VisitDAOImpl();
+        VisitDAO visitDAO = new VisitDAOImpl();
         try {
-            VisitDto visitDto = dao.searchCustomer(familyNo);
+            VisitDto visitDto = visitDAO.searchCustomer(familyNo);
 
             if (visitDto != null) {
                 txtFamilyNo.setText(visitDto.getFamilyNo());

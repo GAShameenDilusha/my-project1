@@ -62,7 +62,7 @@ public class FatherFormController {
         var dto = new FatherDto(church_no, church_father_id, name, start_date, leave_date);
 
 
-        FatherDAOImpl fatherDAO=new FatherDAOImpl();
+        FatherDAO fatherDAO=new FatherDAOImpl();
         try {
             boolean isSaved =fatherDAO.saveFather(dto);
             if (isSaved){
@@ -134,7 +134,7 @@ public class FatherFormController {
         String newStartDate = txtStartDate.getText();
         String newLeaveDate = txtLeaveDate.getText();
 
-        FatherDAOImpl dao = new FatherDAOImpl();
+        FatherDAO dao = new FatherDAOImpl();
         try {
             boolean isUpdated = dao.updateFather(new FatherDto(newChurchNo, churchFatherId, newName, newStartDate, newLeaveDate));
             if (isUpdated) {
@@ -160,9 +160,9 @@ public class FatherFormController {
     void btnSearchOnAction(ActionEvent event) {
         String churchFatherId = txtChurchFatherId1.getText();
 
-        FatherDAO dao = new FatherDAOImpl();  // Create an instance of the DAO
+        FatherDAO fatherDAO = new FatherDAOImpl();  // Create an instance of the DAO
         try {
-            FatherDto fatherDto = dao.searchCustomer(churchFatherId);  // Use the instance to call the method
+            FatherDto fatherDto = fatherDAO.searchCustomer(churchFatherId);  // Use the instance to call the method
 
             if (fatherDto != null) {
                 txtChurchNo.setText(fatherDto.getChurchNo());

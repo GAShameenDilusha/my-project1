@@ -74,7 +74,7 @@ public class ChildrenFormController {
 
 
 
-        ChildrenDAOImpl childrenDAO=new ChildrenDAOImpl();
+        ChildrenDAO childrenDAO=new ChildrenDAOImpl();
         ChildrenDto childrenDto=new ChildrenDto(family_no,child_id,child_name, birthday, complimentary_date, date);
         try {
             boolean isSaved =childrenDAO.saveChildren(childrenDto);
@@ -186,7 +186,7 @@ public class ChildrenFormController {
 
         var dto = new ChildrenDto(newFamilyNo, childId, newChildName, newBirthday, newComplimentaryDate, newDate);
 
-        ChildrenDAOImpl childrenDAO =new ChildrenDAOImpl();
+        ChildrenDAO childrenDAO =new ChildrenDAOImpl();
         try {
             childrenDAO.updateChildren(new ChildrenDto(newFamilyNo, childId, newChildName, newBirthday, newComplimentaryDate,newDate));
 

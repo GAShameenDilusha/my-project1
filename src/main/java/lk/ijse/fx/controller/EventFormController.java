@@ -196,9 +196,9 @@ public class EventFormController {
         var dto = new EventDto(familyNo, newEventName, newDate, newTime, newDisciption, newEstimatedBugdet, newCost);
 
 
-        EventDAOImpl dao =new EventDAOImpl();
+        EventDAO eventDAO =new EventDAOImpl();
         try {
-            dao.updateEvent(new EventDto(familyNo, newEventName, newDate, newTime, newDisciption, newEstimatedBugdet, newCost));
+            eventDAO.updateEvent(new EventDto(familyNo, newEventName, newDate, newTime, newDisciption, newEstimatedBugdet, newCost));
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }

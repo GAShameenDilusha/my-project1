@@ -59,7 +59,7 @@ public class AttendenceTableController {
     private void loadAllAttendence() {
         ObservableList<AttendenceTm> obList = FXCollections.observableArrayList();
         try {
-            AttendenceDAOImpl attendenceDAO = new AttendenceDAOImpl();
+            AttendenceDAO attendenceDAO = new AttendenceDAOImpl();
             List<AttendenceDto> allAttendence = attendenceDAO.loadAllAttendence();
 
             for (AttendenceDto dto : allAttendence) {

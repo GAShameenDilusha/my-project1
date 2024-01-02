@@ -10,6 +10,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import lk.ijse.fx.dao.custom.ChildrenDAO;
 import lk.ijse.fx.dao.impl.ChildrenDAOImpl;
 import lk.ijse.fx.dto.ChildrenDto;
 import lk.ijse.fx.dto.tm.ChildrenTm;
@@ -68,7 +69,7 @@ public class ChildrenTableController {
     private void loadAllChildren() {
         ObservableList<ChildrenTm> obList = FXCollections.observableArrayList();
         try {
-            ChildrenDAOImpl childrenDAO = new ChildrenDAOImpl();
+            ChildrenDAO childrenDAO = new ChildrenDAOImpl();
             List<ChildrenDto> allChildren = childrenDAO.loadAllChildren();
 
             for (ChildrenDto c : allChildren) {
@@ -117,7 +118,7 @@ public class ChildrenTableController {
         Optional<ButtonType> result = confirmationAlert.showAndWait();
 
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            ChildrenDAOImpl childrenDAO = new ChildrenDAOImpl();
+            ChildrenDAO childrenDAO = new ChildrenDAOImpl();
             boolean isDeleted = childrenDAO.deleteChildren(childId);
 
             if (isDeleted) {

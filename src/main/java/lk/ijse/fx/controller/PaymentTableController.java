@@ -11,6 +11,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import lk.ijse.fx.dao.custom.PaymentDAO;
 import lk.ijse.fx.dao.impl.PaymentDAOImpl;
 import lk.ijse.fx.dto.PaymentDto;
 import lk.ijse.fx.dto.tm.PaymentTm;
@@ -58,7 +59,7 @@ public class PaymentTableController {
     private void loadAllPayment() {
         ObservableList<PaymentTm> obList = FXCollections.observableArrayList();
         try {
-            PaymentDAOImpl paymentDAO = new PaymentDAOImpl();
+            PaymentDAO paymentDAO = new PaymentDAOImpl();
             List<PaymentDto> allPayment = paymentDAO.loadAllPayment();
 
             for (PaymentDto dto : allPayment) {
@@ -112,7 +113,7 @@ public class PaymentTableController {
         Optional<ButtonType> result = confirmationAlert.showAndWait();
 
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            PaymentDAOImpl paymentDAO = new PaymentDAOImpl();
+            PaymentDAO paymentDAO = new PaymentDAOImpl();
             boolean isDeleted = paymentDAO.deletePayment(familyNo);
 
             if (isDeleted) {

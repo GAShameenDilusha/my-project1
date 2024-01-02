@@ -59,7 +59,7 @@ public class AttendenceFormController {
 
 
 
-        AttendenceDAOImpl attendenceDAO=new AttendenceDAOImpl();
+        AttendenceDAO attendenceDAO=new AttendenceDAOImpl();
         try {
             boolean isSaved =attendenceDAO.saveAttendence(dto);
             if (isSaved){
@@ -150,9 +150,9 @@ public class AttendenceFormController {
 
         var dto = new AttendenceDto(familyNo, newPurpose, newArrangedTime, newLeaveTime, newDate);
 
-        AttendenceDAOImpl dao =new AttendenceDAOImpl();
+        AttendenceDAO attendenceDAO =new AttendenceDAOImpl();
         try {
-            dao.updateAttendence(new AttendenceDto(familyNo, newPurpose, newArrangedTime, newLeaveTime, newDate));
+            attendenceDAO.updateAttendence(new AttendenceDto(familyNo, newPurpose, newArrangedTime, newLeaveTime, newDate));
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }

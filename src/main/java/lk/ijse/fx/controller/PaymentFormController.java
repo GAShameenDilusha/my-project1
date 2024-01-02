@@ -64,7 +64,7 @@ public class PaymentFormController {
 
         var dto = new PaymentDto(church_no, family_no, division_no, fee, date);
 
-        PaymentDAOImpl paymentDAO=new PaymentDAOImpl();
+        PaymentDAO paymentDAO=new PaymentDAOImpl();
         try {
             boolean isSaved =paymentDAO.savePayment(dto);
             if (isSaved){
@@ -173,9 +173,9 @@ public class PaymentFormController {
         String newFee = txtFee.getText();
         String newDate = txtDate.getText();
 
-        PaymentDAO dao = new PaymentDAOImpl();
+        PaymentDAO paymentDAO = new PaymentDAOImpl();
         try {
-            boolean isUpdated = dao.updatePayment(new PaymentDto(newChurchNo, familyNo, newDivisionNo, newFee, newDate));
+            boolean isUpdated = paymentDAO.updatePayment(new PaymentDto(newChurchNo, familyNo, newDivisionNo, newFee, newDate));
             if (isUpdated) {
                 new Alert(Alert.AlertType.CONFIRMATION, "Payment updated!").show();
                 clearFields();
@@ -192,9 +192,9 @@ public class PaymentFormController {
     void txtSearchOnAction(ActionEvent event) {
         String familyNo = txtFamilyNo1.getText();
 
-        PaymentDAO dao = new PaymentDAOImpl();  // Create an instance of the DAO
+        PaymentDAO paymentDAO = new PaymentDAOImpl();  // Create an instance of the DAO
         try {
-            PaymentDto paymentDto = dao.searchCustomer(familyNo);  // Use the instance to call the method
+            PaymentDto paymentDto = paymentDAO.searchCustomer(familyNo);  // Use the instance to call the method
 
             if (paymentDto != null) {
                 txtChurchNo.setText(paymentDto.getChurchNo());

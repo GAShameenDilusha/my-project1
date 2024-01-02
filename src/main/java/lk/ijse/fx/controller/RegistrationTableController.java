@@ -11,6 +11,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import lk.ijse.fx.dao.custom.RegistrationDAO;
 import lk.ijse.fx.dao.impl.RegistrationDAOImpl;
 import lk.ijse.fx.dto.RegistrationDto;
 import lk.ijse.fx.dto.tm.RegistrationTm;
@@ -84,7 +85,7 @@ public class RegistrationTableController {
     private void loadAllRegistration() {
         ObservableList<RegistrationTm> obList = FXCollections.observableArrayList();
         try {
-            RegistrationDAOImpl registrationDAO = new RegistrationDAOImpl();
+            RegistrationDAO registrationDAO = new RegistrationDAOImpl();
             List<RegistrationDto> allRegistration = registrationDAO.loadAllRegistration();
 
             for (RegistrationDto dto : allRegistration) {
@@ -141,7 +142,7 @@ public class RegistrationTableController {
         Optional<ButtonType> result = confirmationAlert.showAndWait();
 
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            RegistrationDAOImpl registrationDAO = new RegistrationDAOImpl();
+            RegistrationDAO registrationDAO = new RegistrationDAOImpl();
             boolean isDeleted = registrationDAO.deleteRegistration(familyNo);
 
             if (isDeleted) {
