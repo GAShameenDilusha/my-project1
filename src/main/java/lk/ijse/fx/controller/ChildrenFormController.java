@@ -41,7 +41,7 @@ public class ChildrenFormController {
     @FXML
     private AnchorPane root;
 
-
+    ChildrenDAO childrenDAO=new ChildrenDAOImpl();
 
     @FXML
     private TableView<ChildrenTm> tblChildren;
@@ -74,7 +74,6 @@ public class ChildrenFormController {
 
 
 
-        ChildrenDAO childrenDAO=new ChildrenDAOImpl();
         ChildrenDto childrenDto=new ChildrenDto(family_no,child_id,child_name, birthday, complimentary_date, date);
         try {
             boolean isSaved =childrenDAO.saveChildren(childrenDto);
@@ -146,7 +145,6 @@ public class ChildrenFormController {
         String childId = txtChildId1.getText();
 
         try {
-            ChildrenDAO childrenDAO = new ChildrenDAOImpl();  // Create an instance of the DAO
             ChildrenDto childrenDto = childrenDAO.searchCustomer(childId);  // Use the instance to call the method
 
             if (childrenDto != null) {
@@ -186,7 +184,6 @@ public class ChildrenFormController {
 
         var dto = new ChildrenDto(newFamilyNo, childId, newChildName, newBirthday, newComplimentaryDate, newDate);
 
-        ChildrenDAO childrenDAO =new ChildrenDAOImpl();
         try {
             childrenDAO.updateChildren(new ChildrenDto(newFamilyNo, childId, newChildName, newBirthday, newComplimentaryDate,newDate));
 

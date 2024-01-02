@@ -39,6 +39,7 @@ public class VisitTableController {
     private TableView<VisitTm> tblVisit;
     @FXML
     private AnchorPane root;
+    VisitDAO visitDAO = new VisitDAOImpl();
 
 
 
@@ -60,7 +61,6 @@ public class VisitTableController {
     private void loadAllVisit() {
         ObservableList<VisitTm> obList = FXCollections.observableArrayList();
         try {
-            VisitDAO visitDAO = new VisitDAOImpl();
             List<VisitDto> allVisit = visitDAO.loadAllVisit();
 
             for (VisitDto dto : allVisit) {
@@ -113,7 +113,6 @@ public class VisitTableController {
         Optional<ButtonType> result = confirmationAlert.showAndWait();
 
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            VisitDAO visitDAO = new VisitDAOImpl();
             boolean isDeleted = visitDAO.deleteVisit(familyNo);
 
             if (isDeleted) {

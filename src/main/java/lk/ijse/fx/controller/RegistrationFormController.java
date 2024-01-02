@@ -62,6 +62,7 @@ public class RegistrationFormController implements Initializable {
     @FXML
     private TableView<RegistrationTm> tblRegistration;
     private RegistrationDto dto = new RegistrationDto();
+    RegistrationDAO registrationDAO=new RegistrationDAOImpl();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -112,7 +113,6 @@ public class RegistrationFormController implements Initializable {
 
         dto = new RegistrationDto(church_no, division_no, family_no, father_id, mother_id, father_name, mother_name, address, tel, date);
 
-        RegistrationDAO registrationDAO=new RegistrationDAOImpl();
         try {
             boolean isSaved =registrationDAO.saveRegistration(dto);
             if (isSaved){
@@ -145,7 +145,6 @@ public class RegistrationFormController implements Initializable {
     void txtSearchOnAction(ActionEvent event) {
         String familyNo = txtFamilyNo1.getText();
 
-        RegistrationDAO registrationDAO = new RegistrationDAOImpl();
         try {
             RegistrationDto registrationDto = registrationDAO.searchCustomer(familyNo);
             if (registrationDto != null) {
@@ -183,7 +182,6 @@ public class RegistrationFormController implements Initializable {
 
         var dto = new RegistrationDto(newChurchNo, newDivisionNo, familyNo, newFatherId, newMotherId, newFatherName, newMotherName, newAddress, newTel, newDate);
 
-        RegistrationDAO registrationDAO = new RegistrationDAOImpl();
         try {
             boolean isUpdated = registrationDAO.updateRegistration(dto);
             if (isUpdated) {

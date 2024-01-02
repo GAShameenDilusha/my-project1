@@ -35,6 +35,7 @@ public class VehicleFormController {
     @FXML
     private AnchorPane root;
 
+    VehicleDAO vehicleDAO=new VehicleDAOImpl();
 
 
     public void btnBackOnAction(ActionEvent actionEvent) throws IOException {
@@ -60,7 +61,6 @@ public class VehicleFormController {
 
         var dto = new VehicleDto(church_father_id, date, category, discription);
 
-        VehicleDAO vehicleDAO=new VehicleDAOImpl();
         try {
             boolean isSaved =vehicleDAO.saveVehicle(dto);
             if (isSaved){
@@ -136,7 +136,6 @@ public class VehicleFormController {
         String newCategory = txtCategory.getText();
         String newDiscription = txtDescription.getText();
 
-        VehicleDAO vehicleDAO = new VehicleDAOImpl();
         try {
             boolean isUpdated = vehicleDAO.updateVehicle(new VehicleDto(churchFatherId, newDate, newCategory, newDiscription));
             if (isUpdated) {
@@ -158,7 +157,6 @@ public class VehicleFormController {
     void txtSearchOnAction(ActionEvent event) {
         String churchFatherId = txtChurchFatherId1.getText();
 
-        VehicleDAO vehicleDAO = new VehicleDAOImpl();
         try {
             VehicleDto vehicleDto = vehicleDAO.searchCustomer(churchFatherId);
 

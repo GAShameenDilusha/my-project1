@@ -37,6 +37,7 @@ public class EventTableController {
 
     @FXML
     private AnchorPane root;
+    EventDAO eventDAO = new EventDAOImpl();
 
     public void initialize() {
         setCellValueFactory();
@@ -59,7 +60,6 @@ public class EventTableController {
     private void loadAllEvent() {
         ObservableList<EventTm> obList = FXCollections.observableArrayList();
         try {
-            EventDAOImpl eventDAO = new EventDAOImpl();
             List<EventDto> allEvent = eventDAO.loadAllEvent();
 
             for (EventDto dto : allEvent) {
@@ -113,7 +113,6 @@ public class EventTableController {
         Optional<ButtonType> result = confirmationAlert.showAndWait();
 
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            EventDAO eventDAO = new EventDAOImpl();
             boolean isDeleted = eventDAO.deleteEvent(familyNo);
 
             if (isDeleted) {

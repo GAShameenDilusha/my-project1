@@ -35,10 +35,10 @@ public class FatherFormController {
     @FXML
     private AnchorPane root;
 
-
     @FXML
     private TableView<FatherTm> tblFather;
 
+    FatherDAO fatherDAO=new FatherDAOImpl();
 
 
     public void btnBackOnAction(ActionEvent actionEvent) throws IOException {
@@ -62,7 +62,6 @@ public class FatherFormController {
         var dto = new FatherDto(church_no, church_father_id, name, start_date, leave_date);
 
 
-        FatherDAO fatherDAO=new FatherDAOImpl();
         try {
             boolean isSaved =fatherDAO.saveFather(dto);
             if (isSaved){
@@ -134,9 +133,8 @@ public class FatherFormController {
         String newStartDate = txtStartDate.getText();
         String newLeaveDate = txtLeaveDate.getText();
 
-        FatherDAO dao = new FatherDAOImpl();
         try {
-            boolean isUpdated = dao.updateFather(new FatherDto(newChurchNo, churchFatherId, newName, newStartDate, newLeaveDate));
+            boolean isUpdated = fatherDAO.updateFather(new FatherDto(newChurchNo, churchFatherId, newName, newStartDate, newLeaveDate));
             if (isUpdated) {
                 new Alert(Alert.AlertType.CONFIRMATION, "Father updated!").show();
                 clearFields();
@@ -160,7 +158,6 @@ public class FatherFormController {
     void btnSearchOnAction(ActionEvent event) {
         String churchFatherId = txtChurchFatherId1.getText();
 
-        FatherDAO fatherDAO = new FatherDAOImpl();  // Create an instance of the DAO
         try {
             FatherDto fatherDto = fatherDAO.searchCustomer(churchFatherId);  // Use the instance to call the method
 

@@ -34,7 +34,7 @@ public class AttendenceFormController {
     @FXML
     private AnchorPane root;
 
-
+    AttendenceDAO attendenceDAO=new AttendenceDAOImpl();
 
     public void btnBackOnAction(ActionEvent actionEvent) throws IOException {
         AnchorPane anchorPane = FXMLLoader.load(getClass().getResource("/view/dashboard.fxml"));
@@ -59,7 +59,7 @@ public class AttendenceFormController {
 
 
 
-        AttendenceDAO attendenceDAO=new AttendenceDAOImpl();
+
         try {
             boolean isSaved =attendenceDAO.saveAttendence(dto);
             if (isSaved){
@@ -150,7 +150,6 @@ public class AttendenceFormController {
 
         var dto = new AttendenceDto(familyNo, newPurpose, newArrangedTime, newLeaveTime, newDate);
 
-        AttendenceDAO attendenceDAO =new AttendenceDAOImpl();
         try {
             attendenceDAO.updateAttendence(new AttendenceDto(familyNo, newPurpose, newArrangedTime, newLeaveTime, newDate));
         } catch (SQLException e) {
@@ -164,7 +163,6 @@ public class AttendenceFormController {
         String familyNo = txtFamilyNo1.getText();
 
         try {
-            AttendenceDAO attendenceDAO = new AttendenceDAOImpl();  // Create an instance of the DAO
             AttendenceDto attendenceDto = attendenceDAO.searchCustomer(familyNo);  // Use the instance to call the method
 
             if (attendenceDto != null) {

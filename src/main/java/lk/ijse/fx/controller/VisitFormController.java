@@ -36,8 +36,8 @@ public class VisitFormController {
 
     @FXML
     private AnchorPane root;
-
     private JColorChooser tblVisit;
+    VisitDAO visitDAO = new VisitDAOImpl();
 
     public void btnBackOnAction(ActionEvent actionEvent) throws IOException {
         AnchorPane anchorPane = FXMLLoader.load(getClass().getResource("/view/dashboard.fxml"));
@@ -147,7 +147,6 @@ public class VisitFormController {
         String newTime = txtTime.getText();
         String newDescription = txtDescription.getText();
 
-        VisitDAO visitDAO = new VisitDAOImpl();
         try {
             boolean isUpdated = visitDAO.updateVisit(new VisitDto(familyNo, newChurchFatherId, newDate, newTime, newDescription));
             if (isUpdated) {
@@ -167,7 +166,6 @@ public class VisitFormController {
     void txtSearchOnAction(ActionEvent event) {
         String familyNo = txtFamilyNo1.getText();
 
-        VisitDAO visitDAO = new VisitDAOImpl();
         try {
             VisitDto visitDto = visitDAO.searchCustomer(familyNo);
 

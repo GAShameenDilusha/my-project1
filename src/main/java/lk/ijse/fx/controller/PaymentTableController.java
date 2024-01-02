@@ -35,7 +35,7 @@ public class PaymentTableController {
 
     @FXML
     private AnchorPane root;
-
+    PaymentDAO paymentDAO = new PaymentDAOImpl();
 
 
 
@@ -59,7 +59,6 @@ public class PaymentTableController {
     private void loadAllPayment() {
         ObservableList<PaymentTm> obList = FXCollections.observableArrayList();
         try {
-            PaymentDAO paymentDAO = new PaymentDAOImpl();
             List<PaymentDto> allPayment = paymentDAO.loadAllPayment();
 
             for (PaymentDto dto : allPayment) {
@@ -113,7 +112,6 @@ public class PaymentTableController {
         Optional<ButtonType> result = confirmationAlert.showAndWait();
 
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            PaymentDAO paymentDAO = new PaymentDAOImpl();
             boolean isDeleted = paymentDAO.deletePayment(familyNo);
 
             if (isDeleted) {

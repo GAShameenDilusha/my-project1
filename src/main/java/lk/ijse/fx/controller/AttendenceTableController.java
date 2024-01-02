@@ -37,7 +37,7 @@ public class AttendenceTableController {
     @FXML
     private AnchorPane root;
 
-
+    AttendenceDAO attendenceDAO = new AttendenceDAOImpl();
 
 
     public void initialize() {
@@ -59,7 +59,7 @@ public class AttendenceTableController {
     private void loadAllAttendence() {
         ObservableList<AttendenceTm> obList = FXCollections.observableArrayList();
         try {
-            AttendenceDAO attendenceDAO = new AttendenceDAOImpl();
+
             List<AttendenceDto> allAttendence = attendenceDAO.loadAllAttendence();
 
             for (AttendenceDto dto : allAttendence) {
@@ -110,7 +110,6 @@ public class AttendenceTableController {
         Optional<ButtonType> result = confirmationAlert.showAndWait();
 
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            AttendenceDAOImpl attendenceDAO = new AttendenceDAOImpl();
             boolean isDeleted = attendenceDAO.deleteAttendance(familyNo);
 
             if (isDeleted) {

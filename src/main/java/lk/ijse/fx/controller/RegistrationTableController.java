@@ -61,6 +61,7 @@ public class RegistrationTableController {
 
     @FXML
     private TableView<RegistrationTm> tblRegistration;
+    RegistrationDAO registrationDAO = new RegistrationDAOImpl();
 
 
     public void initialize() {
@@ -85,7 +86,6 @@ public class RegistrationTableController {
     private void loadAllRegistration() {
         ObservableList<RegistrationTm> obList = FXCollections.observableArrayList();
         try {
-            RegistrationDAO registrationDAO = new RegistrationDAOImpl();
             List<RegistrationDto> allRegistration = registrationDAO.loadAllRegistration();
 
             for (RegistrationDto dto : allRegistration) {
@@ -142,7 +142,6 @@ public class RegistrationTableController {
         Optional<ButtonType> result = confirmationAlert.showAndWait();
 
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            RegistrationDAO registrationDAO = new RegistrationDAOImpl();
             boolean isDeleted = registrationDAO.deleteRegistration(familyNo);
 
             if (isDeleted) {

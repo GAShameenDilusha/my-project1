@@ -40,7 +40,7 @@ public class FatherTableController {
     @FXML
     private AnchorPane root;
 
-
+    FatherDAO fatherDAO = new FatherDAOImpl();
 
 
     public void initialize() {
@@ -60,7 +60,6 @@ public class FatherTableController {
     private void loadAllFather() {
         ObservableList<FatherTm> obList = FXCollections.observableArrayList();
         try {
-            FatherDAOImpl fatherDAO = new FatherDAOImpl();
             List<FatherDto> allFather = fatherDAO.loadAllFather();
 
             for (FatherDto dto : allFather) {
@@ -115,7 +114,6 @@ public class FatherTableController {
         Optional<ButtonType> result = confirmationAlert.showAndWait();
 
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            FatherDAO fatherDAO = new FatherDAOImpl();
             boolean isDeleted = fatherDAO.deleteFather(churchFatherId);
 
             if (isDeleted) {

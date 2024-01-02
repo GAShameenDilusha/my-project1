@@ -32,6 +32,7 @@ public class VehicleTableController {
     public TableView tblVehicle;
     @FXML
     private AnchorPane root;
+    VehicleDAO vehicleDAO = new VehicleDAOImpl();
 
 
     public void initialize() {
@@ -52,7 +53,6 @@ public class VehicleTableController {
     private void loadAllVehicle() {
         ObservableList<VehicleTm> obList = FXCollections.observableArrayList();
         try {
-            VehicleDAO vehicleDAO = new VehicleDAOImpl();
             List<VehicleDto> allVehicle = vehicleDAO.loadAllVehicle();
 
             for (VehicleDto dto : allVehicle) {
@@ -103,7 +103,6 @@ public class VehicleTableController {
         Optional<ButtonType> result = confirmationAlert.showAndWait();
 
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            VehicleDAO vehicleDAO = new VehicleDAOImpl();
             boolean isDeleted = vehicleDAO.deleteVehicle(churchFatherId);
 
             if (isDeleted) {

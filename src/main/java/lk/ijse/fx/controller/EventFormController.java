@@ -44,7 +44,7 @@ public class EventFormController {
     @FXML
     private AnchorPane root;
 
-
+    EventDAO eventDAO = new EventDAOImpl();
 
     public void btnBackOnAction(ActionEvent actionEvent) throws IOException {
         AnchorPane anchorPane = FXMLLoader.load(getClass().getResource("/view/dashboard.fxml"));
@@ -70,7 +70,6 @@ public class EventFormController {
         EventDto eventDto = new EventDto(family_no, event_name, date, time, discription, estimated_budget, cost);
 
         try {
-            EventDAO eventDAO = new EventDAOImpl();
             boolean isSaved = eventDAO.saveEvent(eventDto);
 
             if (isSaved) {
@@ -196,7 +195,6 @@ public class EventFormController {
         var dto = new EventDto(familyNo, newEventName, newDate, newTime, newDisciption, newEstimatedBugdet, newCost);
 
 
-        EventDAO eventDAO =new EventDAOImpl();
         try {
             eventDAO.updateEvent(new EventDto(familyNo, newEventName, newDate, newTime, newDisciption, newEstimatedBugdet, newCost));
         } catch (SQLException e) {
@@ -213,7 +211,6 @@ public class EventFormController {
         String familyNo = txtFamilyNo1.getText();
 
         try {
-            EventDAO eventDAO = new EventDAOImpl();  // Create an instance of the DAO
             EventDto eventDto = eventDAO.searchCustomer(familyNo);  // Use the instance to call the method
 
             if (eventDto != null) {

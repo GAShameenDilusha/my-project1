@@ -46,9 +46,10 @@ public class ChildrenTableController {
     @FXML
     private TableColumn<?, ?> colDate;
 
-
     @FXML
     private TableView<ChildrenTm> tblChildren;
+
+    ChildrenDAO childrenDAO = new ChildrenDAOImpl();
 
     public void initialize() {
         setCellValueFactory();
@@ -69,7 +70,7 @@ public class ChildrenTableController {
     private void loadAllChildren() {
         ObservableList<ChildrenTm> obList = FXCollections.observableArrayList();
         try {
-            ChildrenDAO childrenDAO = new ChildrenDAOImpl();
+
             List<ChildrenDto> allChildren = childrenDAO.loadAllChildren();
 
             for (ChildrenDto c : allChildren) {
@@ -118,7 +119,6 @@ public class ChildrenTableController {
         Optional<ButtonType> result = confirmationAlert.showAndWait();
 
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            ChildrenDAO childrenDAO = new ChildrenDAOImpl();
             boolean isDeleted = childrenDAO.deleteChildren(childId);
 
             if (isDeleted) {
