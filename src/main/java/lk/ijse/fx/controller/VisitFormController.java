@@ -155,7 +155,7 @@ public class VisitFormController {
             } else {
                 new Alert(Alert.AlertType.ERROR, "Failed to update visit").show();
             }
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
     }
@@ -178,7 +178,7 @@ public class VisitFormController {
             } else {
                 new Alert(Alert.AlertType.INFORMATION, "Visit not found").show();
             }
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
     }

@@ -9,11 +9,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public interface AttendenceDAO {
-           boolean saveAttendence(AttendenceDto dto) throws SQLException;
-           List<AttendenceDto> loadAllAttendence() throws SQLException;
-           boolean updateAttendence(AttendenceDto dto) throws SQLException;
-           AttendenceDto searchCustomer(String familyNo) throws SQLException;
-           boolean deleteAttendance(String familyNo) throws SQLException;
+           boolean saveAttendence(AttendenceDto dto) throws SQLException, ClassNotFoundException;
+           List<AttendenceDto> loadAllAttendence() throws SQLException, ClassNotFoundException;
+           boolean updateAttendence(AttendenceDto dto) throws SQLException, ClassNotFoundException;
+           AttendenceDto searchCustomer(String familyNo) throws SQLException, ClassNotFoundException;
+           boolean deleteAttendance(String familyNo) throws SQLException, ClassNotFoundException;
      }
 
 

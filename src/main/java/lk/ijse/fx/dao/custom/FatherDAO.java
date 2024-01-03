@@ -11,10 +11,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public interface FatherDAO {
-     boolean saveFather(FatherDto dto) throws SQLException, SQLException;
-     List<FatherDto> loadAllFather() throws SQLException;
-     boolean updateFather(FatherDto dto) throws SQLException;
-     FatherDto searchCustomer(String churchFatherId) throws SQLException;
-     boolean deleteFather(String churchFatherId) throws SQLException;
+     boolean saveFather(FatherDto dto) throws SQLException, SQLException, ClassNotFoundException;
+     List<FatherDto> loadAllFather() throws SQLException, ClassNotFoundException;
+     boolean updateFather(FatherDto dto) throws SQLException, ClassNotFoundException;
+     FatherDto searchCustomer(String churchFatherId) throws SQLException, ClassNotFoundException;
+     boolean deleteFather(String churchFatherId) throws SQLException, ClassNotFoundException;
 
 }

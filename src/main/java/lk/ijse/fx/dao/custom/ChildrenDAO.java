@@ -9,14 +9,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public interface ChildrenDAO {
-         boolean saveChildren(ChildrenDto dto) throws SQLException;
-         List<ChildrenDto> loadAllChildren() throws SQLException;
+         boolean saveChildren(ChildrenDto dto) throws SQLException, ClassNotFoundException;
+         List<ChildrenDto> loadAllChildren() throws SQLException, ClassNotFoundException;
 
-         ChildrenDto searchCustomer(String childId) throws SQLException;
+         ChildrenDto searchCustomer(String childId) throws SQLException, ClassNotFoundException;
 
-         boolean updateChildren(ChildrenDto dto) throws SQLException;
+         boolean updateChildren(ChildrenDto dto) throws SQLException, ClassNotFoundException;
 
-         boolean deleteChildren(String childId) throws SQLException;
+         boolean deleteChildren(String childId) throws SQLException, ClassNotFoundException;
 
     }
 

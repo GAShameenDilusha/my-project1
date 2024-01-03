@@ -9,11 +9,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public interface VisitDAO {
-        public boolean saveVisit(VisitDto dto) throws SQLException;
-        public List<VisitDto> loadAllVisit() throws SQLException;
-        public boolean updateVisit(VisitDto dto) throws SQLException;
-        public VisitDto searchCustomer(String familyNo) throws SQLException;
-        public boolean deleteVisit(String familyNo) throws SQLException;
+        public boolean saveVisit(VisitDto dto) throws SQLException, ClassNotFoundException;
+        public List<VisitDto> loadAllVisit() throws SQLException, ClassNotFoundException;
+        public boolean updateVisit(VisitDto dto) throws SQLException, ClassNotFoundException;
+        public VisitDto searchCustomer(String familyNo) throws SQLException, ClassNotFoundException;
+        public boolean deleteVisit(String familyNo) throws SQLException, ClassNotFoundException;
 
 
 

@@ -71,7 +71,7 @@ public class EventTableController {
                 deleteButton.setOnAction(event -> {
                     try {
                         removeEvent(dto.getFamilyNo());
-                    } catch (SQLException e) {
+                    } catch (SQLException | ClassNotFoundException e) {
                         throw new RuntimeException(e);
                     }
                 });
@@ -90,7 +90,7 @@ public class EventTableController {
 
             tblEvent.setItems(obList);
 
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
@@ -106,7 +106,7 @@ public class EventTableController {
         stage.centerOnScreen();
     }
 
-    private void removeEvent(String familyNo) throws SQLException {
+    private void removeEvent(String familyNo) throws SQLException, ClassNotFoundException {
         Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
         confirmationAlert.setHeaderText(null);
         confirmationAlert.setContentText("Are you sure you want to delete this event?");

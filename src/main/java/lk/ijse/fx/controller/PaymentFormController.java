@@ -71,7 +71,7 @@ public class PaymentFormController {
             if (isSaved){
                 tblPayment.getItems().add(new PaymentTm(dto.getChurchNo(), dto.getFamilyNo(), dto.getDivisionNo(), dto.getFee(), dto.getDate()));
             }
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
 
@@ -182,7 +182,7 @@ public class PaymentFormController {
             } else {
                 new Alert(Alert.AlertType.ERROR, "Failed to update payment").show();
             }
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
     }
@@ -204,7 +204,7 @@ public class PaymentFormController {
             } else {
                 new Alert(Alert.AlertType.INFORMATION, "Payment not found").show();
             }
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
     }

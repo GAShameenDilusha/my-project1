@@ -64,7 +64,7 @@ public class VehicleTableController {
                 deleteButton.setOnAction(event -> {
                     try {
                         removeVehicle(dto.getChurchFatherId());
-                    } catch (SQLException e) {
+                    } catch (SQLException | ClassNotFoundException e) {
                         throw new RuntimeException(e);
                     }
                 });
@@ -80,7 +80,7 @@ public class VehicleTableController {
 
             tblVehicle.setItems(obList);
 
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
@@ -96,7 +96,7 @@ public class VehicleTableController {
     }
 
 
-    private void removeVehicle(String churchFatherId) throws SQLException {
+    private void removeVehicle(String churchFatherId) throws SQLException, ClassNotFoundException {
         Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
         confirmationAlert.setHeaderText(null);
         confirmationAlert.setContentText("Are you sure you want to delete this vehicle?");

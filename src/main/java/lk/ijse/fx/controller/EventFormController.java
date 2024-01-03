@@ -75,7 +75,7 @@ public class EventFormController {
             if (isSaved) {
                 tblEvent.getItems().add(new EventTm(family_no, event_name, date, time, discription, estimated_budget, cost));
             }
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
 
@@ -197,7 +197,7 @@ public class EventFormController {
 
         try {
             eventDAO.updateEvent(new EventDto(familyNo, newEventName, newDate, newTime, newDisciption, newEstimatedBugdet, newCost));
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
     }
@@ -224,7 +224,7 @@ public class EventFormController {
             } else {
                 new Alert(Alert.AlertType.INFORMATION, "Event not found").show();
             }
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
     }

@@ -78,7 +78,7 @@ public class ChildrenTableController {
                 deleteButton.setOnAction(event -> {
                     try {
                         removeChildren(c.getChildId());
-                    } catch (SQLException e) {
+                    } catch (SQLException | ClassNotFoundException e) {
                         throw new RuntimeException(e);
                     }
                 });
@@ -96,7 +96,7 @@ public class ChildrenTableController {
 
             tblChildren.setItems(obList);
 
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
@@ -112,7 +112,7 @@ public class ChildrenTableController {
     }
 
 
-    private void removeChildren(String childId) throws SQLException {
+    private void removeChildren(String childId) throws SQLException, ClassNotFoundException {
         Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
         confirmationAlert.setHeaderText(null);
         confirmationAlert.setContentText("Are you sure you want to delete this Child?");

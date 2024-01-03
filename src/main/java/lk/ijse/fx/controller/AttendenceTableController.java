@@ -71,7 +71,7 @@ public class AttendenceTableController {
                 deleteButton.setOnAction(event -> {
                     try {
                         removeAttendance(dto.getFamilyNo());
-                    } catch (SQLException e) {
+                    } catch (SQLException | ClassNotFoundException e) {
                         throw new RuntimeException(e);
                     }
                 });
@@ -88,7 +88,7 @@ public class AttendenceTableController {
 
             tblAttendance.setItems(obList);
 
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
@@ -103,7 +103,7 @@ public class AttendenceTableController {
             }
 
 
-    private void removeAttendance(String familyNo) throws SQLException {
+    private void removeAttendance(String familyNo) throws SQLException, ClassNotFoundException {
         Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
         confirmationAlert.setHeaderText(null);
         confirmationAlert.setContentText("Are you sure you want to delete this attendance?");

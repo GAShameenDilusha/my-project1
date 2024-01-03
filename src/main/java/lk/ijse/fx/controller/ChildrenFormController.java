@@ -80,7 +80,7 @@ public class ChildrenFormController {
             if (isSaved){
                 tblChildren.getItems().add(new ChildrenTm(family_no, child_id, child_name, birthday, complimentary_date, date));
             }
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
 
@@ -157,7 +157,7 @@ public class ChildrenFormController {
             } else {
                 new Alert(Alert.AlertType.INFORMATION, "Children not found").show();
             }
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
     }
@@ -187,7 +187,7 @@ public class ChildrenFormController {
         try {
             childrenDAO.updateChildren(new ChildrenDto(newFamilyNo, childId, newChildName, newBirthday, newComplimentaryDate,newDate));
 
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
     }

@@ -9,11 +9,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public interface VehicleDAO {
-        public boolean saveVehicle(VehicleDto dto) throws SQLException;
-        public List<VehicleDto> loadAllVehicle() throws SQLException;
-        public boolean updateVehicle(VehicleDto dto) throws SQLException;
-        public VehicleDto searchCustomer(String churchFatherId) throws SQLException;
-        public boolean deleteVehicle(String churchFatherId) throws SQLException;
+        public boolean saveVehicle(VehicleDto dto) throws SQLException, ClassNotFoundException;
+        public List<VehicleDto> loadAllVehicle() throws SQLException, ClassNotFoundException;
+        public boolean updateVehicle(VehicleDto dto) throws SQLException, ClassNotFoundException;
+        public VehicleDto searchCustomer(String churchFatherId) throws SQLException, ClassNotFoundException;
+        public boolean deleteVehicle(String churchFatherId) throws SQLException, ClassNotFoundException;
 
 
 }

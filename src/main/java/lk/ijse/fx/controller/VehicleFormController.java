@@ -66,7 +66,7 @@ public class VehicleFormController {
             if (isSaved){
                 tblVehicle.getItems().add(new VehicleTm(dto.getChurchFatherId(), dto.getDate(), dto.getCategory(), dto.getDiscription()));
             }
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
 
@@ -144,7 +144,7 @@ public class VehicleFormController {
             } else {
                 new Alert(Alert.AlertType.ERROR, "Failed to update registration").show();
             }
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
     }
@@ -168,7 +168,7 @@ public class VehicleFormController {
             } else {
                 new Alert(Alert.AlertType.INFORMATION, "Vehicle not found").show();
             }
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
     }

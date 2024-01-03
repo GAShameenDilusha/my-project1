@@ -71,7 +71,7 @@ public class FatherTableController {
                 deleteButton.setOnAction(event -> {
                     try {
                         removeFather(dto.getChurchFatherId());
-                    } catch (SQLException e) {
+                    } catch (SQLException | ClassNotFoundException e) {
                         throw new RuntimeException(e);
                     }
                 });
@@ -88,7 +88,7 @@ public class FatherTableController {
 
             tblFather.setItems(obList);
 
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
@@ -107,7 +107,7 @@ public class FatherTableController {
 
 
 
-    private void removeFather(String churchFatherId) throws SQLException {
+    private void removeFather(String churchFatherId) throws SQLException, ClassNotFoundException {
         Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
         confirmationAlert.setHeaderText(null);
         confirmationAlert.setContentText("Are you sure you want to delete this father?");

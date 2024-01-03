@@ -9,10 +9,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public interface RegistrationDAO {
-         List<RegistrationDto> loadAllRegistration() throws SQLException;
-         RegistrationDto searchCustomer(String familyNo) throws SQLException;
-         boolean updateRegistration(RegistrationDto dto) throws SQLException;
-         boolean deleteRegistration(String familyNo) throws SQLException;
+         List<RegistrationDto> loadAllRegistration() throws SQLException, ClassNotFoundException;
+         RegistrationDto searchCustomer(String familyNo) throws SQLException, ClassNotFoundException;
+         boolean updateRegistration(RegistrationDto dto) throws SQLException, ClassNotFoundException;
+         boolean deleteRegistration(String familyNo) throws SQLException, ClassNotFoundException;
 
     private void incrementDivisionCount(Connection connection, String divisionNo) throws SQLException {
 
@@ -22,8 +22,8 @@ public interface RegistrationDAO {
         return null;
     }
 
-    boolean saveRegistration(RegistrationDto dto) throws SQLException;
-         int getNextFamilyNo() throws SQLException;
+    boolean saveRegistration(RegistrationDto dto) throws SQLException, ClassNotFoundException;
+         int getNextFamilyNo() throws SQLException, ClassNotFoundException;
 
     }
 

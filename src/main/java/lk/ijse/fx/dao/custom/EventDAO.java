@@ -9,11 +9,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public interface EventDAO {
-         boolean saveEvent(EventDto dto) throws SQLException;
-         List<EventDto> loadAllEvent() throws SQLException;
-         boolean updateEvent(EventDto dto) throws SQLException;
-         EventDto searchCustomer(String familyNo) throws SQLException;
-         boolean deleteEvent(String familyNo) throws SQLException;
+         boolean saveEvent(EventDto dto) throws SQLException, ClassNotFoundException;
+         List<EventDto> loadAllEvent() throws SQLException, ClassNotFoundException;
+         boolean updateEvent(EventDto dto) throws SQLException, ClassNotFoundException;
+         EventDto searchCustomer(String familyNo) throws SQLException, ClassNotFoundException;
+         boolean deleteEvent(String familyNo) throws SQLException, ClassNotFoundException;
 
 
     }

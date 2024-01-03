@@ -67,7 +67,7 @@ public class FatherFormController {
             if (isSaved){
                 tblFather.getItems().add(new FatherTm(dto.getChurchNo(), dto.getChurchFatherId(), dto.getName(), dto.getStartDate(), dto.getLeaveDate()));
             }
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
 
@@ -141,7 +141,7 @@ public class FatherFormController {
             } else {
                 new Alert(Alert.AlertType.ERROR, "Failed to update father").show();
             }
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
     }
@@ -170,7 +170,7 @@ public class FatherFormController {
             } else {
                 new Alert(Alert.AlertType.INFORMATION, "Father not found").show();
             }
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
     }

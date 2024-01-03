@@ -80,7 +80,7 @@ public class RegistrationFormController implements Initializable {
             lblMotherId.setText(formattedMotherId);
             dto.setMotherId(formattedMotherId);
 
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
     }
@@ -118,7 +118,7 @@ public class RegistrationFormController implements Initializable {
             if (isSaved){
                 tblRegistration.getItems().add(new RegistrationTm(dto.getChurchNo(), dto.getDivisionNo(), dto.getFamilyNo(), dto.getFatherId(), dto.getMotherId(), dto.getFatherName(), dto.getMotherName(), dto.getAddress(), dto.getTel(), dto.getDate()));
             }
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
 
@@ -161,7 +161,7 @@ public class RegistrationFormController implements Initializable {
             } else {
                 new Alert(Alert.AlertType.INFORMATION, "Registration not found").show();
             }
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
     }
@@ -190,7 +190,7 @@ public class RegistrationFormController implements Initializable {
             } else {
                 new Alert(Alert.AlertType.ERROR, "Failed to update registration").show();
             }
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
     }

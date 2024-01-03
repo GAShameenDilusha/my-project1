@@ -65,7 +65,7 @@ public class AttendenceFormController {
             if (isSaved){
                 tblAttendance.getItems().add(new AttendenceTm(dto.getFamilyNo(), dto.getPurpose(), dto.getArrangedTime(), dto.getLeaveTime(), dto.getDate()));
             }
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
 
@@ -152,7 +152,7 @@ public class AttendenceFormController {
 
         try {
             attendenceDAO.updateAttendence(new AttendenceDto(familyNo, newPurpose, newArrangedTime, newLeaveTime, newDate));
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
     }
@@ -174,7 +174,7 @@ public class AttendenceFormController {
             } else {
                 new Alert(Alert.AlertType.INFORMATION, "Attendance not found").show();
             }
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
     }

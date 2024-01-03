@@ -99,6 +99,8 @@ public class RegistrationTableController {
                         removeRegistration(dto.getFamilyNo());
                     } catch (SQLException e) {
                         throw new RuntimeException(e);
+                    } catch (ClassNotFoundException e) {
+                        throw new RuntimeException(e);
                     }
                 });
 
@@ -121,6 +123,8 @@ public class RegistrationTableController {
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -135,7 +139,7 @@ public class RegistrationTableController {
         stage.centerOnScreen();
     }
 
-    private void removeRegistration(String familyNo) throws SQLException {
+    private void removeRegistration(String familyNo) throws SQLException, ClassNotFoundException {
         Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
         confirmationAlert.setHeaderText(null);
         confirmationAlert.setContentText("Are you sure you want to delete this registration?");

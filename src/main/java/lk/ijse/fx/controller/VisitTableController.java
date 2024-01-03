@@ -72,7 +72,7 @@ public class VisitTableController {
                 deleteButton.setOnAction(event -> {
                     try {
                         removeVisit(dto.getFamilyNo());
-                    } catch (SQLException e) {
+                    } catch (SQLException | ClassNotFoundException e) {
                         throw new RuntimeException(e);
                     }
                 });
@@ -89,7 +89,7 @@ public class VisitTableController {
 
             tblVisit.setItems(obList);
 
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
@@ -106,7 +106,7 @@ public class VisitTableController {
     }
 
 
-    private void removeVisit(String familyNo) throws SQLException {
+    private void removeVisit(String familyNo) throws SQLException, ClassNotFoundException {
         Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
         confirmationAlert.setHeaderText(null);
         confirmationAlert.setContentText("Are you sure you want to delete this visit?");
