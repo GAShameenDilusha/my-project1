@@ -1,5 +1,6 @@
 package lk.ijse.fx.dao.impl;
 
+import lk.ijse.fx.dao.SQLUtil;
 import lk.ijse.fx.dao.custom.EventDAO;
 import lk.ijse.fx.db.DbConnection;
 import lk.ijse.fx.dto.EventDto;
@@ -10,54 +11,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EventDAOImpl implements EventDAO {
-        public boolean saveEvent(EventDto dto) throws SQLException {
+        public boolean saveEvent(EventDto dto) throws SQLException, ClassNotFoundException {
             // Get the current date
             LocalDate currentDate = LocalDate.now();
             Date sqlDate = Date.valueOf(currentDate);
 
+            return SQLUtil.execute("INSERT INTO event VALUES(?, ?, ?, ?, ?, ?, ?)",
+                    dto.getFamilyNo(), dto.getFamilyNo(), dto.getEventName(), sqlDate, dto.getTime(), dto.getDiscription(), dto.getEstimatedBudget(), dto.getCost());
 
-            Connection connection = DbConnection.getInstance().getConnection();
-
-
-            String sql = "INSERT INTO event VALUES(?, ?, ?, ?, ?, ?, ?)";
-            PreparedStatement pstm = connection.prepareStatement(sql);
-
-            pstm.setString(1, dto.getFamilyNo());
-            pstm.setString(2, dto.getEventName());
-            pstm.setDate(3, sqlDate);  // Use setDate to set the date
-            pstm.setString(4, dto.getTime());
-            pstm.setString(5, dto.getDiscription());
-            pstm.setString(6, dto.getEstimatedBudget());
-            pstm.setString(7, dto.getCost());
-
-
-            boolean isSaved = pstm.executeUpdate() > 0;
-
-
-            return isSaved;
         }
 
 
 
 
 
-
-
-
-
-
-        public List<EventDto> loadAllEvent() throws SQLException {
-            Connection connection = DbConnection.getInstance().getConnection();
-
-
-            String sql = "SELECT * FROM event";
-            PreparedStatement pstm = connection.prepareStatement(sql);
-
-
+        public List<EventDto> loadAllEvent() throws SQLException, ClassNotFoundException {
             List<EventDto> eventList = new ArrayList<>();
 
-
-            ResultSet resultSet = pstm.executeQuery();
+            ResultSet resultSet = SQLUtil.execute("SELECT * FROM event");
             while (resultSet.next()) {
                 eventList.add(new EventDto(
                         resultSet.getString(1),
@@ -70,30 +41,16 @@ public class EventDAOImpl implements EventDAO {
 
                 ));
             }
-
-
             return eventList;
         }
 
 
 
 
-        public boolean updateEvent(EventDto dto) throws SQLException {
-            Connection connection = DbConnection.getInstance().getConnection();
+        public boolean updateEvent(EventDto dto) throws SQLException, ClassNotFoundException {
+            return SQLUtil.execute("UPDATE event SET event_name = ?, date = ?, time = ?, discription = ?, estimated_budget = ?, cost = ? WHERE family_no = ?"
+                    ,dto.getEventName(),dto.getDate(),dto.getTime(),dto.getDiscription(),dto.getEstimatedBudget(),dto.getCost(),dto.getFamilyNo());
 
-            String sql = "UPDATE event SET event_name = ?, date = ?, time = ?, discription = ?, estimated_budget = ?, cost = ? WHERE family_no = ?";
-            PreparedStatement pstm = connection.prepareStatement(sql);
-
-            pstm.setString(1, dto.getEventName());
-            pstm.setDate(2, Date.valueOf(LocalDate.parse(dto.getDate()))); // Parse and use setDate
-            pstm.setString(3, dto.getTime());
-            pstm.setString(4, dto.getDiscription());
-            pstm.setString(5, dto.getEstimatedBudget());
-            pstm.setString(6, dto.getCost());
-            pstm.setString(7, dto.getFamilyNo());
-
-
-            return pstm.executeUpdate() > 0;
         }
 
 
@@ -102,22 +59,10 @@ public class EventDAOImpl implements EventDAO {
 
 
 
-        public EventDto searchCustomer(String familyNo) throws SQLException {
-            Connection connection = DbConnection.getInstance().getConnection();
-
-
-            String sql = "SELECT * FROM event WHERE family_no=?";
-
-
-            PreparedStatement pstm = connection.prepareStatement(sql);
-            pstm.setString(1, familyNo);
-
-
-            ResultSet resultSet = pstm.executeQuery();
-
+        public EventDto searchCustomer(String familyNo) throws SQLException, ClassNotFoundException {
+            ResultSet resultSet = SQLUtil.execute("SELECT * FROM event WHERE family_no=?");
 
             EventDto dto = null;
-
 
             if (resultSet.next()) {
                 String event_familyNo = resultSet.getString(1);
@@ -133,16 +78,15 @@ public class EventDAOImpl implements EventDAO {
             return dto;
         }
 
-        public boolean deleteEvent(String familyNo) throws SQLException {
-            Connection connection = DbConnection.getInstance().getConnection();
-            String sql = "DELETE FROM event WHERE family_no = ?";
 
-            try (PreparedStatement pstm = connection.prepareStatement(sql)) {
-                pstm.setString(1, familyNo);
-                return pstm.executeUpdate() > 0;
+
+
+
+        public boolean deleteEvent(String familyNo) throws SQLException, ClassNotFoundException {
+            return SQLUtil.execute("DELETE FROM event WHERE family_no = ?");
             }
         }
 
 
-    }
+
 

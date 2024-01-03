@@ -1,7 +1,9 @@
 package lk.ijse.fx.dao.impl;
 
+import lk.ijse.fx.dao.SQLUtil;
 import lk.ijse.fx.dao.custom.PaymentDAO;
 import lk.ijse.fx.db.DbConnection;
+import lk.ijse.fx.dto.AttendenceDto;
 import lk.ijse.fx.dto.PaymentDto;
 
 import java.sql.*;
@@ -10,34 +12,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PaymentDAOImpl implements PaymentDAO {
-        public boolean savePayment(PaymentDto dto) throws SQLException {
+        public boolean savePayment(PaymentDto dto) throws SQLException, ClassNotFoundException {
             // Get the current date
             LocalDate currentDate = LocalDate.now();
             Date sqlDate = Date.valueOf(currentDate);
 
-            Connection connection = DbConnection.getInstance().getConnection();
-            String sql = "INSERT INTO payment (church_no, family_no, division_no, fee, date) VALUES (?, ?, ?, ?, ?)";
-
-            try (PreparedStatement pstm = connection.prepareStatement(sql)) {
-                pstm.setString(1, dto.getChurchNo());
-                pstm.setString(2, dto.getFamilyNo());
-                pstm.setString(3, dto.getDivisionNo());
-                pstm.setString(4, dto.getFee());
-                pstm.setDate(5, sqlDate);  // Use setDate to set the date
-
-                return pstm.executeUpdate() > 0;
-            }
+            return SQLUtil.execute("INSERT INTO payment (church_no, family_no, division_no, fee, date) VALUES (?, ?, ?, ?, ?)",
+                    dto.getFamilyNo(),dto.getChurchNo(),dto.getFamilyNo(),dto.getDivisionNo(),dto.getFee(),sqlDate);
         }
 
-        public List<PaymentDto> loadAllPayment() throws SQLException {
-            Connection connection = DbConnection.getInstance().getConnection();
-            String sql = "SELECT * FROM payment";
 
-            try (PreparedStatement pstm = connection.prepareStatement(sql);
-                 ResultSet resultSet = pstm.executeQuery()) {
+
+
+        public List<PaymentDto> loadAllPayment() throws SQLException, ClassNotFoundException {
+            ResultSet resultSet = SQLUtil.execute("SELECT * FROM payment");
 
                 List<PaymentDto> paymentList = new ArrayList<>();
-
                 while (resultSet.next()) {
                     paymentList.add(new PaymentDto(
                             resultSet.getString("church_no"),
@@ -49,63 +39,43 @@ public class PaymentDAOImpl implements PaymentDAO {
                 }
 
                 return paymentList;
-            }
         }
 
-        public boolean updatePayment(PaymentDto dto) throws SQLException {
-            Connection connection = DbConnection.getInstance().getConnection();
-            String sql = "UPDATE payment SET church_no = ?, division_no = ?, fee = ?, date = ? WHERE family_no = ?";
 
-            try (PreparedStatement pstm = connection.prepareStatement(sql)) {
-                pstm.setString(1, dto.getChurchNo());
-                pstm.setString(2, dto.getDivisionNo());
-                pstm.setString(3, dto.getFee());
-                pstm.setDate(4, Date.valueOf(LocalDate.parse(dto.getDate()))); // Parse and use setDate
-                pstm.setString(5, dto.getFamilyNo());
-
-                return pstm.executeUpdate() > 0;
-            }
+        public boolean updatePayment(PaymentDto dto) throws SQLException, ClassNotFoundException {
+            return SQLUtil.execute("UPDATE payment SET church_no = ?, division_no = ?, fee = ?, date = ? WHERE family_no = ?"
+                    ,dto.getChurchNo(),dto.getDivisionNo(),dto.getFee(),dto.getDate(),dto.getFamilyNo());
         }
 
 
 
-        public PaymentDto searchCustomer(String familyNo) throws SQLException {
-            Connection connection = DbConnection.getInstance().getConnection();
-            String sql = "SELECT * FROM payment WHERE family_no=?";
+    public PaymentDto searchCustomer(String familyNo) throws SQLException, ClassNotFoundException {
+        PaymentDto paymentDto = null;
 
-            try (PreparedStatement pstm = connection.prepareStatement(sql)) {
-                pstm.setString(1, familyNo);
+        ResultSet resultSet = SQLUtil.execute("SELECT * FROM payment WHERE family_no=?", familyNo);
+        if (resultSet.next()) {
+            String payment_churchNo = resultSet.getString("church_no");
+            String payment_familyNo = resultSet.getString("family_no");
+            String payment_divisionNo = resultSet.getString("division_no");
+            String payment_fee = resultSet.getString("fee");
+            String payment_date = resultSet.getString("date");
 
-                try (ResultSet resultSet = pstm.executeQuery()) {
-                    if (resultSet.next()) {
-                        String payment_churchNo = resultSet.getString("church_no");
-                        String payment_familyNo = resultSet.getString("family_no");
-                        String payment_divisionNo = resultSet.getString("division_no");
-                        String payment_fee = resultSet.getString("fee");
-                        String payment_date = resultSet.getString("date");
-
-                        return new PaymentDto(payment_churchNo, payment_familyNo, payment_divisionNo, payment_fee, payment_date);
-                    }
-                }
-            }
-            return null;
+            paymentDto = new PaymentDto(payment_churchNo, payment_familyNo, payment_divisionNo, payment_fee, payment_date);
         }
 
-
-        public boolean deletePayment(String familyNo) throws SQLException {
-            Connection connection = DbConnection.getInstance().getConnection();
-            String sql = "DELETE FROM payment WHERE family_no = ?";
-
-
-            try (PreparedStatement pstm = connection.prepareStatement(sql)) {
-                pstm.setString(1, familyNo);
-                return pstm.executeUpdate() > 0;
-            }
-        }
-
-
-
-
+        return paymentDto;
     }
+
+
+    public boolean deletePayment(String familyNo) throws SQLException, ClassNotFoundException {
+            return SQLUtil.execute("DELETE FROM payment WHERE family_no = ?");
+
+            }
+        }
+
+
+
+
+
 
 

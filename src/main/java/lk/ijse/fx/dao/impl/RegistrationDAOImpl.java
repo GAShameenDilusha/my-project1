@@ -1,5 +1,6 @@
 package lk.ijse.fx.dao.impl;
 
+import lk.ijse.fx.dao.SQLUtil;
 import lk.ijse.fx.dao.custom.RegistrationDAO;
 import lk.ijse.fx.db.DbConnection;
 import lk.ijse.fx.dto.RegistrationDto;
@@ -10,15 +11,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RegistrationDAOImpl implements RegistrationDAO {
-        public List<RegistrationDto> loadAllRegistration() throws SQLException {
-            Connection connection = DbConnection.getInstance().getConnection();
-
-            String sql = "SELECT * FROM registration";
-            PreparedStatement pstm = connection.prepareStatement(sql);
+        public List<RegistrationDto> loadAllRegistration() throws SQLException, ClassNotFoundException {
+            ResultSet resultSet = SQLUtil.execute("SELECT * FROM registration");
 
             List<RegistrationDto> registrationList = new ArrayList<>();
-
-            ResultSet resultSet = pstm.executeQuery();
             while (resultSet.next()) {
                 registrationList.add(new RegistrationDto(
                         resultSet.getString(1),
@@ -37,15 +33,11 @@ public class RegistrationDAOImpl implements RegistrationDAO {
             return registrationList;
         }
 
-        public RegistrationDto searchCustomer(String familyNo) throws SQLException {
-            Connection connection = DbConnection.getInstance().getConnection();
 
-            String sql = "SELECT * FROM registration WHERE family_no=?";
 
-            PreparedStatement pstm = connection.prepareStatement(sql);
-            pstm.setString(1, familyNo);
 
-            ResultSet resultSet = pstm.executeQuery();
+        public RegistrationDto searchCustomer(String familyNo) throws SQLException, ClassNotFoundException {
+            ResultSet resultSet = SQLUtil.execute("SELECT * FROM registration WHERE family_no=?");
 
             RegistrationDto dto = null;
 
@@ -67,26 +59,21 @@ public class RegistrationDAOImpl implements RegistrationDAO {
         }
 
 
-        public boolean updateRegistration(RegistrationDto dto) throws SQLException {
-            Connection connection = DbConnection.getInstance().getConnection();
-            String sql = "UPDATE registration SET church_no = ?, division_no = ?, father_id = ?, mother_id = ?, father_name = ?, mother_name = ?, address = ?, tel = ?, date = ? WHERE family_no = ?";
-            PreparedStatement pstm = connection.prepareStatement(sql);
-            pstm.setString(1, dto.getChurchNo());
-            pstm.setString(2, dto.getDivisionNo());
-            pstm.setString(3, dto.getFatherId());
-            pstm.setString(4, dto.getMotherId());
-            pstm.setString(5, dto.getFatherName());
-            pstm.setString(6, dto.getMotherName());
-            pstm.setString(7, dto.getAddress());
-            pstm.setString(8, dto.getTel());
-            pstm.setDate(9, Date.valueOf(LocalDate.parse(dto.getDate()))); // Parse and use setDate
-            pstm.setString(10, dto.getFamilyNo());
 
-            return pstm.executeUpdate() > 0;
+
+
+        public boolean updateRegistration(RegistrationDto dto) throws SQLException, ClassNotFoundException {
+            return SQLUtil.execute("UPDATE registration SET church_no = ?, division_no = ?, father_id = ?, mother_id = ?, father_name = ?, mother_name = ?, address = ?, tel = ?, date = ? WHERE family_no = ?"
+                    ,dto.getChurchNo(),dto.getDivisionNo(),dto.getFatherId(),dto.getMotherId(),dto.getFatherName(),dto.getMotherName(),dto.getAddress(),dto.getTel(),dto.getDate(),dto.getFamilyNo());
         }
 
 
-        public boolean deleteRegistration(String familyNo) throws SQLException {
+
+
+
+
+
+        /*public boolean deleteRegistration(String familyNo) throws SQLException {
             Connection connection = DbConnection.getInstance().getConnection();
 
             String selectSql = "SELECT division_no FROM registration WHERE family_no = ?";
@@ -127,9 +114,47 @@ public class RegistrationDAOImpl implements RegistrationDAO {
                     throw e;
                 }
             }
-        }
+        }*/
 
-        private void incrementDivisionCount(Connection connection, String divisionNo) throws SQLException {
+    public boolean deleteRegistration(String familyNo) throws SQLException, ClassNotFoundException {
+        String selectSql = "SELECT division_no FROM registration WHERE family_no = ?";
+        String deleteSql = "DELETE FROM registration WHERE family_no = ?";
+
+        try (PreparedStatement selectStatement = SQLUtil.execute(selectSql, familyNo);
+             ResultSet resultSet = selectStatement.executeQuery();
+             PreparedStatement deleteStatement = SQLUtil.execute(deleteSql, familyNo)) {
+
+            String divisionNo = null;
+            if (resultSet.next()) {
+                divisionNo = resultSet.getString("division_no");
+            }
+
+            // Start transaction
+            SQLUtil.setAutoCommit(false);
+
+            try {
+                // Delete the registration record
+                boolean isDeleted = SQLUtil.execute(deleteSql);
+
+                // Update church table to increment the division count
+                if (isDeleted && divisionNo != null) {
+                    incrementDivisionCount(divisionNo);
+                }
+
+                // Commit transaction
+                SQLUtil.commit();
+
+                return isDeleted;
+            } catch (SQLException e) {
+                // Rollback transaction in case of exception
+                SQLUtil.rollback();
+                throw e;
+            }
+        }
+    }
+
+
+       /* private void incrementDivisionCount(Connection connection, String divisionNo) throws SQLException {
             String updateChurchSql = "UPDATE church SET " +
                     "A = A + CASE WHEN ? = 'A' THEN 1 ELSE 0 END, " +
                     "B = B + CASE WHEN ? = 'B' THEN 1 ELSE 0 END, " +
@@ -145,7 +170,28 @@ public class RegistrationDAOImpl implements RegistrationDAO {
 
                 updateChurchStatement.executeUpdate();
             }
-        }
+        }*/
+
+
+
+
+
+
+
+       private void incrementDivisionCount(String divisionNo) throws SQLException, ClassNotFoundException {
+           String updateChurchSql = "UPDATE church SET " +
+                   "A = A + CASE WHEN ? = 'A' THEN 1 ELSE 0 END, " +
+                   "B = B + CASE WHEN ? = 'B' THEN 1 ELSE 0 END, " +
+                   "C = C + CASE WHEN ? = 'C' THEN 1 ELSE 0 END, " +
+                   "D = D + CASE WHEN ? = 'D' THEN 1 ELSE 0 END " +
+                   "WHERE church_no = ?";
+
+           try (PreparedStatement updateChurchStatement = SQLUtil.execute(updateChurchSql,
+                   divisionNo, divisionNo, divisionNo, divisionNo, getChurchNoForDivision(divisionNo))) {
+               updateChurchStatement.executeUpdate();
+           }
+       }
+
 
 
         private String getChurchNoForDivision(String divisionNo) {
@@ -161,7 +207,11 @@ public class RegistrationDAOImpl implements RegistrationDAO {
 
 
 
-        public boolean saveRegistration(RegistrationDto dto) throws SQLException {
+
+
+
+
+        /*public boolean saveRegistration(RegistrationDto dto) throws SQLException {
             // Get the current date
             LocalDate currentDate = LocalDate.now();
             Date sqlDate = Date.valueOf(currentDate);
@@ -234,10 +284,59 @@ public class RegistrationDAOImpl implements RegistrationDAO {
             }
 
             return isSaved;
+        }*/
+        public boolean saveRegistration(RegistrationDto dto) throws SQLException, ClassNotFoundException {
+            // Get the current date
+            LocalDate currentDate = LocalDate.now();
+            Date sqlDate = Date.valueOf(currentDate);
+
+            String registrationSql = "INSERT INTO registration VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            String updateChurchSql = "UPDATE church SET " +
+                    "A = A - CASE WHEN ? = 'A' THEN 1 ELSE 0 END, " +
+                    "B = B - CASE WHEN ? = 'B' THEN 1 ELSE 0 END, " +
+                    "C = C - CASE WHEN ? = 'C' THEN 1 ELSE 0 END, " +
+                    "D = D - CASE WHEN ? = 'D' THEN 1 ELSE 0 END " +
+                    "WHERE church_no = ?";
+
+            try (PreparedStatement registrationStatement = SQLUtil.execute(registrationSql,
+                    dto.getChurchNo(), dto.getDivisionNo(), dto.getFamilyNo(),
+                    dto.getFatherId(), dto.getMotherId(), dto.getFatherName(),
+                    dto.getMotherName(), dto.getAddress(), dto.getTel(), sqlDate);
+                 PreparedStatement updateChurchStatement = SQLUtil.execute(updateChurchSql,
+                         dto.getDivisionNo(), dto.getDivisionNo(), dto.getDivisionNo(),
+                         dto.getDivisionNo(), dto.getChurchNo())) {
+
+                // Start transaction
+                SQLUtil.setAutoCommit(false);
+
+                try {
+                    // Save registration details
+                    boolean isSaved = SQLUtil.execute(registrationSql);
+
+                    // Update church table to decrement the division count
+                    SQLUtil.execute(updateChurchSql);
+
+                    // Commit transaction
+                    SQLUtil.commit();
+
+                    return isSaved;
+                } catch (SQLException e) {
+                    // Rollback transaction in case of exception
+                    SQLUtil.rollback();
+                    throw e;
+                }
+            }
         }
 
 
-        public int getNextFamilyNo() throws SQLException {
+
+
+
+
+
+
+
+       /* public int getNextFamilyNo() throws SQLException {
 
             Connection connection = DbConnection.getInstance().getConnection();
 
@@ -252,7 +351,20 @@ public class RegistrationDAOImpl implements RegistrationDAO {
             }
 
             return maxFamilyNo + 1;
-        }
+        }*/
+       public int getNextFamilyNo() throws SQLException, ClassNotFoundException {
+           String sql = "SELECT MAX(CAST(family_no AS SIGNED)) FROM registration";
+           try (PreparedStatement statement = SQLUtil.execute(sql);
+                ResultSet resultSet = statement.executeQuery()) {
+
+               int maxFamilyNo = 0;
+               if (resultSet.next()) {
+                   maxFamilyNo = resultSet.getInt(1);
+               }
+
+               return maxFamilyNo + 1;
+           }
+       }
 
 
     }

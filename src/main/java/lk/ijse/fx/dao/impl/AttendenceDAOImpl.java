@@ -1,5 +1,6 @@
 package lk.ijse.fx.dao.impl;
 
+import lk.ijse.fx.dao.SQLUtil;
 import lk.ijse.fx.dao.custom.AttendenceDAO;
 import lk.ijse.fx.db.DbConnection;
 import lk.ijse.fx.dto.AttendenceDto;
@@ -10,25 +11,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AttendenceDAOImpl implements AttendenceDAO {
-        public boolean saveAttendence(AttendenceDto dto) throws SQLException {
+        public boolean saveAttendence(AttendenceDto dto) throws SQLException, ClassNotFoundException {
             // Get the current date
             LocalDate currentDate = LocalDate.now();
             Date sqlDate = Date.valueOf(currentDate);
 
-            Connection connection = DbConnection.getInstance().getConnection();
-
-            String sql = "INSERT INTO attendence VALUES(?, ?, ?, ?, ?)";
-            PreparedStatement pstm = connection.prepareStatement(sql);
-
-            pstm.setString(1, dto.getFamilyNo());
-            pstm.setString(2, dto.getPurpose());
-            pstm.setString(3, dto.getArrangedTime());
-            pstm.setString(4, dto.getLeaveTime());
-            pstm.setDate(5, sqlDate);  // Use setDate to set the date
-
-            boolean isSaved = pstm.executeUpdate() > 0;
-
-            return isSaved;
+            return SQLUtil.execute("INSERT INTO attendence VALUES(?, ?, ?, ?, ?)",
+                            dto.getFamilyNo(),dto.getPurpose(),dto.getArrangedTime(),dto.getLeaveTime(),sqlDate);
         }
 
 
@@ -40,15 +29,10 @@ public class AttendenceDAOImpl implements AttendenceDAO {
 
 
 
-        public List<AttendenceDto> loadAllAttendence() throws SQLException {
-            Connection connection = DbConnection.getInstance().getConnection();
-
-            String sql = "SELECT * FROM attendence";
-            PreparedStatement pstm = connection.prepareStatement(sql);
+        public List<AttendenceDto> loadAllAttendence() throws SQLException, ClassNotFoundException {
+            ResultSet resultSet = SQLUtil.execute("SELECT * FROM attendence");
 
             List<AttendenceDto> attendenceList = new ArrayList<>();
-
-            ResultSet resultSet = pstm.executeQuery();
             while (resultSet.next()) {
                 attendenceList.add(new AttendenceDto(
                         resultSet.getString(1),
@@ -59,23 +43,14 @@ public class AttendenceDAOImpl implements AttendenceDAO {
                 ));
             }
             return attendenceList;
+
         }
 
 
 
-        public boolean updateAttendence(AttendenceDto dto) throws SQLException {
-            Connection connection = DbConnection.getInstance().getConnection();
-
-            String sql = "UPDATE attendence SET purpose = ?, arranged_time = ?, leave_time = ?, date = ? WHERE family_no = ?";
-            PreparedStatement pstm = connection.prepareStatement(sql);
-
-            pstm.setString(1, dto.getPurpose());
-            pstm.setString(2, dto.getArrangedTime());
-            pstm.setString(3, dto.getLeaveTime());
-            pstm.setDate(2, Date.valueOf(LocalDate.parse(dto.getDate()))); // Parse and use setDate
-            pstm.setString(5, dto.getFamilyNo());
-
-            return pstm.executeUpdate() > 0;
+        public boolean updateAttendence(AttendenceDto dto) throws SQLException, ClassNotFoundException {
+            return SQLUtil.execute("UPDATE attendence SET purpose = ?, arranged_time = ?, leave_time = ?, date = ? WHERE family_no = ?"
+                    ,dto.getPurpose(),dto.getArrangedTime(),dto.getLeaveTime(),dto.getDate(),dto.getFamilyNo());
         }
 
 
@@ -83,17 +58,11 @@ public class AttendenceDAOImpl implements AttendenceDAO {
 
 
 
-        public AttendenceDto searchCustomer(String familyNo) throws SQLException {
-            Connection connection = DbConnection.getInstance().getConnection();
-
-            String sql = "SELECT * FROM attendence WHERE family_no=?";
-
-            PreparedStatement pstm = connection.prepareStatement(sql);
-            pstm.setString(1, familyNo);
-
-            ResultSet resultSet = pstm.executeQuery();
-
+        public AttendenceDto searchCustomer(String familyNo) throws SQLException, ClassNotFoundException {
             AttendenceDto dto = null;
+
+            ResultSet resultSet = SQLUtil.execute("SELECT * FROM attendence WHERE family_no=?");
+
 
             if (resultSet.next()) {
                 String attendence_familyNo = resultSet.getString(1);
@@ -105,18 +74,14 @@ public class AttendenceDAOImpl implements AttendenceDAO {
                 dto = new AttendenceDto(attendence_familyNo, attendence_purpose, attendence_arrangedTime, attendence_leaveTime, attendence_date);
             }
             return dto;
+
         }
 
 
-        public boolean deleteAttendance(String familyNo) throws SQLException {
-            Connection connection = DbConnection.getInstance().getConnection();
-
-            String sql = "DELETE FROM attendence WHERE family_no = ?";
-            try (PreparedStatement pstm = connection.prepareStatement(sql)) {
-                pstm.setString(1, familyNo);
-
-                return pstm.executeUpdate() > 0;
-            }
+        public boolean deleteAttendance(String familyNo) throws SQLException, ClassNotFoundException {
+            return SQLUtil.execute("DELETE FROM attendence WHERE family_no = ?");
         }
+}
 
-    }
+
+

@@ -1,33 +1,26 @@
 package lk.ijse.fx.dao.impl;
 
+import lk.ijse.fx.dao.SQLUtil;
 import lk.ijse.fx.dao.custom.LoginDAO;
-import lk.ijse.fx.db.DbConnection;
 import lk.ijse.fx.dto.LoginDto;
 import lk.ijse.fx.dto.SignupDto;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Optional;
 
 public class LoginDAOImpl implements LoginDAO {
-        public static Optional<SignupDto> searchUser(LoginDto loginDto) throws SQLException, ClassNotFoundException {
-            Connection con = DbConnection.getInstance().getConnection();
-            PreparedStatement ps = con.prepareStatement("select * from user where userName= ? and password = ?");
-            ps.setString(1, loginDto.getUserName());
-            ps.setString(2, loginDto.getPassword());
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                String userName = rs.getString(1);
-                String password = rs.getString(2);
-                return Optional.of(new SignupDto(userName, password));
-            }
-            return Optional.empty();
+    public static Optional<SignupDto> searchUser(LoginDto loginDto) throws SQLException, ClassNotFoundException {
+        String sql = "SELECT * FROM user WHERE userName=? AND password=?";
+        ResultSet rs = SQLUtil.execute(sql, loginDto.getUserName(), loginDto.getPassword());
+
+        if (rs.next()) {
+            String userName = rs.getString(1);
+            String password = rs.getString(2);
+            return Optional.of(new SignupDto(userName, password));
         }
+
+        return Optional.empty();
     }
-
-
-
-
-
+}

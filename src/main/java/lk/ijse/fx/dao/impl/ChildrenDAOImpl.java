@@ -1,5 +1,6 @@
 package lk.ijse.fx.dao.impl;
 
+import lk.ijse.fx.dao.SQLUtil;
 import lk.ijse.fx.dao.custom.ChildrenDAO;
 import lk.ijse.fx.db.DbConnection;
 import lk.ijse.fx.dto.ChildrenDto;
@@ -10,37 +11,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ChildrenDAOImpl implements ChildrenDAO {
-        public boolean saveChildren(ChildrenDto dto) throws SQLException {
+        public boolean saveChildren(ChildrenDto dto) throws SQLException, ClassNotFoundException {
             // Get the current date
             LocalDate currentDate = LocalDate.now();
             Date sqlDate = Date.valueOf(currentDate);
 
-        Connection connection = DbConnection.getInstance().getConnection();
-
-        String sql = "INSERT INTO children VALUES(?, ?, ?, ?, ?, ?)";
-        PreparedStatement pstm = connection.prepareStatement(sql);
-
-        pstm.setString(1, dto.getFamilyNo());
-        pstm.setString(2, dto.getChildId());
-        pstm.setString(3, dto.getChildName());
-        pstm.setString(4, dto.getBirthday());
-        pstm.setString(5, dto.getComplimentaryDate());
-        pstm.setDate(6, sqlDate);  // Use setDate to set the date
-
-        boolean isSaved = pstm.executeUpdate() > 0;
-        return isSaved;
+            return SQLUtil.execute("INSERT INTO children VALUES(?, ?, ?, ?, ?, ?)",
+                    dto.getFamilyNo(),dto.getFamilyNo(),dto.getChildId(),dto.getChildName(),dto.getBirthday(),dto.getComplimentaryDate(),sqlDate);
         }
 
 
-        public List<ChildrenDto> loadAllChildren() throws SQLException {
-            Connection connection = DbConnection.getInstance().getConnection();
 
-            String sql = "SELECT * FROM children";
-            PreparedStatement pstm = connection.prepareStatement(sql);
 
+
+
+        public List<ChildrenDto> loadAllChildren() throws SQLException, ClassNotFoundException {
             List<ChildrenDto> childrenList = new ArrayList<>();
 
-            ResultSet resultSet = pstm.executeQuery();
+            ResultSet resultSet = SQLUtil.execute("SELECT * FROM children");
             while (resultSet.next()) {
                 childrenList.add(new ChildrenDto(
                         resultSet.getString(1),
@@ -59,16 +47,9 @@ public class ChildrenDAOImpl implements ChildrenDAO {
 
 
 
-        public ChildrenDto searchCustomer(String childId) throws SQLException {
-            Connection connection = DbConnection.getInstance().getConnection();
 
-            String sql = "SELECT * FROM children WHERE child_id=?";
-
-            PreparedStatement pstm = connection.prepareStatement(sql);
-            pstm.setString(1, childId);
-
-            ResultSet resultSet = pstm.executeQuery();
-
+        public ChildrenDto searchCustomer(String childId) throws SQLException, ClassNotFoundException {
+            ResultSet resultSet = SQLUtil.execute("SELECT * FROM attendence WHERE family_no=?");
             ChildrenDto dto = null;
 
             if (resultSet.next()) {
@@ -91,40 +72,24 @@ public class ChildrenDAOImpl implements ChildrenDAO {
 
 
 
-
-
-
-
-        public boolean updateChildren(ChildrenDto dto) throws SQLException {
-            Connection connection = DbConnection.getInstance().getConnection();
-
-            String sql = "UPDATE children SET family_no = ?, child_name = ?, birthday = ?, complimentary_date = ?, date = ? WHERE child_id = ?";
-            try (PreparedStatement pstm = connection.prepareStatement(sql)) {
-                pstm.setString(1, dto.getFamilyNo());
-                pstm.setString(2, dto.getChildName());
-                pstm.setString(3, dto.getBirthday());
-                pstm.setString(4, dto.getComplimentaryDate());
-                pstm.setDate(5, Date.valueOf(LocalDate.parse(dto.getDate()))); // Parse and use setDate
-                pstm.setString(6, dto.getChildId());
-
-                return pstm.executeUpdate() > 0;
-            }
+        public boolean updateChildren(ChildrenDto dto) throws SQLException, ClassNotFoundException {
+            return SQLUtil.execute("UPDATE children SET family_no = ?, child_name = ?, birthday = ?, complimentary_date = ?, date = ? WHERE child_id = ?"
+                    ,dto.getFamilyNo(),dto.getChildName(),dto.getBirthday(),dto.getComplimentaryDate(),dto.getDate(),dto.getChildId());
         }
 
 
 
-        public boolean deleteChildren(String childId) throws SQLException {
-            Connection connection = DbConnection.getInstance().getConnection();
-            String sql = "DELETE FROM children WHERE child_id = ?";
 
 
-            try (PreparedStatement pstm = connection.prepareStatement(sql)) {
-                pstm.setString(1, childId);
-                return pstm.executeUpdate() > 0;
-            }
+
+
+        public boolean deleteChildren(String childId) throws SQLException, ClassNotFoundException {
+            return SQLUtil.execute("DELETE FROM children WHERE child_id = ?");
+
         }
+}
 
-    }
+
 
 
 

@@ -1,5 +1,6 @@
 package lk.ijse.fx.dao.impl;
 
+import lk.ijse.fx.dao.SQLUtil;
 import lk.ijse.fx.dao.custom.VisitDAO;
 import lk.ijse.fx.db.DbConnection;
 import lk.ijse.fx.dto.VisitDto;
@@ -10,31 +11,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class VisitDAOImpl implements VisitDAO {
-        public boolean saveVisit(VisitDto dto) throws SQLException {
-            Connection connection = DbConnection.getInstance().getConnection();
-
+        public boolean saveVisit(VisitDto dto) throws SQLException, ClassNotFoundException {
             // Get the current date
             LocalDate currentDate = LocalDate.now();
             Date sqlDate = Date.valueOf(currentDate);
 
+            return SQLUtil.execute("INSERT INTO visit VALUES(?, ?, ?, ?, ?)",
+                    dto.getFamilyNo(),dto.getChurchFatherId(),sqlDate,dto.getTime(),dto.getDiscription());
 
-            String sql = "INSERT INTO visit VALUES(?, ?, ?, ?, ?)";
-            PreparedStatement pstm = connection.prepareStatement(sql);
-
-
-            pstm.setString(1, dto.getFamilyNo());
-            pstm.setString(2, dto.getChurchFatherId());
-            pstm.setDate(3, sqlDate);  // Use setDate to set the date
-            pstm.setString(4, dto.getTime());
-            pstm.setString(5, dto.getDiscription());
-
-
-
-
-            boolean isSaved = pstm.executeUpdate() > 0;
-
-
-            return isSaved;
         }
 
 
@@ -46,18 +30,11 @@ public class VisitDAOImpl implements VisitDAO {
 
 
 
-        public List<VisitDto> loadAllVisit() throws SQLException {
-            Connection connection = DbConnection.getInstance().getConnection();
-
-
-            String sql = "SELECT * FROM visit";
-            PreparedStatement pstm = connection.prepareStatement(sql);
-
+        public List<VisitDto> loadAllVisit() throws SQLException, ClassNotFoundException {
+            ResultSet resultSet = SQLUtil.execute("SELECT * FROM attendence");
 
             List<VisitDto> visitList = new ArrayList<>();
 
-
-            ResultSet resultSet = pstm.executeQuery();
             while (resultSet.next()) {
                 visitList.add(new VisitDto(
                         resultSet.getString(1),
@@ -76,19 +53,9 @@ public class VisitDAOImpl implements VisitDAO {
 
 
 
-        public boolean updateVisit(VisitDto dto) throws SQLException {
-            Connection connection = DbConnection.getInstance().getConnection();
-
-            String sql = "UPDATE visit SET church_father_id = ?, date = ?, time = ?, discription = ? WHERE family_no = ?";
-            PreparedStatement pstm = connection.prepareStatement(sql);
-
-            pstm.setString(1, dto.getChurchFatherId());
-            pstm.setDate(2, Date.valueOf(LocalDate.parse(dto.getDate()))); // Parse and use setDate
-            pstm.setString(3, dto.getTime());
-            pstm.setString(4, dto.getDiscription());
-            pstm.setString(5, dto.getFamilyNo());
-
-            return pstm.executeUpdate() > 0;
+        public boolean updateVisit(VisitDto dto) throws SQLException, ClassNotFoundException {
+            return SQLUtil.execute("UPDATE visit SET church_father_id = ?, date = ?, time = ?, discription = ? WHERE family_no = ?"
+                    ,dto.getChurchFatherId(),dto.getDate(),dto.getTime(),dto.getDiscription(),dto.getFamilyNo());
         }
 
 
@@ -96,22 +63,10 @@ public class VisitDAOImpl implements VisitDAO {
 
 
 
-        public VisitDto searchCustomer(String familyNo) throws SQLException {
-            Connection connection = DbConnection.getInstance().getConnection();
-
-
-            String sql = "SELECT * FROM visit WHERE family_no=?";
-
-
-            PreparedStatement pstm = connection.prepareStatement(sql);
-            pstm.setString(1, familyNo);
-
-
-            ResultSet resultSet = pstm.executeQuery();
-
+        public VisitDto searchCustomer(String familyNo) throws SQLException, ClassNotFoundException {
+            ResultSet resultSet = SQLUtil.execute("SELECT * FROM visit WHERE family_no=?");
 
             VisitDto dto = null;
-
 
             if (resultSet.next()) {
                 String visit_familyNo = resultSet.getString(1);
@@ -126,17 +81,13 @@ public class VisitDAOImpl implements VisitDAO {
         }
 
 
-        public boolean deleteVisit(String familyNo) throws SQLException {
-            Connection connection = DbConnection.getInstance().getConnection();
-            String sql = "DELETE FROM visit WHERE family_no = ?";
 
-            try (PreparedStatement pstm = connection.prepareStatement(sql)) {
-                pstm.setString(1, familyNo);
-                return pstm.executeUpdate() > 0;
+        public boolean deleteVisit(String familyNo) throws SQLException, ClassNotFoundException {
+            return SQLUtil.execute("DELETE FROM visit WHERE family_no = ?");
             }
         }
 
-    }
+
 
 
 

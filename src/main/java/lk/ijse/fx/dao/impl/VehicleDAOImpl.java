@@ -1,5 +1,6 @@
 package lk.ijse.fx.dao.impl;
 
+import lk.ijse.fx.dao.SQLUtil;
 import lk.ijse.fx.dao.custom.VehicleDAO;
 import lk.ijse.fx.db.DbConnection;
 import lk.ijse.fx.dto.VehicleDto;
@@ -10,52 +11,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class VehicleDAOImpl implements VehicleDAO {
-        public boolean saveVehicle(VehicleDto dto) throws SQLException {
+        public boolean saveVehicle(VehicleDto dto) throws SQLException, ClassNotFoundException {
             // Get the current date
             LocalDate currentDate = LocalDate.now();
             Date sqlDate = Date.valueOf(currentDate);
 
-            Connection connection = DbConnection.getInstance().getConnection();
-
-
-            String sql = "INSERT INTO vehicle VALUES(?, ?, ?, ?)";
-            PreparedStatement pstm = connection.prepareStatement(sql);
-
-
-            pstm.setString(1, dto.getChurchFatherId());
-            pstm.setDate(2, sqlDate);  // Use setDate to set the date
-            pstm.setString(3, dto.getCategory());
-            pstm.setString(4, dto.getDiscription());
-
-
-
-            boolean isSaved = pstm.executeUpdate() > 0;
-
-
-            return isSaved;
+            return SQLUtil.execute("INSERT INTO vehicle VALUES(?, ?, ?, ?)",
+                    dto.getChurchFatherId(),sqlDate,dto.getCategory(),dto.getDiscription());
         }
 
 
 
 
 
-
-
-
-
-
-        public List<VehicleDto> loadAllVehicle() throws SQLException {
-            Connection connection = DbConnection.getInstance().getConnection();
-
-
-            String sql = "SELECT * FROM vehicle";
-            PreparedStatement pstm = connection.prepareStatement(sql);
-
+        public List<VehicleDto> loadAllVehicle() throws SQLException, ClassNotFoundException {
+            ResultSet resultSet = SQLUtil.execute("SELECT * FROM vehicle");
 
             List<VehicleDto> vehicleList = new ArrayList<>();
 
-
-            ResultSet resultSet = pstm.executeQuery();
             while (resultSet.next()) {
                 vehicleList.add(new VehicleDto(
                         resultSet.getString(1),
@@ -64,8 +37,6 @@ public class VehicleDAOImpl implements VehicleDAO {
                         resultSet.getString(4)
                 ));
             }
-
-
             return vehicleList;
         }
 
@@ -73,36 +44,19 @@ public class VehicleDAOImpl implements VehicleDAO {
 
 
 
-        public boolean updateVehicle(VehicleDto dto) throws SQLException {
-            Connection connection = DbConnection.getInstance().getConnection();
-            String sql = "UPDATE vehicle SET date = ?, category = ?, discription = ? WHERE church_father_id = ?";
-            PreparedStatement pstm = connection.prepareStatement(sql);
-            pstm.setDate(1, Date.valueOf(LocalDate.parse(dto.getDate()))); // Parse and use setDate
-            pstm.setString(2, dto.getCategory());
-            pstm.setString(3, dto.getDiscription());
-            pstm.setString(4, dto.getChurchFatherId());
-
-            return pstm.executeUpdate() > 0;
+        public boolean updateVehicle(VehicleDto dto) throws SQLException, ClassNotFoundException {
+            return SQLUtil.execute("UPDATE vehicle SET date = ?, category = ?, discription = ? WHERE church_father_id = ?"
+                    ,dto.getDate(),dto.getCategory(),dto.getDiscription(),dto.getChurchFatherId());
         }
 
 
 
-        public VehicleDto searchCustomer(String churchFatherId) throws SQLException {
-            Connection connection = DbConnection.getInstance().getConnection();
 
 
-            String sql = "SELECT * FROM vehicle WHERE church_father_id=?";
-
-
-            PreparedStatement pstm = connection.prepareStatement(sql);
-            pstm.setString(1, churchFatherId);
-
-
-            ResultSet resultSet = pstm.executeQuery();
-
+        public VehicleDto searchCustomer(String churchFatherId) throws SQLException, ClassNotFoundException {
+            ResultSet resultSet = SQLUtil.execute("SELECT * FROM vehicle WHERE church_father_id=?");
 
             VehicleDto dto = null;
-
 
             if (resultSet.next()) {
                 String vehicle_churchFatherId= resultSet.getString(1);
@@ -117,19 +71,17 @@ public class VehicleDAOImpl implements VehicleDAO {
 
 
 
-        public boolean deleteVehicle(String churchFatherId) throws SQLException {
-            Connection connection = DbConnection.getInstance().getConnection();
-            String sql = "DELETE FROM vehicle WHERE church_father_id = ?";
 
-            try (PreparedStatement pstm = connection.prepareStatement(sql)) {
-                pstm.setString(1, churchFatherId);
-                return pstm.executeUpdate() > 0;
+
+        public boolean deleteVehicle(String churchFatherId) throws SQLException, ClassNotFoundException {
+            return SQLUtil.execute("DELETE FROM vehicle WHERE church_father_id = ?");
+
             }
         }
 
 
 
-    }
+
 
 
 

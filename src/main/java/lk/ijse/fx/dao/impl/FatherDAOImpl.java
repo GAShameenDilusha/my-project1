@@ -1,5 +1,6 @@
 package lk.ijse.fx.dao.impl;
 
+import lk.ijse.fx.dao.SQLUtil;
 import lk.ijse.fx.dao.custom.FatherDAO;
 import lk.ijse.fx.db.DbConnection;
 import lk.ijse.fx.dto.FatherDto;
@@ -12,40 +13,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FatherDAOImpl implements FatherDAO {
-        public boolean saveFather(FatherDto dto) throws SQLException, SQLException {
-            Connection connection = DbConnection.getInstance().getConnection();
-
-
-            String sql = "INSERT INTO father VALUES(?, ?, ?, ?, ?)";
-            PreparedStatement pstm = connection.prepareStatement(sql);
-
-
-            pstm.setString(1, dto.getChurchNo());
-            pstm.setString(2, dto.getChurchFatherId());
-            pstm.setString(3, dto.getName());
-            pstm.setString(4, dto.getStartDate());
-            pstm.setString(5, dto.getLeaveDate());
-
-
-            boolean isSaved = pstm.executeUpdate() > 0;
-
-
-            return isSaved;
+        public boolean saveFather(FatherDto dto) throws SQLException, SQLException, ClassNotFoundException {
+            return SQLUtil.execute("INSERT INTO father VALUES(?, ?, ?, ?, ?)",
+                    dto.getChurchNo(),dto.getChurchFatherId(),dto.getName(),dto.getStartDate(),dto.getLeaveDate());
         }
 
 
-        public List<FatherDto> loadAllFather() throws SQLException {
-            Connection connection = DbConnection.getInstance().getConnection();
-
-
-            String sql = "SELECT * FROM father";
-            PreparedStatement pstm = connection.prepareStatement(sql);
-
+        public List<FatherDto> loadAllFather() throws SQLException, ClassNotFoundException {
+            ResultSet resultSet = SQLUtil.execute("SELECT * FROM father");
 
             List<FatherDto> fatherList = new ArrayList<>();
-
-
-            ResultSet resultSet = pstm.executeQuery();
             while (resultSet.next()) {
                 fatherList.add(new FatherDto(
                         resultSet.getString(1),
@@ -64,19 +41,9 @@ public class FatherDAOImpl implements FatherDAO {
 
 
 
-        public boolean updateFather(FatherDto dto) throws SQLException {
-            Connection connection = DbConnection.getInstance().getConnection();
-
-            String sql = "UPDATE father SET church_no = ?, name = ?, start_date = ?, leave_date = ? WHERE church_father_id = ?";
-            PreparedStatement pstm = connection.prepareStatement(sql);
-
-            pstm.setString(1, dto.getChurchNo());
-            pstm.setString(2, dto.getName());
-            pstm.setString(3, dto.getStartDate());
-            pstm.setString(4, dto.getLeaveDate());
-            pstm.setString(5, dto.getChurchFatherId());
-
-            return pstm.executeUpdate() > 0;
+        public boolean updateFather(FatherDto dto) throws SQLException, ClassNotFoundException {
+            return SQLUtil.execute("UPDATE father SET church_no = ?, name = ?, start_date = ?, leave_date = ? WHERE church_father_id = ?"
+                    ,dto.getChurchNo(),dto.getName(),dto.getStartDate(),dto.getLeaveDate(),dto.getChurchFatherId());
         }
 
 
@@ -86,15 +53,8 @@ public class FatherDAOImpl implements FatherDAO {
 
 
 
-        public FatherDto searchCustomer(String churchFatherId) throws SQLException {
-            Connection connection = DbConnection.getInstance().getConnection();
-
-            String sql = "SELECT * FROM father WHERE church_father_id=?";
-
-            PreparedStatement pstm = connection.prepareStatement(sql);
-            pstm.setString(1, churchFatherId);
-
-            ResultSet resultSet = pstm.executeQuery();
+        public FatherDto searchCustomer(String churchFatherId) throws SQLException, ClassNotFoundException {
+            ResultSet resultSet = SQLUtil.execute("SELECT * FROM father WHERE church_father_id=?");
 
             FatherDto dto = null;
 
@@ -111,19 +71,15 @@ public class FatherDAOImpl implements FatherDAO {
         }
 
 
-        public boolean deleteFather(String churchFatherId) throws SQLException {
-            Connection connection = DbConnection.getInstance().getConnection();
-            String sql = "DELETE FROM father WHERE church_father_id = ?";
 
 
-            try (PreparedStatement pstm = connection.prepareStatement(sql)) {
-                pstm.setString(1, churchFatherId);
-                return pstm.executeUpdate() > 0;
-            }
+        public boolean deleteFather(String churchFatherId) throws SQLException, ClassNotFoundException {
+            return SQLUtil.execute("DELETE FROM father WHERE church_father_id = ?");
         }
+}
 
 
 
-    }
+
 
 
