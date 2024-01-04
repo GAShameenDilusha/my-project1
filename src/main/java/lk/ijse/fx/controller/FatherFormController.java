@@ -63,7 +63,7 @@ public class FatherFormController {
 
 
         try {
-            boolean isSaved =fatherDAO.saveFather(dto);
+            boolean isSaved =fatherDAO.save(dto);
             if (isSaved){
                 tblFather.getItems().add(new FatherTm(dto.getChurchNo(), dto.getChurchFatherId(), dto.getName(), dto.getStartDate(), dto.getLeaveDate()));
             }
@@ -134,7 +134,7 @@ public class FatherFormController {
         String newLeaveDate = txtLeaveDate.getText();
 
         try {
-            boolean isUpdated = fatherDAO.updateFather(new FatherDto(newChurchNo, churchFatherId, newName, newStartDate, newLeaveDate));
+            boolean isUpdated = fatherDAO.update(new FatherDto(newChurchNo, churchFatherId, newName, newStartDate, newLeaveDate));
             if (isUpdated) {
                 new Alert(Alert.AlertType.CONFIRMATION, "Father updated!").show();
                 clearFields();
@@ -159,7 +159,7 @@ public class FatherFormController {
         String churchFatherId = txtChurchFatherId1.getText();
 
         try {
-            FatherDto fatherDto = fatherDAO.searchCustomer(churchFatherId);  // Use the instance to call the method
+            FatherDto fatherDto = fatherDAO.search(churchFatherId);  // Use the instance to call the method
 
             if (fatherDto != null) {
                 txtChurchNo.setText(fatherDto.getChurchNo());

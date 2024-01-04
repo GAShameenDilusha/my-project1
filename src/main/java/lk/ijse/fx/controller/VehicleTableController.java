@@ -53,7 +53,7 @@ public class VehicleTableController {
     private void loadAllVehicle() {
         ObservableList<VehicleTm> obList = FXCollections.observableArrayList();
         try {
-            List<VehicleDto> allVehicle = vehicleDAO.loadAllVehicle();
+            List<VehicleDto> allVehicle = vehicleDAO.loadAll();
 
             for (VehicleDto dto : allVehicle) {
                 JFXButton deleteButton = new JFXButton("Delete");
@@ -103,7 +103,7 @@ public class VehicleTableController {
         Optional<ButtonType> result = confirmationAlert.showAndWait();
 
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            boolean isDeleted = vehicleDAO.deleteVehicle(churchFatherId);
+            boolean isDeleted = vehicleDAO.delete(churchFatherId);
 
             if (isDeleted) {
                 Alert successAlert = new Alert(Alert.AlertType.INFORMATION);

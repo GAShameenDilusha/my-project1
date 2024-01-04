@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EventDAOImpl implements EventDAO {
-        public boolean saveEvent(EventDto dto) throws SQLException, ClassNotFoundException {
+        public boolean save(EventDto dto) throws SQLException, ClassNotFoundException {
             // Get the current date
             LocalDate currentDate = LocalDate.now();
             Date sqlDate = Date.valueOf(currentDate);
@@ -25,7 +25,7 @@ public class EventDAOImpl implements EventDAO {
 
 
 
-        public List<EventDto> loadAllEvent() throws SQLException, ClassNotFoundException {
+        public List<EventDto> loadAll() throws SQLException, ClassNotFoundException {
             List<EventDto> eventList = new ArrayList<>();
 
             ResultSet resultSet = SQLUtil.execute("SELECT * FROM event");
@@ -47,7 +47,7 @@ public class EventDAOImpl implements EventDAO {
 
 
 
-        public boolean updateEvent(EventDto dto) throws SQLException, ClassNotFoundException {
+        public boolean update(EventDto dto) throws SQLException, ClassNotFoundException {
             return SQLUtil.execute("UPDATE event SET event_name = ?, date = ?, time = ?, discription = ?, estimated_budget = ?, cost = ? WHERE family_no = ?"
                     ,dto.getEventName(),dto.getDate(),dto.getTime(),dto.getDiscription(),dto.getEstimatedBudget(),dto.getCost(),dto.getFamilyNo());
 
@@ -59,7 +59,7 @@ public class EventDAOImpl implements EventDAO {
 
 
 
-        public EventDto searchCustomer(String familyNo) throws SQLException, ClassNotFoundException {
+        public EventDto search(String familyNo) throws SQLException, ClassNotFoundException {
             ResultSet resultSet = SQLUtil.execute("SELECT * FROM event WHERE family_no=?");
 
             EventDto dto = null;
@@ -82,7 +82,7 @@ public class EventDAOImpl implements EventDAO {
 
 
 
-        public boolean deleteEvent(String familyNo) throws SQLException, ClassNotFoundException {
+        public boolean delete(String familyNo) throws SQLException, ClassNotFoundException {
             return SQLUtil.execute("DELETE FROM event WHERE family_no = ?");
             }
         }

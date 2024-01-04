@@ -9,6 +9,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import lk.ijse.fx.dao.CrudDAO;
 import lk.ijse.fx.dao.custom.AttendenceDAO;
 import lk.ijse.fx.dao.impl.AttendenceDAOImpl;
 import lk.ijse.fx.dto.AttendenceDto;
@@ -34,7 +35,7 @@ public class AttendenceFormController {
     @FXML
     private AnchorPane root;
 
-    AttendenceDAO attendenceDAO=new AttendenceDAOImpl();
+    CrudDAO attendenceDAO=new AttendenceDAOImpl();
 
     public void btnBackOnAction(ActionEvent actionEvent) throws IOException {
         AnchorPane anchorPane = FXMLLoader.load(getClass().getResource("/view/dashboard.fxml"));
@@ -61,7 +62,7 @@ public class AttendenceFormController {
 
 
         try {
-            boolean isSaved =attendenceDAO.saveAttendence(dto);
+            boolean isSaved =attendenceDAO.save(dto);
             if (isSaved){
                 tblAttendance.getItems().add(new AttendenceTm(dto.getFamilyNo(), dto.getPurpose(), dto.getArrangedTime(), dto.getLeaveTime(), dto.getDate()));
             }
@@ -151,7 +152,7 @@ public class AttendenceFormController {
         var dto = new AttendenceDto(familyNo, newPurpose, newArrangedTime, newLeaveTime, newDate);
 
         try {
-            attendenceDAO.updateAttendence(new AttendenceDto(familyNo, newPurpose, newArrangedTime, newLeaveTime, newDate));
+            attendenceDAO.update(new AttendenceDto(familyNo, newPurpose, newArrangedTime, newLeaveTime, newDate));
         } catch (SQLException | ClassNotFoundException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
@@ -163,7 +164,7 @@ public class AttendenceFormController {
         String familyNo = txtFamilyNo1.getText();
 
         try {
-            AttendenceDto attendenceDto = attendenceDAO.searchCustomer(familyNo);  // Use the instance to call the method
+            AttendenceDto attendenceDto = (AttendenceDto) attendenceDAO.search(familyNo);  // Use the instance to call the method
 
             if (attendenceDto != null) {
                 txtFamilyNo.setText(attendenceDto.getFamilyNo());

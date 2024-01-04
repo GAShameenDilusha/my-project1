@@ -76,7 +76,7 @@ public class ChildrenFormController {
 
         ChildrenDto childrenDto=new ChildrenDto(family_no,child_id,child_name, birthday, complimentary_date, date);
         try {
-            boolean isSaved =childrenDAO.saveChildren(childrenDto);
+            boolean isSaved =childrenDAO.save(childrenDto);
             if (isSaved){
                 tblChildren.getItems().add(new ChildrenTm(family_no, child_id, child_name, birthday, complimentary_date, date));
             }
@@ -145,7 +145,7 @@ public class ChildrenFormController {
         String childId = txtChildId1.getText();
 
         try {
-            ChildrenDto childrenDto = childrenDAO.searchCustomer(childId);  // Use the instance to call the method
+            ChildrenDto childrenDto = childrenDAO.search(childId);  // Use the instance to call the method
 
             if (childrenDto != null) {
                 txtChildId.setText(childrenDto.getChildId());
@@ -185,7 +185,7 @@ public class ChildrenFormController {
         var dto = new ChildrenDto(newFamilyNo, childId, newChildName, newBirthday, newComplimentaryDate, newDate);
 
         try {
-            childrenDAO.updateChildren(new ChildrenDto(newFamilyNo, childId, newChildName, newBirthday, newComplimentaryDate,newDate));
+            childrenDAO.update(new ChildrenDto(newFamilyNo, childId, newChildName, newBirthday, newComplimentaryDate,newDate));
 
         } catch (SQLException | ClassNotFoundException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();

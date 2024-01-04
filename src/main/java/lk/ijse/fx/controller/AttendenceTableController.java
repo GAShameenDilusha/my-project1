@@ -60,7 +60,7 @@ public class AttendenceTableController {
         ObservableList<AttendenceTm> obList = FXCollections.observableArrayList();
         try {
 
-            List<AttendenceDto> allAttendence = attendenceDAO.loadAllAttendence();
+            List<AttendenceDto> allAttendence = attendenceDAO.loadAll();
 
             for (AttendenceDto dto : allAttendence) {
                 JFXButton deleteButton = new JFXButton("Delete");
@@ -110,7 +110,7 @@ public class AttendenceTableController {
         Optional<ButtonType> result = confirmationAlert.showAndWait();
 
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            boolean isDeleted = attendenceDAO.deleteAttendance(familyNo);
+            boolean isDeleted = attendenceDAO.delete(familyNo);
 
             if (isDeleted) {
                 Alert successAlert = new Alert(Alert.AlertType.INFORMATION);

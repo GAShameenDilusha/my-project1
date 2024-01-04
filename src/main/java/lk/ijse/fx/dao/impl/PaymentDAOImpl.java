@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PaymentDAOImpl implements PaymentDAO {
-        public boolean savePayment(PaymentDto dto) throws SQLException, ClassNotFoundException {
+        public boolean save(PaymentDto dto) throws SQLException, ClassNotFoundException {
             // Get the current date
             LocalDate currentDate = LocalDate.now();
             Date sqlDate = Date.valueOf(currentDate);
@@ -24,7 +24,7 @@ public class PaymentDAOImpl implements PaymentDAO {
 
 
 
-        public List<PaymentDto> loadAllPayment() throws SQLException, ClassNotFoundException {
+        public List<PaymentDto> loadAll() throws SQLException, ClassNotFoundException {
             ResultSet resultSet = SQLUtil.execute("SELECT * FROM payment");
 
                 List<PaymentDto> paymentList = new ArrayList<>();
@@ -42,14 +42,14 @@ public class PaymentDAOImpl implements PaymentDAO {
         }
 
 
-        public boolean updatePayment(PaymentDto dto) throws SQLException, ClassNotFoundException {
+        public boolean update(PaymentDto dto) throws SQLException, ClassNotFoundException {
             return SQLUtil.execute("UPDATE payment SET church_no = ?, division_no = ?, fee = ?, date = ? WHERE family_no = ?"
                     ,dto.getChurchNo(),dto.getDivisionNo(),dto.getFee(),dto.getDate(),dto.getFamilyNo());
         }
 
 
 
-    public PaymentDto searchCustomer(String familyNo) throws SQLException, ClassNotFoundException {
+    public PaymentDto search(String familyNo) throws SQLException, ClassNotFoundException {
         PaymentDto paymentDto = null;
 
         ResultSet resultSet = SQLUtil.execute("SELECT * FROM payment WHERE family_no=?", familyNo);
@@ -67,7 +67,7 @@ public class PaymentDAOImpl implements PaymentDAO {
     }
 
 
-    public boolean deletePayment(String familyNo) throws SQLException, ClassNotFoundException {
+    public boolean delete(String familyNo) throws SQLException, ClassNotFoundException {
             return SQLUtil.execute("DELETE FROM payment WHERE family_no = ?");
 
             }

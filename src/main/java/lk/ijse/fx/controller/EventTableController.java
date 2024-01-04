@@ -60,7 +60,7 @@ public class EventTableController {
     private void loadAllEvent() {
         ObservableList<EventTm> obList = FXCollections.observableArrayList();
         try {
-            List<EventDto> allEvent = eventDAO.loadAllEvent();
+            List<EventDto> allEvent = eventDAO.loadAll();
 
             for (EventDto dto : allEvent) {
                 JFXButton deleteButton = new JFXButton("Delete");
@@ -113,7 +113,7 @@ public class EventTableController {
         Optional<ButtonType> result = confirmationAlert.showAndWait();
 
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            boolean isDeleted = eventDAO.deleteEvent(familyNo);
+            boolean isDeleted = eventDAO.delete(familyNo);
 
             if (isDeleted) {
                 Alert successAlert = new Alert(Alert.AlertType.INFORMATION);

@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class VisitDAOImpl implements VisitDAO {
-        public boolean saveVisit(VisitDto dto) throws SQLException, ClassNotFoundException {
+        public boolean save(VisitDto dto) throws SQLException, ClassNotFoundException {
             // Get the current date
             LocalDate currentDate = LocalDate.now();
             Date sqlDate = Date.valueOf(currentDate);
@@ -30,7 +30,7 @@ public class VisitDAOImpl implements VisitDAO {
 
 
 
-        public List<VisitDto> loadAllVisit() throws SQLException, ClassNotFoundException {
+        public List<VisitDto> loadAll() throws SQLException, ClassNotFoundException {
             ResultSet resultSet = SQLUtil.execute("SELECT * FROM attendence");
 
             List<VisitDto> visitList = new ArrayList<>();
@@ -53,7 +53,7 @@ public class VisitDAOImpl implements VisitDAO {
 
 
 
-        public boolean updateVisit(VisitDto dto) throws SQLException, ClassNotFoundException {
+        public boolean update(VisitDto dto) throws SQLException, ClassNotFoundException {
             return SQLUtil.execute("UPDATE visit SET church_father_id = ?, date = ?, time = ?, discription = ? WHERE family_no = ?"
                     ,dto.getChurchFatherId(),dto.getDate(),dto.getTime(),dto.getDiscription(),dto.getFamilyNo());
         }
@@ -63,7 +63,7 @@ public class VisitDAOImpl implements VisitDAO {
 
 
 
-        public VisitDto searchCustomer(String familyNo) throws SQLException, ClassNotFoundException {
+        public VisitDto search(String familyNo) throws SQLException, ClassNotFoundException {
             ResultSet resultSet = SQLUtil.execute("SELECT * FROM visit WHERE family_no=?");
 
             VisitDto dto = null;
@@ -82,7 +82,7 @@ public class VisitDAOImpl implements VisitDAO {
 
 
 
-        public boolean deleteVisit(String familyNo) throws SQLException, ClassNotFoundException {
+        public boolean delete(String familyNo) throws SQLException, ClassNotFoundException {
             return SQLUtil.execute("DELETE FROM visit WHERE family_no = ?");
             }
         }

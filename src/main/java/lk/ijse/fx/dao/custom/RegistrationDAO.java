@@ -14,15 +14,12 @@ public interface RegistrationDAO {
          boolean updateRegistration(RegistrationDto dto) throws SQLException, ClassNotFoundException;
          boolean deleteRegistration(String familyNo) throws SQLException, ClassNotFoundException;
 
-    private void incrementDivisionCount(Connection connection, String divisionNo) throws SQLException {
-
-    }
-
-    private String getChurchNoForDivision(String divisionNo) {
+         private void incrementDivisionCount(Connection connection, String divisionNo) throws SQLException {
+         }
+         private String getChurchNoForDivision(String divisionNo) {
         return null;
     }
-
-    boolean saveRegistration(RegistrationDto dto) throws SQLException, ClassNotFoundException;
+        boolean saveRegistration(RegistrationDto dto) throws SQLException, ClassNotFoundException;
          int getNextFamilyNo() throws SQLException, ClassNotFoundException;
 
     }

@@ -60,7 +60,7 @@ public class FatherTableController {
     private void loadAllFather() {
         ObservableList<FatherTm> obList = FXCollections.observableArrayList();
         try {
-            List<FatherDto> allFather = fatherDAO.loadAllFather();
+            List<FatherDto> allFather = fatherDAO.loadAll();
 
             for (FatherDto dto : allFather) {
                 JFXButton deleteButton = new JFXButton("Delete");
@@ -114,7 +114,7 @@ public class FatherTableController {
         Optional<ButtonType> result = confirmationAlert.showAndWait();
 
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            boolean isDeleted = fatherDAO.deleteFather(churchFatherId);
+            boolean isDeleted = fatherDAO.delete(churchFatherId);
 
             if (isDeleted) {
                 Alert successAlert = new Alert(Alert.AlertType.INFORMATION);

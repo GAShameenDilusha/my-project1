@@ -61,7 +61,7 @@ public class VisitTableController {
     private void loadAllVisit() {
         ObservableList<VisitTm> obList = FXCollections.observableArrayList();
         try {
-            List<VisitDto> allVisit = visitDAO.loadAllVisit();
+            List<VisitDto> allVisit = visitDAO.loadAll();
 
             for (VisitDto dto : allVisit) {
                 JFXButton deleteButton = new JFXButton("Delete");
@@ -113,7 +113,7 @@ public class VisitTableController {
         Optional<ButtonType> result = confirmationAlert.showAndWait();
 
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            boolean isDeleted = visitDAO.deleteVisit(familyNo);
+            boolean isDeleted = visitDAO.delete(familyNo);
 
             if (isDeleted) {
                 Alert successAlert = new Alert(Alert.AlertType.INFORMATION);

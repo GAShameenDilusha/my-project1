@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AttendenceDAOImpl implements AttendenceDAO {
-        public boolean saveAttendence(AttendenceDto dto) throws SQLException, ClassNotFoundException {
+        public boolean save(AttendenceDto dto) throws SQLException, ClassNotFoundException {
             // Get the current date
             LocalDate currentDate = LocalDate.now();
             Date sqlDate = Date.valueOf(currentDate);
@@ -29,7 +29,7 @@ public class AttendenceDAOImpl implements AttendenceDAO {
 
 
 
-        public List<AttendenceDto> loadAllAttendence() throws SQLException, ClassNotFoundException {
+        public List<AttendenceDto> loadAll() throws SQLException, ClassNotFoundException {
             ResultSet resultSet = SQLUtil.execute("SELECT * FROM attendence");
 
             List<AttendenceDto> attendenceList = new ArrayList<>();
@@ -48,7 +48,7 @@ public class AttendenceDAOImpl implements AttendenceDAO {
 
 
 
-        public boolean updateAttendence(AttendenceDto dto) throws SQLException, ClassNotFoundException {
+        public boolean update(AttendenceDto dto) throws SQLException, ClassNotFoundException {
             return SQLUtil.execute("UPDATE attendence SET purpose = ?, arranged_time = ?, leave_time = ?, date = ? WHERE family_no = ?"
                     ,dto.getPurpose(),dto.getArrangedTime(),dto.getLeaveTime(),dto.getDate(),dto.getFamilyNo());
         }
@@ -58,7 +58,7 @@ public class AttendenceDAOImpl implements AttendenceDAO {
 
 
 
-        public AttendenceDto searchCustomer(String familyNo) throws SQLException, ClassNotFoundException {
+        public AttendenceDto search(String familyNo) throws SQLException, ClassNotFoundException {
             AttendenceDto dto = null;
 
             ResultSet resultSet = SQLUtil.execute("SELECT * FROM attendence WHERE family_no=?");
@@ -78,7 +78,7 @@ public class AttendenceDAOImpl implements AttendenceDAO {
         }
 
 
-        public boolean deleteAttendance(String familyNo) throws SQLException, ClassNotFoundException {
+        public boolean delete(String familyNo) throws SQLException, ClassNotFoundException {
             return SQLUtil.execute("DELETE FROM attendence WHERE family_no = ?");
         }
 }

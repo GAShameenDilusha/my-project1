@@ -67,7 +67,7 @@ public class PaymentFormController {
 
 
         try {
-            boolean isSaved =paymentDAO.savePayment(dto);
+            boolean isSaved =paymentDAO.save(dto);
             if (isSaved){
                 tblPayment.getItems().add(new PaymentTm(dto.getChurchNo(), dto.getFamilyNo(), dto.getDivisionNo(), dto.getFee(), dto.getDate()));
             }
@@ -175,7 +175,7 @@ public class PaymentFormController {
         String newDate = txtDate.getText();
 
         try {
-            boolean isUpdated = paymentDAO.updatePayment(new PaymentDto(newChurchNo, familyNo, newDivisionNo, newFee, newDate));
+            boolean isUpdated = paymentDAO.update(new PaymentDto(newChurchNo, familyNo, newDivisionNo, newFee, newDate));
             if (isUpdated) {
                 new Alert(Alert.AlertType.CONFIRMATION, "Payment updated!").show();
                 clearFields();
@@ -193,7 +193,7 @@ public class PaymentFormController {
         String familyNo = txtFamilyNo1.getText();
 
         try {
-            PaymentDto paymentDto = paymentDAO.searchCustomer(familyNo);  // Use the instance to call the method
+            PaymentDto paymentDto = paymentDAO.search(familyNo);  // Use the instance to call the method
 
             if (paymentDto != null) {
                 txtChurchNo.setText(paymentDto.getChurchNo());

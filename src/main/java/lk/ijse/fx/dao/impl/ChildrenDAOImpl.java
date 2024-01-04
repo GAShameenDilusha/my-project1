@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ChildrenDAOImpl implements ChildrenDAO {
-        public boolean saveChildren(ChildrenDto dto) throws SQLException, ClassNotFoundException {
+        public boolean save(ChildrenDto dto) throws SQLException, ClassNotFoundException {
             // Get the current date
             LocalDate currentDate = LocalDate.now();
             Date sqlDate = Date.valueOf(currentDate);
@@ -25,7 +25,7 @@ public class ChildrenDAOImpl implements ChildrenDAO {
 
 
 
-        public List<ChildrenDto> loadAllChildren() throws SQLException, ClassNotFoundException {
+        public List<ChildrenDto> loadAll() throws SQLException, ClassNotFoundException {
             List<ChildrenDto> childrenList = new ArrayList<>();
 
             ResultSet resultSet = SQLUtil.execute("SELECT * FROM children");
@@ -48,7 +48,7 @@ public class ChildrenDAOImpl implements ChildrenDAO {
 
 
 
-        public ChildrenDto searchCustomer(String childId) throws SQLException, ClassNotFoundException {
+        public ChildrenDto search(String childId) throws SQLException, ClassNotFoundException {
             ResultSet resultSet = SQLUtil.execute("SELECT * FROM attendence WHERE family_no=?");
             ChildrenDto dto = null;
 
@@ -72,7 +72,7 @@ public class ChildrenDAOImpl implements ChildrenDAO {
 
 
 
-        public boolean updateChildren(ChildrenDto dto) throws SQLException, ClassNotFoundException {
+        public boolean update(ChildrenDto dto) throws SQLException, ClassNotFoundException {
             return SQLUtil.execute("UPDATE children SET family_no = ?, child_name = ?, birthday = ?, complimentary_date = ?, date = ? WHERE child_id = ?"
                     ,dto.getFamilyNo(),dto.getChildName(),dto.getBirthday(),dto.getComplimentaryDate(),dto.getDate(),dto.getChildId());
         }
@@ -83,7 +83,7 @@ public class ChildrenDAOImpl implements ChildrenDAO {
 
 
 
-        public boolean deleteChildren(String childId) throws SQLException, ClassNotFoundException {
+        public boolean delete(String childId) throws SQLException, ClassNotFoundException {
             return SQLUtil.execute("DELETE FROM children WHERE child_id = ?");
 
         }

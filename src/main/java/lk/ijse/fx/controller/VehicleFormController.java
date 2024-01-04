@@ -62,7 +62,7 @@ public class VehicleFormController {
         var dto = new VehicleDto(church_father_id, date, category, discription);
 
         try {
-            boolean isSaved =vehicleDAO.saveVehicle(dto);
+            boolean isSaved =vehicleDAO.save(dto);
             if (isSaved){
                 tblVehicle.getItems().add(new VehicleTm(dto.getChurchFatherId(), dto.getDate(), dto.getCategory(), dto.getDiscription()));
             }
@@ -137,7 +137,7 @@ public class VehicleFormController {
         String newDiscription = txtDescription.getText();
 
         try {
-            boolean isUpdated = vehicleDAO.updateVehicle(new VehicleDto(churchFatherId, newDate, newCategory, newDiscription));
+            boolean isUpdated = vehicleDAO.update(new VehicleDto(churchFatherId, newDate, newCategory, newDiscription));
             if (isUpdated) {
                 new Alert(Alert.AlertType.CONFIRMATION, "Registration updated!").show();
                 clearFields();
@@ -158,7 +158,7 @@ public class VehicleFormController {
         String churchFatherId = txtChurchFatherId1.getText();
 
         try {
-            VehicleDto vehicleDto = vehicleDAO.searchCustomer(churchFatherId);
+            VehicleDto vehicleDto = vehicleDAO.search(churchFatherId);
 
             if (vehicleDto != null) {
                 txtChurchFatherId.setText(vehicleDto.getChurchFatherId());

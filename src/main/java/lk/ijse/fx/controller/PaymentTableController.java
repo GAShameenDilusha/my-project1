@@ -59,7 +59,7 @@ public class PaymentTableController {
     private void loadAllPayment() {
         ObservableList<PaymentTm> obList = FXCollections.observableArrayList();
         try {
-            List<PaymentDto> allPayment = paymentDAO.loadAllPayment();
+            List<PaymentDto> allPayment = paymentDAO.loadAll();
 
             for (PaymentDto dto : allPayment) {
                 JFXButton deleteButton = new JFXButton("Delete");
@@ -112,7 +112,7 @@ public class PaymentTableController {
         Optional<ButtonType> result = confirmationAlert.showAndWait();
 
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            boolean isDeleted = paymentDAO.deletePayment(familyNo);
+            boolean isDeleted = paymentDAO.delete(familyNo);
 
             if (isDeleted) {
                 Alert successAlert = new Alert(Alert.AlertType.INFORMATION);

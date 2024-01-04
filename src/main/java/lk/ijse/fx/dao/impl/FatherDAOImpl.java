@@ -13,13 +13,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FatherDAOImpl implements FatherDAO {
-        public boolean saveFather(FatherDto dto) throws SQLException, SQLException, ClassNotFoundException {
+        public boolean save(FatherDto dto) throws SQLException, SQLException, ClassNotFoundException {
             return SQLUtil.execute("INSERT INTO father VALUES(?, ?, ?, ?, ?)",
                     dto.getChurchNo(),dto.getChurchFatherId(),dto.getName(),dto.getStartDate(),dto.getLeaveDate());
         }
 
 
-        public List<FatherDto> loadAllFather() throws SQLException, ClassNotFoundException {
+        public List<FatherDto> loadAll() throws SQLException, ClassNotFoundException {
             ResultSet resultSet = SQLUtil.execute("SELECT * FROM father");
 
             List<FatherDto> fatherList = new ArrayList<>();
@@ -41,7 +41,7 @@ public class FatherDAOImpl implements FatherDAO {
 
 
 
-        public boolean updateFather(FatherDto dto) throws SQLException, ClassNotFoundException {
+        public boolean update(FatherDto dto) throws SQLException, ClassNotFoundException {
             return SQLUtil.execute("UPDATE father SET church_no = ?, name = ?, start_date = ?, leave_date = ? WHERE church_father_id = ?"
                     ,dto.getChurchNo(),dto.getName(),dto.getStartDate(),dto.getLeaveDate(),dto.getChurchFatherId());
         }
@@ -53,7 +53,7 @@ public class FatherDAOImpl implements FatherDAO {
 
 
 
-        public FatherDto searchCustomer(String churchFatherId) throws SQLException, ClassNotFoundException {
+        public FatherDto search(String churchFatherId) throws SQLException, ClassNotFoundException {
             ResultSet resultSet = SQLUtil.execute("SELECT * FROM father WHERE church_father_id=?");
 
             FatherDto dto = null;
@@ -73,7 +73,7 @@ public class FatherDAOImpl implements FatherDAO {
 
 
 
-        public boolean deleteFather(String churchFatherId) throws SQLException, ClassNotFoundException {
+        public boolean delete(String churchFatherId) throws SQLException, ClassNotFoundException {
             return SQLUtil.execute("DELETE FROM father WHERE church_father_id = ?");
         }
 }

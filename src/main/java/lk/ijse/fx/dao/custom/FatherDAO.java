@@ -1,5 +1,6 @@
 package lk.ijse.fx.dao.custom;
 
+import lk.ijse.fx.dao.CrudDAO;
 import lk.ijse.fx.db.DbConnection;
 import lk.ijse.fx.dto.FatherDto;
 
@@ -10,11 +11,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public interface FatherDAO {
-     boolean saveFather(FatherDto dto) throws SQLException, SQLException, ClassNotFoundException;
-     List<FatherDto> loadAllFather() throws SQLException, ClassNotFoundException;
-     boolean updateFather(FatherDto dto) throws SQLException, ClassNotFoundException;
-     FatherDto searchCustomer(String churchFatherId) throws SQLException, ClassNotFoundException;
-     boolean deleteFather(String churchFatherId) throws SQLException, ClassNotFoundException;
+public interface FatherDAO extends CrudDAO<FatherDto> {
 
 }

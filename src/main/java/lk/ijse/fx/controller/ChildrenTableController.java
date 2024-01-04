@@ -71,7 +71,7 @@ public class ChildrenTableController {
         ObservableList<ChildrenTm> obList = FXCollections.observableArrayList();
         try {
 
-            List<ChildrenDto> allChildren = childrenDAO.loadAllChildren();
+            List<ChildrenDto> allChildren = childrenDAO.loadAll();
 
             for (ChildrenDto c : allChildren) {
                 Button deleteButton = new Button("Delete");
@@ -119,7 +119,7 @@ public class ChildrenTableController {
         Optional<ButtonType> result = confirmationAlert.showAndWait();
 
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            boolean isDeleted = childrenDAO.deleteChildren(childId);
+            boolean isDeleted = childrenDAO.delete(childId);
 
             if (isDeleted) {
                 Alert successAlert = new Alert(Alert.AlertType.INFORMATION);

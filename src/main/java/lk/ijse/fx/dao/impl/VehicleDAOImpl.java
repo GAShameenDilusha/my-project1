@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class VehicleDAOImpl implements VehicleDAO {
-        public boolean saveVehicle(VehicleDto dto) throws SQLException, ClassNotFoundException {
+        public boolean save(VehicleDto dto) throws SQLException, ClassNotFoundException {
             // Get the current date
             LocalDate currentDate = LocalDate.now();
             Date sqlDate = Date.valueOf(currentDate);
@@ -24,7 +24,7 @@ public class VehicleDAOImpl implements VehicleDAO {
 
 
 
-        public List<VehicleDto> loadAllVehicle() throws SQLException, ClassNotFoundException {
+        public List<VehicleDto> loadAll() throws SQLException, ClassNotFoundException {
             ResultSet resultSet = SQLUtil.execute("SELECT * FROM vehicle");
 
             List<VehicleDto> vehicleList = new ArrayList<>();
@@ -44,7 +44,7 @@ public class VehicleDAOImpl implements VehicleDAO {
 
 
 
-        public boolean updateVehicle(VehicleDto dto) throws SQLException, ClassNotFoundException {
+        public boolean update(VehicleDto dto) throws SQLException, ClassNotFoundException {
             return SQLUtil.execute("UPDATE vehicle SET date = ?, category = ?, discription = ? WHERE church_father_id = ?"
                     ,dto.getDate(),dto.getCategory(),dto.getDiscription(),dto.getChurchFatherId());
         }
@@ -53,7 +53,7 @@ public class VehicleDAOImpl implements VehicleDAO {
 
 
 
-        public VehicleDto searchCustomer(String churchFatherId) throws SQLException, ClassNotFoundException {
+        public VehicleDto search(String churchFatherId) throws SQLException, ClassNotFoundException {
             ResultSet resultSet = SQLUtil.execute("SELECT * FROM vehicle WHERE church_father_id=?");
 
             VehicleDto dto = null;
@@ -73,7 +73,7 @@ public class VehicleDAOImpl implements VehicleDAO {
 
 
 
-        public boolean deleteVehicle(String churchFatherId) throws SQLException, ClassNotFoundException {
+        public boolean delete(String churchFatherId) throws SQLException, ClassNotFoundException {
             return SQLUtil.execute("DELETE FROM vehicle WHERE church_father_id = ?");
 
             }

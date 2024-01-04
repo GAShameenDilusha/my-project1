@@ -70,7 +70,7 @@ public class EventFormController {
         EventDto eventDto = new EventDto(family_no, event_name, date, time, discription, estimated_budget, cost);
 
         try {
-            boolean isSaved = eventDAO.saveEvent(eventDto);
+            boolean isSaved = eventDAO.save(eventDto);
 
             if (isSaved) {
                 tblEvent.getItems().add(new EventTm(family_no, event_name, date, time, discription, estimated_budget, cost));
@@ -196,7 +196,7 @@ public class EventFormController {
 
 
         try {
-            eventDAO.updateEvent(new EventDto(familyNo, newEventName, newDate, newTime, newDisciption, newEstimatedBugdet, newCost));
+            eventDAO.update(new EventDto(familyNo, newEventName, newDate, newTime, newDisciption, newEstimatedBugdet, newCost));
         } catch (SQLException | ClassNotFoundException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
@@ -211,7 +211,7 @@ public class EventFormController {
         String familyNo = txtFamilyNo1.getText();
 
         try {
-            EventDto eventDto = eventDAO.searchCustomer(familyNo);  // Use the instance to call the method
+            EventDto eventDto = eventDAO.search(familyNo);  // Use the instance to call the method
 
             if (eventDto != null) {
                 txtFamilyNo.setText(eventDto.getFamilyNo());

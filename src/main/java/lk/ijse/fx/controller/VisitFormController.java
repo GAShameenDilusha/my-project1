@@ -63,7 +63,7 @@ public class VisitFormController {
 
         VisitDAO visitDAO = new VisitDAOImpl();
         try {
-            boolean isSaved = visitDAO.saveVisit(dto);
+            boolean isSaved = visitDAO.save(dto);
             if (isSaved) {
                 // Assuming tblVisit is a TableView and VisitTm is the model class
                 tblVisit.getItems().add(new VisitTm(dto.getFamilyNo(), dto.getChurchFatherId(), dto.getDate(), dto.getTime(), dto.getDiscription()));
@@ -148,7 +148,7 @@ public class VisitFormController {
         String newDescription = txtDescription.getText();
 
         try {
-            boolean isUpdated = visitDAO.updateVisit(new VisitDto(familyNo, newChurchFatherId, newDate, newTime, newDescription));
+            boolean isUpdated = visitDAO.update(new VisitDto(familyNo, newChurchFatherId, newDate, newTime, newDescription));
             if (isUpdated) {
                 new Alert(Alert.AlertType.CONFIRMATION, "Visit updated!").show();
                 clearFields();
@@ -167,7 +167,7 @@ public class VisitFormController {
         String familyNo = txtFamilyNo1.getText();
 
         try {
-            VisitDto visitDto = visitDAO.searchCustomer(familyNo);
+            VisitDto visitDto = visitDAO.search(familyNo);
 
             if (visitDto != null) {
                 txtFamilyNo.setText(visitDto.getFamilyNo());
