@@ -22,16 +22,4 @@ public class SQLUtil {
 
     }
 
-    public static void setAutoCommit(boolean b) {
-
-    }
-
-    public static void commit() {
-
-    }
-
-    public static void rollback() {
-
-    }
-
 }
