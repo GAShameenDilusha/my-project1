@@ -8,6 +8,9 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import lk.ijse.fx.bo.BOFactory;
+import lk.ijse.fx.bo.custom.VehicleBO;
+import lk.ijse.fx.bo.custom.VisitBO;
 import lk.ijse.fx.dao.custom.AttendenceDAO;
 import lk.ijse.fx.dao.custom.VisitDAO;
 import lk.ijse.fx.dao.impl.AttendenceDAOImpl;
@@ -37,7 +40,7 @@ public class VisitFormController {
     @FXML
     private AnchorPane root;
     private JColorChooser tblVisit;
-    VisitDAO visitDAO = new VisitDAOImpl();
+    VisitBO visitBO= (VisitBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.VISIT);
 
     public void btnBackOnAction(ActionEvent actionEvent) throws IOException {
         AnchorPane anchorPane = FXMLLoader.load(getClass().getResource("/view/dashboard.fxml"));
@@ -49,9 +52,9 @@ public class VisitFormController {
     }
 
 
-   /* @FXML
+   @FXML
     void btnSaveOnAction(ActionEvent event) throws IOException {
-        String family_no = txtFamilyNo.getText();
+       /* String family_no = txtFamilyNo.getText();
         String church_father_id = txtChurchFatherId.getText();
         String date = txtDate.getText();
         String time = txtTime.getText();
@@ -63,14 +66,14 @@ public class VisitFormController {
 
         VisitDAO visitDAO = new VisitDAOImpl();
         try {
-            boolean isSaved = visitDAO.save(dto);
+            boolean isSaved = visitBO.saveVisit(dto);
             if (isSaved) {
                 // Assuming tblVisit is a TableView and VisitTm is the model class
                 tblVisit.getItems().add(new VisitTm(dto.getFamilyNo(), dto.getChurchFatherId(), dto.getDate(), dto.getTime(), dto.getDiscription()));
             }
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
-        }
+        }*/
 
         AnchorPane anchorPane = FXMLLoader.load(getClass().getResource("/view/visit_table.fxml"));   //me kotasa (mekath ekka line 6)mn damme next window ekata yamataya
         Scene scene = new Scene(anchorPane);
@@ -82,9 +85,10 @@ public class VisitFormController {
         boolean isVisitValid = validateVisit();
         if (isVisitValid)  {
             //perform save action
+            new Alert(Alert.AlertType.CONFIRMATION, "Visit saved!").show();
         }
 
-    }*/
+    }
 
     private boolean validateVisit() {
         //Validate family_no
@@ -148,7 +152,7 @@ public class VisitFormController {
         String newDescription = txtDescription.getText();
 
         try {
-            boolean isUpdated = visitDAO.update(new VisitDto(familyNo, newChurchFatherId, newDate, newTime, newDescription));
+            boolean isUpdated = visitBO.updateVisit(new VisitDto(familyNo, newChurchFatherId, newDate, newTime, newDescription));
             if (isUpdated) {
                 new Alert(Alert.AlertType.CONFIRMATION, "Visit updated!").show();
                 clearFields();
@@ -167,7 +171,7 @@ public class VisitFormController {
         String familyNo = txtFamilyNo1.getText();
 
         try {
-            VisitDto visitDto = visitDAO.search(familyNo);
+            VisitDto visitDto = visitBO.searchVisit(familyNo);
 
             if (visitDto != null) {
                 txtFamilyNo.setText(visitDto.getFamilyNo());

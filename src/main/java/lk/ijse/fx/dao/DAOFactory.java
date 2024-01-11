@@ -1,5 +1,6 @@
 package lk.ijse.fx.dao;
 
+
 import lk.ijse.fx.dao.impl.*;
 
 public class DAOFactory {
@@ -23,19 +24,19 @@ public class DAOFactory {
             case CHILDREN:
                 return new ChildrenDAOImpl();
             case CHURCH:
-                return new ChurchDAOImpl();
+                return  new ChurchDAOImpl();
             case EVENT:
                 return new EventDAOImpl();
             case FATHER:
                 return new FatherDAOImpl();
             case LOGIN:
-                return new LoginDAOImpl();
+                return (SuperDAO) new LoginDAOImpl();
             case PAYMENT:
                 return new PaymentDAOImpl();
             case REGISTRATION:
                 return new RegistrationDAOImpl();
             case SIGNUP:
-                return new SignupDAOImpl();
+                return (SuperDAO) new SignupDAOImpl();
             case VEHICLE:
                 return new VehicleDAOImpl();
             case VISIT:

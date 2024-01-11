@@ -1,6 +1,8 @@
 package lk.ijse.fx.bo;
 
-import lk.ijse.fx.dao.impl.*;
+
+import lk.ijse.fx.bo.impl.*;
+
 
 public class BOFactory {
     private static BOFactory boFactory;
@@ -19,27 +21,27 @@ public class BOFactory {
     public SuperBO getBO(BOTypes boTypes){
         switch (boTypes){
             case ATTENDENCE:
-                return new AttendenceDAOImpl();
+                return new AttendenceBOImpl();
             case CHILDREN:
-                return new ChildrenDAOImpl();
+                return new ChildrenBOImpl();
             case CHURCH:
-                return new ChurchDAOImpl();
+                return new ChurchBOImpl();
             case EVENT:
-                return new EventDAOImpl();
+                return new EventBOImpl();
             case FATHER:
-                return new FatherDAOImpl();
+                return new FatherBOImpl();
             case LOGIN:
-                return new LoginDAOImpl();
+                return new LoginBOImpl();
             case PAYMENT:
-                return new PaymentDAOImpl();
+                return new PaymentBOImpl();
             case REGISTRATION:
-                return new RegistrationDAOImpl();
+                return new RegistrationBOImpl();
             case SIGNUP:
-                return new SignupDAOImpl();
+                return new SignUpBOImpl();
             case VEHICLE:
-                return new VehicleDAOImpl();
+                return new VehicleBOImpl();
             case VISIT:
-                return new VisitDAOImpl();
+                return new VisitBOImpl();
             default:
                 return null;
         }

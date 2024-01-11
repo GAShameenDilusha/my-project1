@@ -1,6 +1,8 @@
 package lk.ijse.fx.entity;
 
-public class Event {
+import lk.ijse.fx.dto.EventDto;
+
+public class Event   {
     private String FamilyNo;
     private String EventName;
     private String Date;

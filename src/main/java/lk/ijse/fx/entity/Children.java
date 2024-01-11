@@ -1,6 +1,8 @@
 package lk.ijse.fx.entity;
 
-public class Children {
+import lk.ijse.fx.dto.ChildrenDto;
+
+public class Children   {
     private String FamilyNo;
     private String ChildId;
     private String ChildName;

@@ -2,8 +2,8 @@ package lk.ijse.fx.dao.impl;
 
 import lk.ijse.fx.dao.SQLUtil;
 import lk.ijse.fx.dao.custom.EventDAO;
-import lk.ijse.fx.db.DbConnection;
 import lk.ijse.fx.dto.EventDto;
+import lk.ijse.fx.entity.Attendence;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EventDAOImpl implements EventDAO {
+        @Override
         public boolean save(EventDto dto) throws SQLException, ClassNotFoundException {
             // Get the current date
             LocalDate currentDate = LocalDate.now();
@@ -24,7 +25,7 @@ public class EventDAOImpl implements EventDAO {
 
 
 
-
+        @Override
         public List<EventDto> loadAll() throws SQLException, ClassNotFoundException {
             List<EventDto> eventList = new ArrayList<>();
 
@@ -44,21 +45,17 @@ public class EventDAOImpl implements EventDAO {
             return eventList;
         }
 
-
-
-
+        @Override
         public boolean update(EventDto dto) throws SQLException, ClassNotFoundException {
             return SQLUtil.execute("UPDATE event SET event_name = ?, date = ?, time = ?, discription = ?, estimated_budget = ?, cost = ? WHERE family_no = ?"
                     ,dto.getEventName(),dto.getDate(),dto.getTime(),dto.getDiscription(),dto.getEstimatedBudget(),dto.getCost(),dto.getFamilyNo());
-
         }
 
 
 
 
 
-
-
+        @Override
         public EventDto search(String familyNo) throws SQLException, ClassNotFoundException {
             ResultSet resultSet = SQLUtil.execute("SELECT * FROM event WHERE family_no=?");
 
@@ -81,11 +78,12 @@ public class EventDAOImpl implements EventDAO {
 
 
 
-
+        @Override
         public boolean delete(String familyNo) throws SQLException, ClassNotFoundException {
             return SQLUtil.execute("DELETE FROM event WHERE family_no = ?");
             }
-        }
+
+}
 
 
 

@@ -9,10 +9,13 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import lk.ijse.fx.bo.BOFactory;
+import lk.ijse.fx.bo.custom.AttendenceBO;
 import lk.ijse.fx.dao.CrudDAO;
 import lk.ijse.fx.dao.custom.AttendenceDAO;
 import lk.ijse.fx.dao.impl.AttendenceDAOImpl;
 import lk.ijse.fx.dto.AttendenceDto;
+import lk.ijse.fx.dto.ChildrenDto;
 import lk.ijse.fx.dto.tm.AttendenceTm;
 
 import java.io.IOException;
@@ -35,7 +38,7 @@ public class AttendenceFormController {
     @FXML
     private AnchorPane root;
 
-    CrudDAO attendenceDAO=new AttendenceDAOImpl();
+    AttendenceBO attendenceBO = (AttendenceBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.ATTENDENCE);
 
     public void btnBackOnAction(ActionEvent actionEvent) throws IOException {
         AnchorPane anchorPane = FXMLLoader.load(getClass().getResource("/view/dashboard.fxml"));
@@ -58,13 +61,11 @@ public class AttendenceFormController {
 
         var dto = new AttendenceDto(family_no, purpose, arranged_time, leave_time, date);
 
-
-
-
+        AttendenceDto attendenceDto=new AttendenceDto(family_no, purpose, arranged_time, leave_time, date);
         try {
-            boolean isSaved =attendenceDAO.save(dto);
-            if (isSaved){
-                tblAttendance.getItems().add(new AttendenceTm(dto.getFamilyNo(), dto.getPurpose(), dto.getArrangedTime(), dto.getLeaveTime(), dto.getDate()));
+            boolean isSaved = attendenceBO.saveAttendence(attendenceDto);
+            if (isSaved) {
+                tblAttendance.getItems().add(new AttendenceTm(family_no, purpose, arranged_time, leave_time, date));
             }
         } catch (SQLException | ClassNotFoundException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
@@ -80,10 +81,14 @@ public class AttendenceFormController {
 
 
         boolean isAttendence = validateAttendence();
-        if(isAttendence){
-            //perform save action
+        if (isAttendence) {
+            new Alert(Alert.AlertType.CONFIRMATION, "attendence saved!").show();
         }
     }
+
+
+
+
 
     private boolean validateAttendence() {
         //Validate family_no
@@ -141,7 +146,7 @@ public class AttendenceFormController {
 
 
     @FXML
-    void btnUpdateOnAction(ActionEvent event) {
+    void btnUpdateOnAction(ActionEvent event) throws SQLException, ClassNotFoundException {
         String familyNo = txtFamilyNo.getText();
         String newPurpose = txtPurpose.getText();
         String newArrangedTime = txtArrangedTime.getText();
@@ -151,10 +156,12 @@ public class AttendenceFormController {
 
         var dto = new AttendenceDto(familyNo, newPurpose, newArrangedTime, newLeaveTime, newDate);
 
-        try {
-            attendenceDAO.update(new AttendenceDto(familyNo, newPurpose, newArrangedTime, newLeaveTime, newDate));
-        } catch (SQLException | ClassNotFoundException e) {
-            new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+        boolean isUpdated = attendenceBO.updateAttendence(dto);
+        if (isUpdated) {
+            new Alert(Alert.AlertType.CONFIRMATION, "Attendence updated!").show();
+            clearFields();
+        } else {
+            new Alert(Alert.AlertType.ERROR, "Failed to update attendence").show();
         }
     }
 
@@ -164,7 +171,7 @@ public class AttendenceFormController {
         String familyNo = txtFamilyNo1.getText();
 
         try {
-            AttendenceDto attendenceDto = (AttendenceDto) attendenceDAO.search(familyNo);  // Use the instance to call the method
+            AttendenceDto attendenceDto = (AttendenceDto) attendenceBO.searchAttendence(familyNo);  // Use the instance to call the method
 
             if (attendenceDto != null) {
                 txtFamilyNo.setText(attendenceDto.getFamilyNo());

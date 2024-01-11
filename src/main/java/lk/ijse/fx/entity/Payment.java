@@ -1,6 +1,8 @@
 package lk.ijse.fx.entity;
 
-public class Payment {
+import lk.ijse.fx.dto.PaymentDto;
+
+public class Payment   {
     private String ChurchNo;
     private String FamilyNo;
     private String DivisionNo;

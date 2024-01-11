@@ -1,6 +1,8 @@
 package lk.ijse.fx.entity;
 
-public class Vehicle {
+import lk.ijse.fx.dto.VehicleDto;
+
+public class Vehicle   {
     private String ChurchFatherId;
     private String Date;
     private String Category;

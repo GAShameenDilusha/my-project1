@@ -11,6 +11,8 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import lk.ijse.fx.bo.BOFactory;
+import lk.ijse.fx.bo.custom.AttendenceBO;
 import lk.ijse.fx.dao.custom.AttendenceDAO;
 import lk.ijse.fx.dao.impl.AttendenceDAOImpl;
 import lk.ijse.fx.dto.AttendenceDto;
@@ -37,7 +39,7 @@ public class AttendenceTableController {
     @FXML
     private AnchorPane root;
 
-    AttendenceDAO attendenceDAO = new AttendenceDAOImpl();
+    AttendenceBO attendenceBO= (AttendenceBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.ATTENDENCE);
 
 
     public void initialize() {
@@ -60,7 +62,7 @@ public class AttendenceTableController {
         ObservableList<AttendenceTm> obList = FXCollections.observableArrayList();
         try {
 
-            List<AttendenceDto> allAttendence = attendenceDAO.loadAll();
+            List<AttendenceDto> allAttendence = attendenceBO.loadAllAttendence();
 
             for (AttendenceDto dto : allAttendence) {
                 JFXButton deleteButton = new JFXButton("Delete");
@@ -110,7 +112,7 @@ public class AttendenceTableController {
         Optional<ButtonType> result = confirmationAlert.showAndWait();
 
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            boolean isDeleted = attendenceDAO.delete(familyNo);
+            boolean isDeleted = attendenceBO.deleteAttendence(familyNo);
 
             if (isDeleted) {
                 Alert successAlert = new Alert(Alert.AlertType.INFORMATION);

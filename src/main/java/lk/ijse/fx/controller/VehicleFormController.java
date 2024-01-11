@@ -9,6 +9,9 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import lk.ijse.fx.bo.BOFactory;
+import lk.ijse.fx.bo.custom.RegistrationBO;
+import lk.ijse.fx.bo.custom.VehicleBO;
 import lk.ijse.fx.dao.custom.AttendenceDAO;
 import lk.ijse.fx.dao.custom.VehicleDAO;
 import lk.ijse.fx.dao.impl.AttendenceDAOImpl;
@@ -35,7 +38,7 @@ public class VehicleFormController {
     @FXML
     private AnchorPane root;
 
-    VehicleDAO vehicleDAO=new VehicleDAOImpl();
+    VehicleBO vehicleBO= (VehicleBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.VEHICLE);
 
 
     public void btnBackOnAction(ActionEvent actionEvent) throws IOException {
@@ -62,7 +65,7 @@ public class VehicleFormController {
         var dto = new VehicleDto(church_father_id, date, category, discription);
 
         try {
-            boolean isSaved =vehicleDAO.save(dto);
+            boolean isSaved =vehicleBO.saveVehicle(dto);
             if (isSaved){
                 tblVehicle.getItems().add(new VehicleTm(dto.getChurchFatherId(), dto.getDate(), dto.getCategory(), dto.getDiscription()));
             }
@@ -81,6 +84,7 @@ public class VehicleFormController {
         boolean isVehicleValid = validateVehicle();
         if(isVehicleValid){
             //perform save action
+            new Alert(Alert.AlertType.CONFIRMATION, "Vehicle saved!").show();
         }
     }
 
@@ -137,12 +141,12 @@ public class VehicleFormController {
         String newDiscription = txtDescription.getText();
 
         try {
-            boolean isUpdated = vehicleDAO.update(new VehicleDto(churchFatherId, newDate, newCategory, newDiscription));
+            boolean isUpdated = vehicleBO.updateVehicle(new VehicleDto(churchFatherId, newDate, newCategory, newDiscription));
             if (isUpdated) {
-                new Alert(Alert.AlertType.CONFIRMATION, "Registration updated!").show();
+                new Alert(Alert.AlertType.CONFIRMATION, "Vehicle updated!").show();
                 clearFields();
             } else {
-                new Alert(Alert.AlertType.ERROR, "Failed to update registration").show();
+                new Alert(Alert.AlertType.ERROR, "Failed to update Vehicle").show();
             }
         } catch (SQLException | ClassNotFoundException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
@@ -158,7 +162,7 @@ public class VehicleFormController {
         String churchFatherId = txtChurchFatherId1.getText();
 
         try {
-            VehicleDto vehicleDto = vehicleDAO.search(churchFatherId);
+            VehicleDto vehicleDto = vehicleBO.searchVehicle(churchFatherId);
 
             if (vehicleDto != null) {
                 txtChurchFatherId.setText(vehicleDto.getChurchFatherId());

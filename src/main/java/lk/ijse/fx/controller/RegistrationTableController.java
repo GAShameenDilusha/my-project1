@@ -11,6 +11,8 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import lk.ijse.fx.bo.BOFactory;
+import lk.ijse.fx.bo.custom.RegistrationBO;
 import lk.ijse.fx.dao.custom.RegistrationDAO;
 import lk.ijse.fx.dao.impl.RegistrationDAOImpl;
 import lk.ijse.fx.dto.RegistrationDto;
@@ -61,10 +63,9 @@ public class RegistrationTableController {
 
     @FXML
     private TableView<RegistrationTm> tblRegistration;
-    RegistrationDAO registrationDAO = new RegistrationDAOImpl();
+    RegistrationBO registrationBO= (RegistrationBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.REGISTRATION);
 
-
-    public void initialize() {
+    public void initialize() throws SQLException, ClassNotFoundException {
         setCellValueFactory();
         loadAllRegistration();
     }
@@ -83,49 +84,43 @@ public class RegistrationTableController {
         colAction.setCellValueFactory(new PropertyValueFactory<>("btnDelete"));
     }
 
-    private void loadAllRegistration() {
+    private void loadAllRegistration() throws SQLException, ClassNotFoundException {
         ObservableList<RegistrationTm> obList = FXCollections.observableArrayList();
-        try {
-            List<RegistrationDto> allRegistration = registrationDAO.loadAllRegistration();
+        List<RegistrationDto> allRegistration = registrationBO.loadAllRegistration();
 
-            for (RegistrationDto dto : allRegistration) {
-                JFXButton deleteButton = new JFXButton("Delete");
-                deleteButton.setCursor(javafx.scene.Cursor.HAND);
-                deleteButton.setStyle("-fx-background-color: #ff0000; -fx-text-fill: #ffffff");
-                deleteButton.setPrefWidth(100);
-                deleteButton.setPrefHeight(30);
-                deleteButton.setOnAction(event -> {
-                    try {
-                        removeRegistration(dto.getFamilyNo());
-                    } catch (SQLException e) {
-                        throw new RuntimeException(e);
-                    } catch (ClassNotFoundException e) {
-                        throw new RuntimeException(e);
-                    }
-                });
+        for (RegistrationDto dto : allRegistration) {
+            JFXButton deleteButton = new JFXButton("Delete");
+            deleteButton.setCursor(javafx.scene.Cursor.HAND);
+            deleteButton.setStyle("-fx-background-color: #ff0000; -fx-text-fill: #ffffff");
+            deleteButton.setPrefWidth(100);
+            deleteButton.setPrefHeight(30);
+            deleteButton.setOnAction(event -> {
+                try {
+                    removeRegistration(dto.getFamilyNo());
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                } catch (ClassNotFoundException e) {
+                    throw new RuntimeException(e);
+                }
+            });
 
-                obList.add(new RegistrationTm(
-                        dto.getChurchNo(),
-                        dto.getDivisionNo(),
-                        dto.getFamilyNo(),
-                        dto.getFatherId(),
-                        dto.getMotherId(),
-                        dto.getFatherName(),
-                        dto.getMotherName(),
-                        dto.getAddress(),
-                        dto.getTel(),
-                        dto.getDate(),
-                        deleteButton
-                ));
-            }
-
-            tblRegistration.setItems(obList);
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
+            obList.add(new RegistrationTm(
+                    dto.getChurchNo(),
+                    dto.getDivisionNo(),
+                    dto.getFamilyNo(),
+                    dto.getFatherId(),
+                    dto.getMotherId(),
+                    dto.getFatherName(),
+                    dto.getMotherName(),
+                    dto.getAddress(),
+                    dto.getTel(),
+                    dto.getDate(),
+                    deleteButton
+            ));
         }
+
+        tblRegistration.setItems(obList);
+
     }
 
 
@@ -146,7 +141,7 @@ public class RegistrationTableController {
         Optional<ButtonType> result = confirmationAlert.showAndWait();
 
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            boolean isDeleted = registrationDAO.deleteRegistration(familyNo);
+            boolean isDeleted = registrationBO.deleteRegistration(familyNo);
 
             if (isDeleted) {
                 Alert successAlert = new Alert(Alert.AlertType.INFORMATION);

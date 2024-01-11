@@ -7,61 +7,73 @@ import lk.ijse.fx.dao.custom.AttendenceDAO;
 import lk.ijse.fx.dto.AttendenceDto;
 import lk.ijse.fx.entity.Attendence;
 
-import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 public class AttendenceBOImpl implements AttendenceBO {
-    AttendenceDAO attendenceDAO= (AttendenceDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.ATTENDENCE);
+    private AttendenceDAO attendenceDAO = (AttendenceDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.ATTENDENCE);
 
     @Override
     public boolean saveAttendence(AttendenceDto dto) throws SQLException, ClassNotFoundException {
-      return attendenceDAO.save(new Attendence(dto.getFamilyNo(),dto.getPurpose(),dto.getArrangedTime(),dto.getLeaveTime(),dto.getDate()));
+        String sql = "INSERT INTO attendence VALUES(?, ?, ?, ?, ?)";
+        return SQLUtil.execute(sql, dto.getFamilyNo(), dto.getPurpose(), dto.getArrangedTime(), dto.getLeaveTime(), dto.getDate());
     }
-
-
-
-
 
     @Override
     public List<AttendenceDto> loadAllAttendence() throws SQLException, ClassNotFoundException {
-        ArrayList<Attendence> attendences=attendenceDAO.loadAll();
-        ArrayList<AttendenceDto> attendenceDtos=new ArrayList<>();
-        for (Attendence attendence:attendences) {
-            attendenceDtos.add(new AttendenceDto(attendence.getFamilyNo(),attendence.getPurpose(),attendence.getArrangedTime(),attendence.getLeaveTime(),attendence.getDate()));
+        String sql = "SELECT * FROM attendence";
+        List<AttendenceDto> attendenceList = new ArrayList<>();
+
+        try {
+            ResultSet resultSet = SQLUtil.execute(sql);
+
+            while (resultSet.next()) {
+                attendenceList.add(new AttendenceDto(
+                        resultSet.getString(1),
+                        resultSet.getString(2),
+                        resultSet.getString(3),
+                        resultSet.getString(4),
+                        resultSet.getString(5)
+                ));
+            }
+        } finally {
+            // Close any resources if necessary
         }
-        return attendenceDtos;
 
+        return attendenceList;
     }
-
-
-
 
     @Override
     public boolean updateAttendence(AttendenceDto dto) throws SQLException, ClassNotFoundException {
-        return AttendenceDAO.update(new Attendence(dto.getFamilyNo(),dto.getPurpose(),dto.getArrangedTime(),dto.getLeaveTime(),dto.getDate()));
-
+        String sql = "UPDATE attendence SET purpose = ?, arranged_time = ?, leave_time = ?, date = ? WHERE family_no = ?";
+        return SQLUtil.execute(sql, dto.getPurpose(), dto.getArrangedTime(), dto.getLeaveTime(), dto.getDate(), dto.getFamilyNo());
     }
-
-
-
-
 
     @Override
     public AttendenceDto searchAttendence(String familyNo) throws SQLException, ClassNotFoundException {
-        Attendence attendence=attendenceDAO.search(familyNo);
-        AttendenceDto attendenceDto=new AttendenceDto(attendence.getFamilyNo(),attendence.getPurpose(),attendence.getArrangedTime(),attendence.getLeaveTime(),attendence.getDate());
-        return attendenceDto;
+        String sql = "SELECT * FROM attendence WHERE family_no=?";
+        ResultSet resultSet = SQLUtil.execute(sql, familyNo);
+
+        AttendenceDto dto = null;
+
+        if (resultSet.next()) {
+            String attendence_familyNo = resultSet.getString(1);
+            String attendence_purpose = resultSet.getString(2);
+            String attendence_arrangedTime = resultSet.getString(3);
+            String attendence_leaveTime = resultSet.getString(4);
+            String attendence_date = resultSet.getString(5);
+
+            dto = new AttendenceDto(attendence_familyNo, attendence_purpose, attendence_arrangedTime, attendence_leaveTime, attendence_date);
+        }
+
+        return dto;
     }
-
-
-
 
     @Override
     public boolean deleteAttendence(String familyNo) throws SQLException, ClassNotFoundException {
-        return attendenceDAO.delete(familyNo);
+        String sql = "DELETE FROM attendence WHERE family_no = ?";
+        return SQLUtil.execute(sql, familyNo);
     }
 }

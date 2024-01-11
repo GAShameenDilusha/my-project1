@@ -11,6 +11,8 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import lk.ijse.fx.bo.BOFactory;
+import lk.ijse.fx.bo.custom.VehicleBO;
 import lk.ijse.fx.dao.custom.VehicleDAO;
 import lk.ijse.fx.dao.impl.VehicleDAOImpl;
 import lk.ijse.fx.dto.VehicleDto;
@@ -32,8 +34,7 @@ public class VehicleTableController {
     public TableView tblVehicle;
     @FXML
     private AnchorPane root;
-    VehicleDAO vehicleDAO = new VehicleDAOImpl();
-
+    VehicleBO vehicleBO= (VehicleBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.VEHICLE);
 
     public void initialize() {
         setCellValueFactory();
@@ -53,7 +54,7 @@ public class VehicleTableController {
     private void loadAllVehicle() {
         ObservableList<VehicleTm> obList = FXCollections.observableArrayList();
         try {
-            List<VehicleDto> allVehicle = vehicleDAO.loadAll();
+            List<VehicleDto> allVehicle = vehicleBO.loadAllVehicle();
 
             for (VehicleDto dto : allVehicle) {
                 JFXButton deleteButton = new JFXButton("Delete");
@@ -103,7 +104,7 @@ public class VehicleTableController {
         Optional<ButtonType> result = confirmationAlert.showAndWait();
 
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            boolean isDeleted = vehicleDAO.delete(churchFatherId);
+            boolean isDeleted = vehicleBO.deleteVehicle(churchFatherId);
 
             if (isDeleted) {
                 Alert successAlert = new Alert(Alert.AlertType.INFORMATION);

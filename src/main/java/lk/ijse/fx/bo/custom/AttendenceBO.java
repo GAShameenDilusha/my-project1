@@ -1,5 +1,6 @@
 package lk.ijse.fx.bo.custom;
 
+import lk.ijse.fx.bo.SuperBO;
 import lk.ijse.fx.dao.SQLUtil;
 import lk.ijse.fx.dto.AttendenceDto;
 
@@ -10,7 +11,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public interface AttendenceBO {
+public interface AttendenceBO extends SuperBO {
      boolean saveAttendence(AttendenceDto dto) throws SQLException, ClassNotFoundException;
      List<AttendenceDto> loadAllAttendence() throws SQLException, ClassNotFoundException;
      boolean updateAttendence(AttendenceDto dto) throws SQLException, ClassNotFoundException;

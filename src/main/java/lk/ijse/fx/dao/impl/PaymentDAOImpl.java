@@ -2,9 +2,8 @@ package lk.ijse.fx.dao.impl;
 
 import lk.ijse.fx.dao.SQLUtil;
 import lk.ijse.fx.dao.custom.PaymentDAO;
-import lk.ijse.fx.db.DbConnection;
-import lk.ijse.fx.dto.AttendenceDto;
 import lk.ijse.fx.dto.PaymentDto;
+import lk.ijse.fx.entity.Attendence;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -12,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PaymentDAOImpl implements PaymentDAO {
+        @Override
         public boolean save(PaymentDto dto) throws SQLException, ClassNotFoundException {
             // Get the current date
             LocalDate currentDate = LocalDate.now();
@@ -23,7 +23,7 @@ public class PaymentDAOImpl implements PaymentDAO {
 
 
 
-
+        @Override
         public List<PaymentDto> loadAll() throws SQLException, ClassNotFoundException {
             ResultSet resultSet = SQLUtil.execute("SELECT * FROM payment");
 
@@ -41,37 +41,37 @@ public class PaymentDAOImpl implements PaymentDAO {
                 return paymentList;
         }
 
-
+        @Override
         public boolean update(PaymentDto dto) throws SQLException, ClassNotFoundException {
             return SQLUtil.execute("UPDATE payment SET church_no = ?, division_no = ?, fee = ?, date = ? WHERE family_no = ?"
                     ,dto.getChurchNo(),dto.getDivisionNo(),dto.getFee(),dto.getDate(),dto.getFamilyNo());
         }
 
+        @Override
+        public PaymentDto search(String familyNo) throws SQLException, ClassNotFoundException {
+            PaymentDto paymentDto = null;
 
+            ResultSet resultSet = SQLUtil.execute("SELECT * FROM payment WHERE family_no=?", familyNo);
+            if (resultSet.next()) {
+                String payment_churchNo = resultSet.getString("church_no");
+                String payment_familyNo = resultSet.getString("family_no");
+                String payment_divisionNo = resultSet.getString("division_no");
+                String payment_fee = resultSet.getString("fee");
+                String payment_date = resultSet.getString("date");
 
-    public PaymentDto search(String familyNo) throws SQLException, ClassNotFoundException {
-        PaymentDto paymentDto = null;
-
-        ResultSet resultSet = SQLUtil.execute("SELECT * FROM payment WHERE family_no=?", familyNo);
-        if (resultSet.next()) {
-            String payment_churchNo = resultSet.getString("church_no");
-            String payment_familyNo = resultSet.getString("family_no");
-            String payment_divisionNo = resultSet.getString("division_no");
-            String payment_fee = resultSet.getString("fee");
-            String payment_date = resultSet.getString("date");
-
-            paymentDto = new PaymentDto(payment_churchNo, payment_familyNo, payment_divisionNo, payment_fee, payment_date);
-        }
-
-        return paymentDto;
-    }
-
-
-    public boolean delete(String familyNo) throws SQLException, ClassNotFoundException {
-            return SQLUtil.execute("DELETE FROM payment WHERE family_no = ?");
-
+                paymentDto = new PaymentDto(payment_churchNo, payment_familyNo, payment_divisionNo, payment_fee, payment_date);
             }
+
+            return paymentDto;
         }
+
+        @Override
+        public boolean delete(String familyNo) throws SQLException, ClassNotFoundException {
+                return SQLUtil.execute("DELETE FROM payment WHERE family_no = ?");
+
+                }
+
+}
 
 
 

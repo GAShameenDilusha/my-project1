@@ -9,14 +9,19 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import lk.ijse.fx.bo.BOFactory;
+import lk.ijse.fx.bo.custom.EventBO;
+import lk.ijse.fx.bo.custom.PaymentBO;
 import lk.ijse.fx.dao.custom.AttendenceDAO;
 import lk.ijse.fx.dao.custom.PaymentDAO;
 import lk.ijse.fx.dao.impl.AttendenceDAOImpl;
 import lk.ijse.fx.dao.impl.PaymentDAOImpl;
 import lk.ijse.fx.db.DbConnection;
 import lk.ijse.fx.dto.AttendenceDto;
+import lk.ijse.fx.dto.ChildrenDto;
 import lk.ijse.fx.dto.PaymentDto;
 import lk.ijse.fx.dto.tm.AttendenceTm;
+import lk.ijse.fx.dto.tm.ChildrenTm;
 import lk.ijse.fx.dto.tm.PaymentTm;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -43,8 +48,11 @@ public class PaymentFormController {
     public TableView tblPayment;
     @FXML
     private AnchorPane root;
-    PaymentDAO paymentDAO=new PaymentDAOImpl();
 
+    @FXML
+    private TableView<PaymentTm> tblChildren;
+
+    PaymentBO paymentBO= (PaymentBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.PAYMENT);
     public void btnBackOnAction(ActionEvent actionEvent) throws IOException {
         AnchorPane anchorPane = FXMLLoader.load(getClass().getResource("/view/dashboard.fxml"));
         Stage stage = (Stage) root.getScene().getWindow();
@@ -63,13 +71,14 @@ public class PaymentFormController {
         String fee = txtFee.getText();
         String date = txtDate.getText();
 
-        var dto = new PaymentDto(church_no, family_no, division_no, fee, date);
+        var dto = new PaymentDto(church_no, family_no, division_no, fee,date);
 
 
+        PaymentDto paymentDto=new PaymentDto(church_no, family_no, division_no, fee,date);
         try {
-            boolean isSaved =paymentDAO.save(dto);
+            boolean isSaved =paymentBO.savePayment(paymentDto);
             if (isSaved){
-                tblPayment.getItems().add(new PaymentTm(dto.getChurchNo(), dto.getFamilyNo(), dto.getDivisionNo(), dto.getFee(), dto.getDate()));
+                tblPayment.getItems().add(new PaymentTm(church_no, family_no, division_no, fee,date));
             }
         } catch (SQLException | ClassNotFoundException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
@@ -86,6 +95,7 @@ public class PaymentFormController {
         boolean isPaymentValid = validatePayment();
         if (isPaymentValid) {
             //perform save action
+            new Alert(Alert.AlertType.CONFIRMATION, "Payment saved!").show();
         }
     }
 
@@ -167,23 +177,21 @@ public class PaymentFormController {
 
 
     @FXML
-    void btnUpdateOnAction(ActionEvent event) {
+    void btnUpdateOnAction(ActionEvent event) throws SQLException, ClassNotFoundException {
         String newChurchNo = txtChurchNo.getText();
         String familyNo = txtFamilyNo.getText();
         String newDivisionNo = txtDivisionNo.getText();
         String newFee = txtFee.getText();
         String newDate = txtDate.getText();
 
-        try {
-            boolean isUpdated = paymentDAO.update(new PaymentDto(newChurchNo, familyNo, newDivisionNo, newFee, newDate));
-            if (isUpdated) {
-                new Alert(Alert.AlertType.CONFIRMATION, "Payment updated!").show();
-                clearFields();
-            } else {
-                new Alert(Alert.AlertType.ERROR, "Failed to update payment").show();
-            }
-        } catch (SQLException | ClassNotFoundException e) {
-            new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+        var dto = new PaymentDto(newChurchNo, familyNo, newDivisionNo, newFee,newDate);
+
+        boolean isUpdated = paymentBO.updatePayment(dto);
+        if (isUpdated) {
+            new Alert(Alert.AlertType.CONFIRMATION, "Payment updated!").show();
+            clearFields();
+        } else {
+            new Alert(Alert.AlertType.ERROR, "Failed to update payemnt").show();
         }
     }
 
@@ -193,7 +201,7 @@ public class PaymentFormController {
         String familyNo = txtFamilyNo1.getText();
 
         try {
-            PaymentDto paymentDto = paymentDAO.search(familyNo);  // Use the instance to call the method
+            PaymentDto paymentDto = paymentBO.searchPayment(familyNo);  // Use the instance to call the method
 
             if (paymentDto != null) {
                 txtChurchNo.setText(paymentDto.getChurchNo());

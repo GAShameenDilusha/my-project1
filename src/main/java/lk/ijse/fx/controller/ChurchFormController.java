@@ -10,6 +10,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import lk.ijse.fx.bo.BOFactory;
+import lk.ijse.fx.bo.custom.AttendenceBO;
+import lk.ijse.fx.bo.custom.ChurchBO;
 import lk.ijse.fx.dao.impl.ChurchDAOImpl;
 import lk.ijse.fx.dto.ChurchDto;
 
@@ -40,7 +43,7 @@ public class ChurchFormController {
     private TextField txtD;
 
 
-    private final ChurchDAOImpl churchDAO = new ChurchDAOImpl();
+    ChurchBO churchBO= (ChurchBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.CHURCH);
 
     public void initialize() {
         loadChurches();
@@ -48,7 +51,7 @@ public class ChurchFormController {
 
     private void loadChurches() {
         try {
-            List<ChurchDto> churches = churchDAO.getAllChurches();
+            List<ChurchDto> churches = churchBO.getAllChurches();
             cmbChurch.setItems(FXCollections.observableArrayList(churches));
         } catch (Exception e) {
             e.printStackTrace();

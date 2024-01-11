@@ -11,6 +11,8 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import lk.ijse.fx.bo.BOFactory;
+import lk.ijse.fx.bo.custom.EventBO;
 import lk.ijse.fx.dao.custom.EventDAO;
 import lk.ijse.fx.dao.impl.EventDAOImpl;
 import lk.ijse.fx.dto.EventDto;
@@ -37,7 +39,7 @@ public class EventTableController {
 
     @FXML
     private AnchorPane root;
-    EventDAO eventDAO = new EventDAOImpl();
+    EventBO eventBO= (EventBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.EVENT);
 
     public void initialize() {
         setCellValueFactory();
@@ -60,7 +62,7 @@ public class EventTableController {
     private void loadAllEvent() {
         ObservableList<EventTm> obList = FXCollections.observableArrayList();
         try {
-            List<EventDto> allEvent = eventDAO.loadAll();
+            List<EventDto> allEvent = eventBO.loadAllEvent();
 
             for (EventDto dto : allEvent) {
                 JFXButton deleteButton = new JFXButton("Delete");
@@ -113,7 +115,7 @@ public class EventTableController {
         Optional<ButtonType> result = confirmationAlert.showAndWait();
 
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            boolean isDeleted = eventDAO.delete(familyNo);
+            boolean isDeleted = eventBO.deleteEvent(familyNo);
 
             if (isDeleted) {
                 Alert successAlert = new Alert(Alert.AlertType.INFORMATION);

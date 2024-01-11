@@ -1,5 +1,6 @@
 package lk.ijse.fx.bo.custom;
 
+import lk.ijse.fx.bo.SuperBO;
 import lk.ijse.fx.dao.SQLUtil;
 import lk.ijse.fx.dto.FatherDto;
 
@@ -8,7 +9,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public interface FatherBO {
+public interface FatherBO extends SuperBO {
      boolean saveFather(FatherDto dto) throws SQLException, SQLException, ClassNotFoundException;
      List<FatherDto> loadAllFather() throws SQLException, ClassNotFoundException;
      boolean updateFather(FatherDto dto) throws SQLException, ClassNotFoundException;

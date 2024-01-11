@@ -9,6 +9,9 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import lk.ijse.fx.bo.BOFactory;
+import lk.ijse.fx.bo.custom.ChildrenBO;
+import lk.ijse.fx.bo.custom.EventBO;
 import lk.ijse.fx.dao.custom.AttendenceDAO;
 import lk.ijse.fx.dao.custom.EventDAO;
 import lk.ijse.fx.dao.impl.AttendenceDAOImpl;
@@ -44,7 +47,7 @@ public class EventFormController {
     @FXML
     private AnchorPane root;
 
-    EventDAO eventDAO = new EventDAOImpl();
+    EventBO eventBO= (EventBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.EVENT);
 
     public void btnBackOnAction(ActionEvent actionEvent) throws IOException {
         AnchorPane anchorPane = FXMLLoader.load(getClass().getResource("/view/dashboard.fxml"));
@@ -70,7 +73,7 @@ public class EventFormController {
         EventDto eventDto = new EventDto(family_no, event_name, date, time, discription, estimated_budget, cost);
 
         try {
-            boolean isSaved = eventDAO.save(eventDto);
+            boolean isSaved = eventBO.saveEvent(eventDto);
 
             if (isSaved) {
                 tblEvent.getItems().add(new EventTm(family_no, event_name, date, time, discription, estimated_budget, cost));
@@ -93,6 +96,7 @@ public class EventFormController {
         boolean isEventValid = validateEvent();
         if (isEventValid) {
             // perform save action
+            new Alert(Alert.AlertType.CONFIRMATION, "Event saved!").show();
         }
     }
 
@@ -181,7 +185,7 @@ public class EventFormController {
 
 
     @FXML
-    void btnUpdateOnAction(ActionEvent event) {
+    void btnUpdateOnAction(ActionEvent event) throws SQLException, ClassNotFoundException {
         String familyNo = txtFamilyNo.getText();
         String newEventName = txtEventName.getText();
         String newDate = txtDate.getText();
@@ -194,11 +198,12 @@ public class EventFormController {
 
         var dto = new EventDto(familyNo, newEventName, newDate, newTime, newDisciption, newEstimatedBugdet, newCost);
 
-
-        try {
-            eventDAO.update(new EventDto(familyNo, newEventName, newDate, newTime, newDisciption, newEstimatedBugdet, newCost));
-        } catch (SQLException | ClassNotFoundException e) {
-            new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+        boolean isUpdated = eventBO.updateEvent(dto);
+        if (isUpdated) {
+            new Alert(Alert.AlertType.CONFIRMATION, "Event updated!").show();
+            clearFields();
+        } else {
+            new Alert(Alert.AlertType.ERROR, "Failed to update event").show();
         }
     }
 
@@ -211,7 +216,7 @@ public class EventFormController {
         String familyNo = txtFamilyNo1.getText();
 
         try {
-            EventDto eventDto = eventDAO.search(familyNo);  // Use the instance to call the method
+            EventDto eventDto = eventBO.searchEvent(familyNo);  // Use the instance to call the method
 
             if (eventDto != null) {
                 txtFamilyNo.setText(eventDto.getFamilyNo());

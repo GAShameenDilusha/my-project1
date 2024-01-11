@@ -11,6 +11,9 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import lk.ijse.fx.bo.BOFactory;
+import lk.ijse.fx.bo.custom.EventBO;
+import lk.ijse.fx.bo.custom.FatherBO;
 import lk.ijse.fx.dao.custom.FatherDAO;
 import lk.ijse.fx.dao.impl.FatherDAOImpl;
 import lk.ijse.fx.dto.FatherDto;
@@ -40,7 +43,7 @@ public class FatherTableController {
     @FXML
     private AnchorPane root;
 
-    FatherDAO fatherDAO = new FatherDAOImpl();
+    FatherBO fatherBO= (FatherBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.FATHER);
 
 
     public void initialize() {
@@ -60,7 +63,7 @@ public class FatherTableController {
     private void loadAllFather() {
         ObservableList<FatherTm> obList = FXCollections.observableArrayList();
         try {
-            List<FatherDto> allFather = fatherDAO.loadAll();
+            List<FatherDto> allFather = fatherBO.loadAllFather();
 
             for (FatherDto dto : allFather) {
                 JFXButton deleteButton = new JFXButton("Delete");
@@ -114,7 +117,7 @@ public class FatherTableController {
         Optional<ButtonType> result = confirmationAlert.showAndWait();
 
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            boolean isDeleted = fatherDAO.delete(churchFatherId);
+            boolean isDeleted = fatherBO.deleteFather(churchFatherId);
 
             if (isDeleted) {
                 Alert successAlert = new Alert(Alert.AlertType.INFORMATION);

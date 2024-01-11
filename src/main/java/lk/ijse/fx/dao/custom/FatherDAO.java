@@ -3,6 +3,7 @@ package lk.ijse.fx.dao.custom;
 import lk.ijse.fx.dao.CrudDAO;
 import lk.ijse.fx.db.DbConnection;
 import lk.ijse.fx.dto.FatherDto;
+import lk.ijse.fx.entity.Father;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,5 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public interface FatherDAO extends CrudDAO<FatherDto> {
+
+
 
 }

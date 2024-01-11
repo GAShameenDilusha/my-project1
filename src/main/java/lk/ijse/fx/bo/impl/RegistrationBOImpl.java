@@ -1,13 +1,63 @@
 package lk.ijse.fx.bo.impl;
 
 import lk.ijse.fx.bo.custom.RegistrationBO;
+import lk.ijse.fx.dao.SQLUtil;
 import lk.ijse.fx.db.DbConnection;
 import lk.ijse.fx.dto.RegistrationDto;
 
 import java.sql.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 public class RegistrationBOImpl implements RegistrationBO {
+    public List<RegistrationDto> loadAllRegistration() throws SQLException {
+        Connection connection = DbConnection.getInstance().getConnection();
+
+        String sql = "SELECT * FROM registration";
+        PreparedStatement pstm = connection.prepareStatement(sql);
+
+        List<RegistrationDto> registrationList = new ArrayList<>();
+
+        ResultSet resultSet = pstm.executeQuery();
+        while (resultSet.next()) {
+            registrationList.add(new RegistrationDto(
+                    resultSet.getString(1),
+                    resultSet.getString(2),
+                    resultSet.getString(3),
+                    resultSet.getString(4),
+                    resultSet.getString(5),
+                    resultSet.getString(6),
+                    resultSet.getString(7),
+                    resultSet.getString(8),
+                    resultSet.getString(9),
+                    resultSet.getString(10)
+            ));
+        }
+
+        return registrationList;
+    }
+
+
+    public boolean updateRegistration(RegistrationDto dto) throws SQLException {
+        Connection connection = DbConnection.getInstance().getConnection();
+        String sql = "UPDATE registration SET church_no = ?, division_no = ?, father_id = ?, mother_id = ?, father_name = ?, mother_name = ?, address = ?, tel = ?, date = ? WHERE family_no = ?";
+        PreparedStatement pstm = connection.prepareStatement(sql);
+        pstm.setString(1, dto.getChurchNo());
+        pstm.setString(2, dto.getDivisionNo());
+        pstm.setString(3, dto.getFatherId());
+        pstm.setString(4, dto.getMotherId());
+        pstm.setString(5, dto.getFatherName());
+        pstm.setString(6, dto.getMotherName());
+        pstm.setString(7, dto.getAddress());
+        pstm.setString(8, dto.getTel());
+        pstm.setDate(9, Date.valueOf(LocalDate.parse(dto.getDate()))); // Parse and use setDate
+        pstm.setString(10, dto.getFamilyNo());
+
+        return pstm.executeUpdate() > 0;
+    }
+
+
     public boolean deleteRegistration(String familyNo) throws SQLException {
         Connection connection = DbConnection.getInstance().getConnection();
 
@@ -51,9 +101,7 @@ public class RegistrationBOImpl implements RegistrationBO {
         }
     }
 
-
-
-    private void incrementDivisionCount(Connection connection, String divisionNo) throws SQLException {
+    public void incrementDivisionCount(Connection connection, String divisionNo) throws SQLException {
         String updateChurchSql = "UPDATE church SET " +
                 "A = A + CASE WHEN ? = 'A' THEN 1 ELSE 0 END, " +
                 "B = B + CASE WHEN ? = 'B' THEN 1 ELSE 0 END, " +
@@ -72,7 +120,7 @@ public class RegistrationBOImpl implements RegistrationBO {
     }
 
 
-    private String getChurchNoForDivision(String divisionNo) {
+    public String getChurchNoForDivision(String divisionNo) {
         // You need to implement a method to map divisionNo to churchNo based on your application's logic.
         // This is a placeholder method and should be replaced with the actual implementation.
         // The mapping logic depends on your specific requirements and database structure.
@@ -81,6 +129,8 @@ public class RegistrationBOImpl implements RegistrationBO {
         // This is just an example and may not fit your actual use case.
         return "CHURCH_A";
     }
+
+
 
 
     public boolean saveRegistration(RegistrationDto dto) throws SQLException {
@@ -159,8 +209,6 @@ public class RegistrationBOImpl implements RegistrationBO {
     }
 
 
-
-
     public int getNextFamilyNo() throws SQLException {
 
         Connection connection = DbConnection.getInstance().getConnection();
@@ -176,5 +224,35 @@ public class RegistrationBOImpl implements RegistrationBO {
         }
 
         return maxFamilyNo + 1;
+    }
+
+    @Override
+    public RegistrationDto searchRegistration(String familyNo) throws SQLException, ClassNotFoundException {
+        Connection connection = DbConnection.getInstance().getConnection();
+
+        String sql = "SELECT * FROM registration WHERE family_no=?";
+
+        PreparedStatement pstm = connection.prepareStatement(sql);
+        pstm.setString(1, familyNo);
+
+        ResultSet resultSet = pstm.executeQuery();
+
+        RegistrationDto dto = null;
+
+        if (resultSet.next()) {
+            String registration_churchNo = resultSet.getString(1);
+            String registration_divisionNo = resultSet.getString(2);
+            String registration_familyNo = resultSet.getString(3);
+            String registration_fatherId = resultSet.getString(4);
+            String registration_motherId = resultSet.getString(5);
+            String registration_fatherName = resultSet.getString(6);
+            String registration_motherName = resultSet.getString(7);
+            String registration_address = resultSet.getString(8);
+            String registration_tel = resultSet.getString(9);
+            String registration_date = resultSet.getString(10);
+
+            dto = new RegistrationDto(registration_churchNo, registration_divisionNo, registration_familyNo, registration_fatherId, registration_motherId, registration_fatherName, registration_motherName, registration_address, registration_tel, registration_date);
+        }
+        return dto;
     }
 }

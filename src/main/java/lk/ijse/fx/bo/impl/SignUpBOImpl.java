@@ -12,7 +12,7 @@ import java.sql.SQLException;
 
 public class SignUpBOImpl implements SignUpBO {
     SignupDAO signupDAO= (SignupDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.SIGNUP);
-    public static boolean registerUser(SignupDto signupDto) throws SQLException, ClassNotFoundException {
+    public boolean registerUser(SignupDto signupDto) throws SQLException, ClassNotFoundException {
        return signupDAO.save(new Signup(signupDto.getUserName(),signupDto.getPassword()));
     }
 }

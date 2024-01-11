@@ -10,6 +10,9 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import lk.ijse.fx.bo.BOFactory;
+import lk.ijse.fx.bo.custom.AttendenceBO;
+import lk.ijse.fx.bo.custom.ChildrenBO;
 import lk.ijse.fx.dao.custom.ChildrenDAO;
 import lk.ijse.fx.dao.impl.ChildrenDAOImpl;
 import lk.ijse.fx.dto.ChildrenDto;
@@ -49,8 +52,7 @@ public class ChildrenTableController {
     @FXML
     private TableView<ChildrenTm> tblChildren;
 
-    ChildrenDAO childrenDAO = new ChildrenDAOImpl();
-
+    ChildrenBO childrenBO= (ChildrenBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.CHILDREN);
     public void initialize() {
         setCellValueFactory();
         loadAllChildren();
@@ -71,7 +73,7 @@ public class ChildrenTableController {
         ObservableList<ChildrenTm> obList = FXCollections.observableArrayList();
         try {
 
-            List<ChildrenDto> allChildren = childrenDAO.loadAll();
+            List<ChildrenDto> allChildren = childrenBO.loadAllChildren();
 
             for (ChildrenDto c : allChildren) {
                 Button deleteButton = new Button("Delete");
@@ -119,7 +121,7 @@ public class ChildrenTableController {
         Optional<ButtonType> result = confirmationAlert.showAndWait();
 
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            boolean isDeleted = childrenDAO.delete(childId);
+            boolean isDeleted = childrenBO.deleteChildren(childId);
 
             if (isDeleted) {
                 Alert successAlert = new Alert(Alert.AlertType.INFORMATION);

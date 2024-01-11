@@ -2,8 +2,8 @@ package lk.ijse.fx.dao.impl;
 
 import lk.ijse.fx.dao.SQLUtil;
 import lk.ijse.fx.dao.custom.ChildrenDAO;
-import lk.ijse.fx.db.DbConnection;
 import lk.ijse.fx.dto.ChildrenDto;
+import lk.ijse.fx.entity.Attendence;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ChildrenDAOImpl implements ChildrenDAO {
+        @Override
         public boolean save(ChildrenDto dto) throws SQLException, ClassNotFoundException {
             // Get the current date
             LocalDate currentDate = LocalDate.now();
@@ -24,7 +25,7 @@ public class ChildrenDAOImpl implements ChildrenDAO {
 
 
 
-
+        @Override
         public List<ChildrenDto> loadAll() throws SQLException, ClassNotFoundException {
             List<ChildrenDto> childrenList = new ArrayList<>();
 
@@ -43,12 +44,14 @@ public class ChildrenDAOImpl implements ChildrenDAO {
             return childrenList;
         }
 
+    @Override
+    public boolean update(ChildrenDto dto) throws SQLException, ClassNotFoundException {
+        return SQLUtil.execute("UPDATE children SET family_no = ?, child_name = ?, birthday = ?, complimentary_date = ?, date = ? WHERE child_id = ?"
+                ,dto.getFamilyNo(),dto.getChildName(),dto.getBirthday(),dto.getComplimentaryDate(),dto.getDate(),dto.getChildId());
+    }
 
-
-
-
-
-        public ChildrenDto search(String childId) throws SQLException, ClassNotFoundException {
+    @Override
+    public ChildrenDto search(String childId) throws SQLException, ClassNotFoundException {
             ResultSet resultSet = SQLUtil.execute("SELECT * FROM attendence WHERE family_no=?");
             ChildrenDto dto = null;
 
@@ -70,23 +73,12 @@ public class ChildrenDAOImpl implements ChildrenDAO {
 
 
 
-
-
-        public boolean update(ChildrenDto dto) throws SQLException, ClassNotFoundException {
-            return SQLUtil.execute("UPDATE children SET family_no = ?, child_name = ?, birthday = ?, complimentary_date = ?, date = ? WHERE child_id = ?"
-                    ,dto.getFamilyNo(),dto.getChildName(),dto.getBirthday(),dto.getComplimentaryDate(),dto.getDate(),dto.getChildId());
-        }
-
-
-
-
-
-
-
+        @Override
         public boolean delete(String childId) throws SQLException, ClassNotFoundException {
             return SQLUtil.execute("DELETE FROM children WHERE child_id = ?");
 
         }
+
 }
 
 

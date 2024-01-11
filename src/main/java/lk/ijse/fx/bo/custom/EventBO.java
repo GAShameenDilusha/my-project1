@@ -1,5 +1,6 @@
 package lk.ijse.fx.bo.custom;
 
+import lk.ijse.fx.bo.SuperBO;
 import lk.ijse.fx.dao.SQLUtil;
 import lk.ijse.fx.dto.EventDto;
 
@@ -10,7 +11,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public interface EventBO {
+public interface EventBO extends SuperBO {
      boolean saveEvent(EventDto dto) throws SQLException, ClassNotFoundException;
      List<EventDto> loadAllEvent() throws SQLException, ClassNotFoundException;
      boolean updateEvent(EventDto dto) throws SQLException, ClassNotFoundException;

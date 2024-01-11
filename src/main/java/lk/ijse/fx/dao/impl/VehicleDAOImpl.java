@@ -2,8 +2,8 @@ package lk.ijse.fx.dao.impl;
 
 import lk.ijse.fx.dao.SQLUtil;
 import lk.ijse.fx.dao.custom.VehicleDAO;
-import lk.ijse.fx.db.DbConnection;
 import lk.ijse.fx.dto.VehicleDto;
+import lk.ijse.fx.entity.Attendence;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class VehicleDAOImpl implements VehicleDAO {
+        @Override
         public boolean save(VehicleDto dto) throws SQLException, ClassNotFoundException {
             // Get the current date
             LocalDate currentDate = LocalDate.now();
@@ -23,7 +24,7 @@ public class VehicleDAOImpl implements VehicleDAO {
 
 
 
-
+        @Override
         public List<VehicleDto> loadAll() throws SQLException, ClassNotFoundException {
             ResultSet resultSet = SQLUtil.execute("SELECT * FROM vehicle");
 
@@ -40,10 +41,7 @@ public class VehicleDAOImpl implements VehicleDAO {
             return vehicleList;
         }
 
-
-
-
-
+        @Override
         public boolean update(VehicleDto dto) throws SQLException, ClassNotFoundException {
             return SQLUtil.execute("UPDATE vehicle SET date = ?, category = ?, discription = ? WHERE church_father_id = ?"
                     ,dto.getDate(),dto.getCategory(),dto.getDiscription(),dto.getChurchFatherId());
@@ -53,6 +51,8 @@ public class VehicleDAOImpl implements VehicleDAO {
 
 
 
+
+        @Override
         public VehicleDto search(String churchFatherId) throws SQLException, ClassNotFoundException {
             ResultSet resultSet = SQLUtil.execute("SELECT * FROM vehicle WHERE church_father_id=?");
 
@@ -72,12 +72,13 @@ public class VehicleDAOImpl implements VehicleDAO {
 
 
 
-
+        @Override
         public boolean delete(String churchFatherId) throws SQLException, ClassNotFoundException {
             return SQLUtil.execute("DELETE FROM vehicle WHERE church_father_id = ?");
 
             }
-        }
+
+}
 
 
 

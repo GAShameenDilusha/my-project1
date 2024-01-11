@@ -2,8 +2,8 @@ package lk.ijse.fx.dao.impl;
 
 import lk.ijse.fx.dao.SQLUtil;
 import lk.ijse.fx.dao.custom.AttendenceDAO;
-import lk.ijse.fx.db.DbConnection;
 import lk.ijse.fx.dto.AttendenceDto;
+import lk.ijse.fx.entity.Attendence;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AttendenceDAOImpl implements AttendenceDAO {
+        @Override
         public boolean save(AttendenceDto dto) throws SQLException, ClassNotFoundException {
             // Get the current date
             LocalDate currentDate = LocalDate.now();
@@ -28,7 +29,7 @@ public class AttendenceDAOImpl implements AttendenceDAO {
 
 
 
-
+        @Override
         public List<AttendenceDto> loadAll() throws SQLException, ClassNotFoundException {
             ResultSet resultSet = SQLUtil.execute("SELECT * FROM attendence");
 
@@ -46,8 +47,7 @@ public class AttendenceDAOImpl implements AttendenceDAO {
 
         }
 
-
-
+        @Override
         public boolean update(AttendenceDto dto) throws SQLException, ClassNotFoundException {
             return SQLUtil.execute("UPDATE attendence SET purpose = ?, arranged_time = ?, leave_time = ?, date = ? WHERE family_no = ?"
                     ,dto.getPurpose(),dto.getArrangedTime(),dto.getLeaveTime(),dto.getDate(),dto.getFamilyNo());
@@ -57,7 +57,7 @@ public class AttendenceDAOImpl implements AttendenceDAO {
 
 
 
-
+        @Override
         public AttendenceDto search(String familyNo) throws SQLException, ClassNotFoundException {
             AttendenceDto dto = null;
 
@@ -77,10 +77,11 @@ public class AttendenceDAOImpl implements AttendenceDAO {
 
         }
 
-
+        @Override
         public boolean delete(String familyNo) throws SQLException, ClassNotFoundException {
             return SQLUtil.execute("DELETE FROM attendence WHERE family_no = ?");
         }
+
 }
 
 

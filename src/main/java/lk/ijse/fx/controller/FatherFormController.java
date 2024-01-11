@@ -9,6 +9,9 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import lk.ijse.fx.bo.BOFactory;
+import lk.ijse.fx.bo.custom.EventBO;
+import lk.ijse.fx.bo.custom.FatherBO;
 import lk.ijse.fx.dao.custom.AttendenceDAO;
 import lk.ijse.fx.dao.custom.FatherDAO;
 import lk.ijse.fx.dao.impl.AttendenceDAOImpl;
@@ -38,7 +41,7 @@ public class FatherFormController {
     @FXML
     private TableView<FatherTm> tblFather;
 
-    FatherDAO fatherDAO=new FatherDAOImpl();
+    FatherBO fatherBO= (FatherBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.FATHER);
 
 
     public void btnBackOnAction(ActionEvent actionEvent) throws IOException {
@@ -63,7 +66,7 @@ public class FatherFormController {
 
 
         try {
-            boolean isSaved =fatherDAO.save(dto);
+            boolean isSaved =fatherBO.saveFather(dto);
             if (isSaved){
                 tblFather.getItems().add(new FatherTm(dto.getChurchNo(), dto.getChurchFatherId(), dto.getName(), dto.getStartDate(), dto.getLeaveDate()));
             }
@@ -77,11 +80,16 @@ public class FatherFormController {
         stage.setScene(scene);
         stage.setTitle("Father Table");
         stage.centerOnScreen();
-        
-        
+
+
         boolean isFatherValid = validateFather();
-        if(isFatherValid){
-            //perform save action
+        if (isFatherValid) {
+            // Additional save actions
+            // Your additional save logic here
+            // For example, you can save the data to another table or perform other operations
+
+            // Show a success message
+            new Alert(Alert.AlertType.INFORMATION, "Father saved successfully!").show();
         }
     }
 
@@ -134,7 +142,7 @@ public class FatherFormController {
         String newLeaveDate = txtLeaveDate.getText();
 
         try {
-            boolean isUpdated = fatherDAO.update(new FatherDto(newChurchNo, churchFatherId, newName, newStartDate, newLeaveDate));
+            boolean isUpdated = fatherBO.updateFather(new FatherDto(newChurchNo, churchFatherId, newName, newStartDate, newLeaveDate));
             if (isUpdated) {
                 new Alert(Alert.AlertType.CONFIRMATION, "Father updated!").show();
                 clearFields();
@@ -159,7 +167,7 @@ public class FatherFormController {
         String churchFatherId = txtChurchFatherId1.getText();
 
         try {
-            FatherDto fatherDto = fatherDAO.search(churchFatherId);  // Use the instance to call the method
+            FatherDto fatherDto = fatherBO.searchFather(churchFatherId);  // Use the instance to call the method
 
             if (fatherDto != null) {
                 txtChurchNo.setText(fatherDto.getChurchNo());

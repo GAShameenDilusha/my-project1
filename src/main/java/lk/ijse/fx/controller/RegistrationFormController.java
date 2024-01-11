@@ -12,6 +12,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import lk.ijse.fx.bo.BOFactory;
+import lk.ijse.fx.bo.custom.PaymentBO;
+import lk.ijse.fx.bo.custom.RegistrationBO;
+import lk.ijse.fx.bo.impl.RegistrationBOImpl;
 import lk.ijse.fx.dao.custom.AttendenceDAO;
 import lk.ijse.fx.dao.custom.RegistrationDAO;
 import lk.ijse.fx.dao.impl.AttendenceDAOImpl;
@@ -62,13 +66,13 @@ public class RegistrationFormController implements Initializable {
     @FXML
     private TableView<RegistrationTm> tblRegistration;
     private RegistrationDto dto = new RegistrationDto();
-    RegistrationDAO registrationDAO=new RegistrationDAOImpl();
+    RegistrationBO registrationBO= (RegistrationBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.REGISTRATION);
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         try {
-            RegistrationDAO registrationDAO = new RegistrationDAOImpl();
-            int nextFamilyNo = registrationDAO.getNextFamilyNo();
+            RegistrationBO registrationBO = new RegistrationBOImpl();  // Create an instance
+            int nextFamilyNo = registrationBO.getNextFamilyNo();  // Call the method on the instance
             lblFamilyNo.setText(String.valueOf(nextFamilyNo));
             dto.setFamilyNo(String.valueOf(nextFamilyNo));
 
@@ -80,10 +84,13 @@ public class RegistrationFormController implements Initializable {
             lblMotherId.setText(formattedMotherId);
             dto.setMotherId(formattedMotherId);
 
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
     }
+
 
     @FXML
     void btnSaveOnAction(ActionEvent event) throws IOException, SQLException {
@@ -114,11 +121,11 @@ public class RegistrationFormController implements Initializable {
         dto = new RegistrationDto(church_no, division_no, family_no, father_id, mother_id, father_name, mother_name, address, tel, date);
 
         try {
-            boolean isSaved =registrationDAO.saveRegistration(dto);
+            boolean isSaved =registrationBO.saveRegistration(dto);
             if (isSaved){
                 tblRegistration.getItems().add(new RegistrationTm(dto.getChurchNo(), dto.getDivisionNo(), dto.getFamilyNo(), dto.getFatherId(), dto.getMotherId(), dto.getFatherName(), dto.getMotherName(), dto.getAddress(), dto.getTel(), dto.getDate()));
             }
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
 
@@ -132,6 +139,7 @@ public class RegistrationFormController implements Initializable {
         boolean isRegistrationValid = validateRegistration();
         if (isRegistrationValid) {
             // Perform save action
+            new Alert(Alert.AlertType.CONFIRMATION, "Registration saved!").show();
         }
     }
 
@@ -142,33 +150,29 @@ public class RegistrationFormController implements Initializable {
     }
 
     @FXML
-    void txtSearchOnAction(ActionEvent event) {
+    void txtSearchOnAction(ActionEvent event) throws SQLException, ClassNotFoundException {
         String familyNo = txtFamilyNo1.getText();
 
-        try {
-            RegistrationDto registrationDto = registrationDAO.searchCustomer(familyNo);
-            if (registrationDto != null) {
-                lblFamilyNo.setText(registrationDto.getFamilyNo());
-                txtChurchNo.setText(registrationDto.getChurchNo());
-                txtDivisionNo.setText(registrationDto.getDivisionNo());
-                lblFatherId.setText(registrationDto.getFatherId());
-                lblMotherId.setText(registrationDto.getMotherId());
-                txtFatherName.setText(registrationDto.getFatherName());
-                txtMotherName.setText(registrationDto.getMotherName());
-                txtAddress.setText(registrationDto.getAddress());
-                txtTel.setText(registrationDto.getTel());
-                txtDate.setText(registrationDto.getDate());
-            } else {
-                new Alert(Alert.AlertType.INFORMATION, "Registration not found").show();
-            }
-        } catch (SQLException | ClassNotFoundException e) {
-            new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+        RegistrationDto registrationDto = registrationBO.searchRegistration(familyNo);
+        if (registrationDto != null) {
+            lblFamilyNo.setText(registrationDto.getFamilyNo());
+            txtChurchNo.setText(registrationDto.getChurchNo());
+            txtDivisionNo.setText(registrationDto.getDivisionNo());
+            lblFatherId.setText(registrationDto.getFatherId());
+            lblMotherId.setText(registrationDto.getMotherId());
+            txtFatherName.setText(registrationDto.getFatherName());
+            txtMotherName.setText(registrationDto.getMotherName());
+            txtAddress.setText(registrationDto.getAddress());
+            txtTel.setText(registrationDto.getTel());
+            txtDate.setText(registrationDto.getDate());
+        } else {
+            new Alert(Alert.AlertType.INFORMATION, "Registration not found").show();
         }
     }
 
 
     @FXML
-    void btnUpdateOnAction(ActionEvent event) {
+    void btnUpdateOnAction(ActionEvent event) throws SQLException, ClassNotFoundException {
         String familyNo = lblFamilyNo.getText();
         String newChurchNo = txtChurchNo.getText();
         String newDivisionNo = txtDivisionNo.getText();
@@ -182,16 +186,12 @@ public class RegistrationFormController implements Initializable {
 
         var dto = new RegistrationDto(newChurchNo, newDivisionNo, familyNo, newFatherId, newMotherId, newFatherName, newMotherName, newAddress, newTel, newDate);
 
-        try {
-            boolean isUpdated = registrationDAO.updateRegistration(dto);
-            if (isUpdated) {
-                new Alert(Alert.AlertType.CONFIRMATION, "Registration updated!").show();
-                clearFields();
-            } else {
-                new Alert(Alert.AlertType.ERROR, "Failed to update registration").show();
-            }
-        } catch (SQLException | ClassNotFoundException e) {
-            new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+        boolean isUpdated = registrationBO.updateRegistration(dto);
+        if (isUpdated) {
+            new Alert(Alert.AlertType.CONFIRMATION, "Registration updated!").show();
+            clearFields();
+        } else {
+            new Alert(Alert.AlertType.ERROR, "Failed to update registration").show();
         }
     }
 

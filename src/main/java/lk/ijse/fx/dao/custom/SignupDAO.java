@@ -2,6 +2,7 @@ package lk.ijse.fx.dao.custom;
 
 import lk.ijse.fx.db.DbConnection;
 import lk.ijse.fx.dto.SignupDto;
+import lk.ijse.fx.entity.Signup;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,4 +13,6 @@ public interface SignupDAO {
                 return false;
         }
 
+
+    boolean save(Signup signup);
 }

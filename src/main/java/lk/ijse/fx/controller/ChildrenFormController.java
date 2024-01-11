@@ -11,11 +11,15 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import lk.ijse.fx.bo.BOFactory;
+import lk.ijse.fx.bo.custom.AttendenceBO;
+import lk.ijse.fx.bo.custom.ChildrenBO;
 import lk.ijse.fx.dao.custom.AttendenceDAO;
 import lk.ijse.fx.dao.custom.ChildrenDAO;
 import lk.ijse.fx.dao.impl.ChildrenDAOImpl;
 import lk.ijse.fx.dto.AttendenceDto;
 import lk.ijse.fx.dto.ChildrenDto;
+import lk.ijse.fx.dto.RegistrationDto;
 import lk.ijse.fx.dto.tm.ChildrenTm;
 
 import java.io.IOException;
@@ -41,13 +45,11 @@ public class ChildrenFormController {
     @FXML
     private AnchorPane root;
 
-    ChildrenDAO childrenDAO=new ChildrenDAOImpl();
-
     @FXML
     private TableView<ChildrenTm> tblChildren;
 
 
-
+    ChildrenBO childrenBO= (ChildrenBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.CHILDREN);
 
 
     public void btnBackOnAction(ActionEvent actionEvent) throws IOException {
@@ -73,10 +75,9 @@ public class ChildrenFormController {
         var dto = new ChildrenDto(family_no, child_id, child_name, birthday, complimentary_date, date);
 
 
-
         ChildrenDto childrenDto=new ChildrenDto(family_no,child_id,child_name, birthday, complimentary_date, date);
         try {
-            boolean isSaved =childrenDAO.save(childrenDto);
+            boolean isSaved =childrenBO.saveChildren(childrenDto);
             if (isSaved){
                 tblChildren.getItems().add(new ChildrenTm(family_no, child_id, child_name, birthday, complimentary_date, date));
             }
@@ -94,7 +95,7 @@ public class ChildrenFormController {
 
         boolean isChildrenValid = validateChildren();
         if (isChildrenValid) {
-            //perform save action
+            new Alert(Alert.AlertType.CONFIRMATION, "Children saved!").show();
         }
 
 
@@ -145,7 +146,7 @@ public class ChildrenFormController {
         String childId = txtChildId1.getText();
 
         try {
-            ChildrenDto childrenDto = childrenDAO.search(childId);  // Use the instance to call the method
+            ChildrenDto childrenDto = childrenBO.searchChildren(childId);  // Use the instance to call the method
 
             if (childrenDto != null) {
                 txtChildId.setText(childrenDto.getChildId());
@@ -174,7 +175,7 @@ public class ChildrenFormController {
 
 
     @FXML
-    void btnUpdateOnAction(ActionEvent event) {
+    void btnUpdateOnAction(ActionEvent event) throws SQLException, ClassNotFoundException {
         String newFamilyNo = txtFamilyNo.getText();
         String childId = txtChildId.getText();
         String newChildName = txtChildName.getText();
@@ -184,11 +185,12 @@ public class ChildrenFormController {
 
         var dto = new ChildrenDto(newFamilyNo, childId, newChildName, newBirthday, newComplimentaryDate, newDate);
 
-        try {
-            childrenDAO.update(new ChildrenDto(newFamilyNo, childId, newChildName, newBirthday, newComplimentaryDate,newDate));
-
-        } catch (SQLException | ClassNotFoundException e) {
-            new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+        boolean isUpdated = childrenBO.updateChildren(dto);
+        if (isUpdated) {
+            new Alert(Alert.AlertType.CONFIRMATION, "Registration updated!").show();
+            clearFields();
+        } else {
+            new Alert(Alert.AlertType.ERROR, "Failed to update registration").show();
         }
     }
 

@@ -2,23 +2,22 @@ package lk.ijse.fx.dao.impl;
 
 import lk.ijse.fx.dao.SQLUtil;
 import lk.ijse.fx.dao.custom.FatherDAO;
-import lk.ijse.fx.db.DbConnection;
 import lk.ijse.fx.dto.FatherDto;
+import lk.ijse.fx.entity.Attendence;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class FatherDAOImpl implements FatherDAO {
+        @Override
         public boolean save(FatherDto dto) throws SQLException, SQLException, ClassNotFoundException {
             return SQLUtil.execute("INSERT INTO father VALUES(?, ?, ?, ?, ?)",
                     dto.getChurchNo(),dto.getChurchFatherId(),dto.getName(),dto.getStartDate(),dto.getLeaveDate());
         }
 
-
+        @Override
         public List<FatherDto> loadAll() throws SQLException, ClassNotFoundException {
             ResultSet resultSet = SQLUtil.execute("SELECT * FROM father");
 
@@ -36,11 +35,7 @@ public class FatherDAOImpl implements FatherDAO {
             return fatherList;
         }
 
-
-
-
-
-
+        @Override
         public boolean update(FatherDto dto) throws SQLException, ClassNotFoundException {
             return SQLUtil.execute("UPDATE father SET church_no = ?, name = ?, start_date = ?, leave_date = ? WHERE church_father_id = ?"
                     ,dto.getChurchNo(),dto.getName(),dto.getStartDate(),dto.getLeaveDate(),dto.getChurchFatherId());
@@ -52,7 +47,7 @@ public class FatherDAOImpl implements FatherDAO {
 
 
 
-
+        @Override
         public FatherDto search(String churchFatherId) throws SQLException, ClassNotFoundException {
             ResultSet resultSet = SQLUtil.execute("SELECT * FROM father WHERE church_father_id=?");
 
@@ -72,10 +67,11 @@ public class FatherDAOImpl implements FatherDAO {
 
 
 
-
+        @Override
         public boolean delete(String churchFatherId) throws SQLException, ClassNotFoundException {
             return SQLUtil.execute("DELETE FROM father WHERE church_father_id = ?");
         }
+
 }
 
 

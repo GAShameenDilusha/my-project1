@@ -1,6 +1,8 @@
 package lk.ijse.fx.entity;
 
-public class Visit {
+import lk.ijse.fx.dto.VisitDto;
+
+public class Visit   {
     private String FamilyNo;
     private String ChurchFatherId;
     private String Date;

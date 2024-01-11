@@ -11,6 +11,8 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import lk.ijse.fx.bo.BOFactory;
+import lk.ijse.fx.bo.custom.VisitBO;
 import lk.ijse.fx.dao.custom.VisitDAO;
 import lk.ijse.fx.dao.impl.VisitDAOImpl;
 import lk.ijse.fx.dto.VisitDto;
@@ -39,7 +41,7 @@ public class VisitTableController {
     private TableView<VisitTm> tblVisit;
     @FXML
     private AnchorPane root;
-    VisitDAO visitDAO = new VisitDAOImpl();
+    VisitBO visitBO= (VisitBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.VISIT);
 
 
 
@@ -61,7 +63,7 @@ public class VisitTableController {
     private void loadAllVisit() {
         ObservableList<VisitTm> obList = FXCollections.observableArrayList();
         try {
-            List<VisitDto> allVisit = visitDAO.loadAll();
+            List<VisitDto> allVisit = visitBO.loadAllVisit();
 
             for (VisitDto dto : allVisit) {
                 JFXButton deleteButton = new JFXButton("Delete");
@@ -113,7 +115,7 @@ public class VisitTableController {
         Optional<ButtonType> result = confirmationAlert.showAndWait();
 
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            boolean isDeleted = visitDAO.delete(familyNo);
+            boolean isDeleted = visitBO.deleteVisit(familyNo);
 
             if (isDeleted) {
                 Alert successAlert = new Alert(Alert.AlertType.INFORMATION);

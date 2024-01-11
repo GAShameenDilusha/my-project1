@@ -11,6 +11,8 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import lk.ijse.fx.bo.BOFactory;
+import lk.ijse.fx.bo.custom.PaymentBO;
 import lk.ijse.fx.dao.custom.PaymentDAO;
 import lk.ijse.fx.dao.impl.PaymentDAOImpl;
 import lk.ijse.fx.dto.PaymentDto;
@@ -35,7 +37,7 @@ public class PaymentTableController {
 
     @FXML
     private AnchorPane root;
-    PaymentDAO paymentDAO = new PaymentDAOImpl();
+    PaymentBO paymentBO= (PaymentBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.PAYMENT);
 
 
 
@@ -59,7 +61,7 @@ public class PaymentTableController {
     private void loadAllPayment() {
         ObservableList<PaymentTm> obList = FXCollections.observableArrayList();
         try {
-            List<PaymentDto> allPayment = paymentDAO.loadAll();
+            List<PaymentDto> allPayment = paymentBO.loadAllPayment();
 
             for (PaymentDto dto : allPayment) {
                 JFXButton deleteButton = new JFXButton("Delete");
@@ -112,7 +114,7 @@ public class PaymentTableController {
         Optional<ButtonType> result = confirmationAlert.showAndWait();
 
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            boolean isDeleted = paymentDAO.delete(familyNo);
+            boolean isDeleted = paymentBO.deletePayment(familyNo);
 
             if (isDeleted) {
                 Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
